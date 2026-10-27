@@ -72,6 +72,7 @@
   .footer__mission { grid-column: 1 / -1; }
   .footer__cta { grid-column: 1 / -1; width: 100%; margin-top: calc(-1 * var(--space-2)); }
   .footer__contacts { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--space-6); } /* 2 x 2: Phone | Fax, Mail | Address; icon on top, label, value */
-  .footer__row .footer__label { gap: var(--space-3); }
+  .footer__contacts .footer__row dd > a:not(.btn) { align-items: flex-start; } /* values top-aligned: link keeps 44px touch box, text starts at the top like plain-text values */
+  .footer__row .footer__label { gap: var(--space-4); }
   .footer__wordmark { margin-top: var(--space-7); min-height: var(--control-md); }
 }
