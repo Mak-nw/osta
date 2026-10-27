@@ -1,17 +1,11 @@
-/* Legal pages template (privacy / terms / data-processing): hero without media, sticky TOC (cols 1-3) + sections (cols 4-10). */
+/* Legal pages template (privacy / terms / data-processing): hero and body start at column 4 of the 12-col grid (cols 1-3 empty). */
 .legal { padding-bottom: var(--section-md); }
-.legal__hero { display: flex; flex-direction: column; gap: var(--space-3); padding-block: var(--space-8) var(--section-sm); }
-.legal__title, .legal__updated { margin: 0; }
+.legal__hero { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--space-3); padding-block: var(--space-8) var(--section-sm); }
+.legal__title, .legal__updated { grid-column: 4 / -1; margin: 0; }
 .legal__updated { color: var(--text-muted); }
 .legal__grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); align-items: start; }
-.legal__toc { grid-column: 1 / 4; position: sticky; top: calc(var(--header-h) + var(--space-5)); display: flex; flex-direction: column; gap: var(--space-3); }
-.legal__toc-label { margin: 0; color: var(--text-muted); }
-.legal__toc-list { display: flex; flex-direction: column; gap: var(--space-2); margin: 0; }
-.legal__toc-link { color: var(--text-accent); text-decoration: none; }
-.legal__toc-link:hover, .legal__toc-link.is-hover { color: var(--accent); text-decoration: underline; }
-.legal__toc-link:focus-visible { outline: var(--focus-outline); outline-offset: var(--focus-offset); }
 .legal__body { grid-column: 4 / 11; display: flex; flex-direction: column; gap: var(--section-sm); }
-.legal__section { scroll-margin-top: calc(var(--header-h) + var(--space-5)); display: flex; flex-direction: column; gap: var(--space-4); }
+.legal__section { display: flex; flex-direction: column; gap: var(--space-4); }
 .legal__heading { margin: 0; }
 .legal__text, .legal__section > p { margin: 0; color: var(--text); }
 /* Lists inside a section: <ul class="legal__list t-body"> / <ol class="legal__list legal__list--numbered t-body"> */
