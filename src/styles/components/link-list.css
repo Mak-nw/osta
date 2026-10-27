@@ -10,6 +10,21 @@
 .link-card:hover, .link-card.is-hover { border-color: var(--accent); }
 .link-card:hover .link-card__title, .link-card.is-hover .link-card__title { color: var(--accent-hover); }
 .link-card:focus-visible { outline: var(--focus-outline); outline-offset: var(--focus-offset); }
-/* --3: three title-only cards (no text row), each 2 columns; the group itself sits on 6 page columns (placed by the page, Home Products: cols 4-9). Narrow card: padding --space-4, icon, title below (hyphenated wrap) */
-.link-cards--3 > li { grid-column: span 2; }
-.link-cards--3 .link-card { grid-template-rows: auto auto; padding: var(--space-4); }
+/* --3: four PORTRAIT (3:4) cards (3 title-only scene cards + 1 text card), each 3 columns = full width of the 12-col grid. Card (aspect-ratio 1/1, padding --space-5): icon ring B top-left, looping three.js line scene (.link-card__art > canvas, src/pages/home-product-scenes.js, white lines: colour read from .link-card__art color = --accent-contrast) in the middle, bottom row: title left, .round-btn--outline arrow right (white outline; fills white on card hover like .btn--outline-on-accent). Whole card sits on the blue section: transparent fill, 1px --accent-contrast border, all content --accent-contrast */
+.link-cards--3 > li { grid-column: span 3; }
+.link-cards--3 .link-card { background: transparent; border-color: var(--accent-contrast); color: var(--accent-contrast); }
+.link-cards--3 .link-card > .icon-ring { color: var(--accent-contrast); }
+.link-cards--3 .link-card__title, .link-cards--3 .link-card:hover .link-card__title, .link-cards--3 .link-card.is-hover .link-card__title { color: var(--accent-contrast); }
+.link-cards--3 .link-card > .round-btn { border-color: var(--accent-contrast); color: var(--accent-contrast); background: transparent; }
+.link-cards--3 .link-card:hover > .round-btn, .link-cards--3 .link-card.is-hover > .round-btn { background: var(--surface-white); border-color: var(--surface-white); color: var(--accent); }
+.link-cards--3 .link-card:focus-visible { outline-color: var(--accent-contrast); }
+.link-cards--3 .link-card { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto minmax(0, 1fr) auto; align-items: center; aspect-ratio: 3 / 4; padding: var(--space-5); }
+.link-cards--3 .link-card > .icon-ring { grid-column: 1 / -1; grid-row: 1; align-self: start; }
+.link-cards--3 .link-card__art { --il-fill: var(--c-white); --il-ink: var(--accent); --il-soft: var(--c-blue-200); grid-column: 1 / -1; grid-row: 2; align-self: stretch; justify-self: center; position: relative; min-height: 0; min-width: 0; width: 100%; color: var(--accent-contrast); }
+.link-cards--3 .link-card__canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
+.link-cards--3 .link-card__canvas.is-ready { opacity: 1; }
+.link-cards--3 .link-card__title { grid-column: 1; grid-row: 3; align-self: end; }
+.link-cards--3 .link-card > .round-btn { grid-column: 2; grid-row: 3; align-self: end; }
+/* 4th card of --3 (customer df7f1d78): white text card, same size/radius/padding as the link cards; paragraph above button, whole block vertically centred, left edge shared */
+.link-card-note { flex: 1; min-width: 0; box-sizing: border-box; aspect-ratio: 3 / 4; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; gap: var(--space-5); padding: var(--space-5); background: var(--surface-white); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text); }
+.link-card-note > p { margin: 0; }
