@@ -38,3 +38,15 @@
   display: block; width: 100%; height: auto; stroke-width: 1px; }
 .iso-art--raised { --il-bg: var(--surface-raised); }
 .iso-art--on-accent { --il-bg: var(--surface-accent); --il-fill: var(--c-white); --il-ink: var(--accent); --il-soft: var(--c-blue-200); --il-canvas: var(--c-blue-400); --il-grid: var(--c-blue-500); }
+
+/* Responsive feature grid (About Quality): intro on top full width, cards 2 per row (tablet) / 1 per row (mobile) */
+@media (max-width: 1199px) {
+  .feature-grid > .feature-grid__intro { grid-column: 1 / -1; }
+  .feature-grid > .feature-card, .feature-grid__intro + .feature-card { grid-column: span 4; }
+  .feature-card { min-height: 380px; padding: var(--space-5); }
+  .feature-card__text { max-width: none; }
+}
+@media (max-width: 767px) {
+  .feature-grid > .feature-card, .feature-grid__intro + .feature-card { grid-column: 1 / -1; }
+  .feature-card { min-height: 360px; }
+}

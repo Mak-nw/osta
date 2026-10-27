@@ -9,6 +9,7 @@ import {
   WebGLRenderer, Scene, PerspectiveCamera, Group, Vector3, Color, MathUtils, BufferGeometry, Float32BufferAttribute, LineBasicMaterial, LineSegments,
   Mesh, SphereGeometry, MeshBasicMaterial,
 } from 'three';
+import { capDpr } from '../utils/dpr.js';
 
 const FOV = 45, SR = 3.0, MAX_DPR = 2, RING_FRAC = 0.42;   // RING_FRAC = limb radius / container height
 const GW = 360, GH = 180, NL = 46, NSRC = 44, NWAVE = 16, SLICE_MS = 8;
@@ -152,7 +153,7 @@ export function initAboutHeroSphere(host) {
   const resize = () => {
     W = host.clientWidth; H = host.clientHeight;
     if (!W || !H) return false;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, MAX_DPR));
+    renderer.setPixelRatio(capDpr(MAX_DPR));
     renderer.setSize(W, H, false);
     camera.aspect = W / H; camera.updateProjectionMatrix();
     camera.position.set(0, 0, CAM_D); camera.lookAt(0, 0, 0);

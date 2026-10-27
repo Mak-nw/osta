@@ -26,3 +26,23 @@
 .cta-block__art-svg .il-grid { stroke: var(--il-grid); stroke-width: 0.75px; stroke-dasharray: 2 3; }
 .cta-block__art-svg .il-dash { stroke-dasharray: 2 3; stroke-width: 0.75px; }
 .cta-block__art-svg .il-edge, .cta-block__art-svg .il-sheet, .cta-block__art-svg .il-line { stroke: var(--il-soft); }
+
+/* ==========================================================================
+   Responsive product. One column: tablet = full 8 columns, info cards 2 per row; mobile = info cards stacked, the CTA block stacks (title + round button, text, illustration).
+   ========================================================================== */
+@media (max-width: 1199px) {
+  .product-hero__inner > * { grid-column: 1 / -1; }
+  .product-info { margin-top: var(--space-5); }
+  .product-info > .info-card { grid-column: span 4; }
+  .product-info > .cta-block { padding: var(--space-5); }
+}
+@media (max-width: 767px) {
+  .product-info { grid-template-columns: minmax(0, 1fr); }
+  .product-info > .info-card, .product-info > .cta-block { grid-column: 1 / -1; }
+  .product-info > .cta-block { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "title btn" "text text" "art art"; row-gap: var(--space-4); }
+  .cta-block__text { max-width: none; align-self: start; }
+  .cta-block__art { height: 160px; }
+  .cta-block__foot .round-btn { align-self: start; }
+  .breadcrumbs { flex-wrap: wrap; row-gap: var(--space-1); }
+  .breadcrumbs a { display: inline-flex; align-items: center; min-height: var(--control-md); }
+}

@@ -41,3 +41,25 @@
 .slide--split .slide__body > h2 { text-wrap: balance; }
 .slide--split .slide__body > p { text-wrap: pretty; }
 .slide__content > .link-cta { margin-top: var(--space-6); }
+
+/* ==========================================================================
+   Responsive slides (About). The side tracks shrink to the page gutter (gutter - gap), columns follow --grid-cols (8 / 4).
+   Image slide: head top, text bottom (cols 1-6 on tablet, full on mobile). Split slide: blue block with text, photo below (stacked).
+   ========================================================================== */
+@media (max-width: 1199px) {
+  .slide { grid-template-columns: calc(var(--gutter) - var(--grid-gap)) repeat(var(--grid-cols), minmax(0, 1fr)) calc(var(--gutter) - var(--grid-gap)); }
+  .slide--image { min-height: 600px; row-gap: var(--section-md); }
+  .slide__head { grid-column: 2 / -2; margin-top: var(--section-md); }
+  .slide__text { grid-column: 2 / span 6; }
+  .slide--split { min-height: 0; grid-template-rows: auto auto; }
+  .slide__panel { grid-column: 1 / -1; grid-row: 1; margin-right: 0; }
+  .slide__content { grid-column: 2 / -2; grid-row: 1; padding-block: var(--section-md); }
+  .slide__body { margin-top: 0; gap: var(--space-4); }
+  .slide__photo { grid-column: 1 / -1; grid-row: 2; aspect-ratio: 16 / 9; }
+  .slide__content > .link-cta { margin-top: var(--space-5); }
+}
+@media (max-width: 767px) {
+  .slide--image { min-height: 560px; }
+  .slide__text { grid-column: 2 / -2; }
+  .slide__photo { aspect-ratio: 4 / 3; }
+}

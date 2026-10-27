@@ -18,12 +18,15 @@
               <svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#search"/></svg>
               <input class="input input--md" type="search" id="catalog-search" autocomplete="off" placeholder="Search by Name" data-i18n-attr="placeholder:catalog.search_placeholder;aria-label:catalog.search_placeholder">
             </div>
+            <div class="catalog__filters" data-adaptive-wrap>
+            <button class="catalog__filters-toggle" type="button" data-adaptive data-filters-toggle aria-expanded="false" aria-controls="catalog-filters"><span data-i18n="catalog.filters">Filters</span><svg class="icon lang-switch__chevron" aria-hidden="true"><use href="/assets/icons/sprite.svg#chevron-down"/></svg></button>
             <span class="t-label t-muted" data-i18n="catalog.categories">Categories</span>
             <div class="filter-list" id="catalog-filters">
               <button class="filter-item is-active" type="button" data-category="all"><svg class="icon icon-text" aria-hidden="true"><use href="/assets/icons/sprite.svg#grid"/></svg><span data-i18n="catalog.cat_all">All</span></button>
               <button class="filter-item" type="button" data-category="api"><svg class="icon icon-text" aria-hidden="true"><use href="/assets/icons/sprite.svg#molecule"/></svg><span data-i18n="catalog.cat_api">API</span></button>
               <button class="filter-item" type="button" data-category="excipients"><svg class="icon icon-text" aria-hidden="true"><use href="/assets/icons/sprite.svg#puzzle"/></svg><span data-i18n="catalog.cat_excipients">Excipients</span></button>
               <button class="filter-item" type="button" data-category="food-grade"><svg class="icon icon-text" aria-hidden="true"><use href="/assets/icons/sprite.svg#leaf"/></svg><span data-i18n="catalog.cat_food">Food Grade</span></button>
+            </div>
             </div>
             <p class="t-body t-muted" id="catalog-count"></p>
           </div>

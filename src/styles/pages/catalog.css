@@ -10,3 +10,35 @@
 .catalog__help .btn { width: 100%; height: auto; min-height: var(--control-md); white-space: normal; justify-content: space-between; text-align: left; line-height: 1.25; padding-block: var(--space-3); }
 .catalog__help .btn span { min-width: 0; }
 .catalog__help .btn .icon { flex-shrink: 0; }
+
+/* ==========================================================================
+   Responsive catalog. Tablet / mobile: no sticky sidebar. Order: title + search + collapsed "Filters" block, the results (2 cards per row on tablet, 1 on mobile), the help card.
+   The category list opens with the "Filters" toggle (aria-expanded).
+   ========================================================================== */
+.catalog__filters { display: contents; }
+.catalog__filters-toggle { display: none; }
+@media (max-width: 1199px) {
+  .layout-catalog { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-5); }
+  .layout-catalog__sidebar { display: contents; }
+  .layout-catalog__sidebar > .stack { order: 1; }
+  .layout-catalog__sidebar ~ *, .catalog__results { order: 2; width: 100%; }
+  .layout-catalog__sidebar > .catalog__help { order: 3; }
+  #catalog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .catalog__filters { display: flex; flex-direction: column; gap: var(--space-2); }
+  .catalog__filters > .t-label { display: none; }
+  .catalog__filters-toggle {
+    display: flex; align-items: center; justify-content: space-between; width: 100%; height: var(--control-md); padding-inline: var(--space-4);
+    border: 1px solid var(--border-strong); border-radius: var(--radius-md); color: var(--text-accent); font-size: var(--type-body-size); text-align: left;
+    transition: background-color var(--dur) var(--ease);
+  }
+  .catalog__filters-toggle:hover { background: var(--surface-white); }
+  .catalog__filters-toggle[aria-expanded="true"] .lang-switch__chevron { transform: rotate(180deg); }
+  .catalog__filters:not(.is-open) .filter-list { display: none; }
+  .catalog__filters .filter-list { padding: var(--space-2); background: var(--surface-raised); border-radius: var(--radius-lg); }
+  .catalog__help { margin-top: var(--space-3); }
+  .catalog__help .btn { width: auto; align-self: flex-start; min-width: var(--btn-split-w); }
+}
+@media (max-width: 767px) {
+  #catalog-grid { grid-template-columns: minmax(0, 1fr); }
+  .catalog__help .btn { width: 100%; }
+}

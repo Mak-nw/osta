@@ -129,3 +129,31 @@
   --ease-out: cubic-bezier(.22,.61,.36,1); --ease-in-out: cubic-bezier(.65,0,.35,1);
   --reveal-distance: 16px; --stagger: 60ms;
 }
+
+/* ==========================================================================
+   Responsive overrides (decision 2026-10-27): tablet 768-1199 = 8 columns, mobile 375-767 = 4 columns.
+   Desktop (>=1200) values above are NOT touched; only the tokens listed here change.
+   Same roles, new values: display 80 -> 56 -> 40, h1 48 -> 40 -> 32, h2 40 -> 32 -> 28; h3 / lead 24, body 16, label 14 stay.
+   ========================================================================== */
+@media (max-width: 1199px) {
+  :root {
+    --gutter: 24px; --grid-cols: 8; --grid-gap: 16px;
+    --type-display-size: 56px; --type-display-lh: 56px;
+    --type-h1-size: 40px;      --type-h1-lh: 48px;
+    --type-h2-size: 32px;      --type-h2-lh: 40px;
+    --section-sm: var(--space-7);   /* 48 */
+    --section-md: var(--space-8);   /* 64 */
+    --section-lg: var(--space-9);   /* 96 */
+  }
+}
+@media (max-width: 767px) {
+  :root {
+    --gutter: 16px; --grid-cols: 4; --grid-gap: 16px;
+    --type-display-size: 40px; --type-display-lh: 40px;
+    --type-h1-size: 32px;      --type-h1-lh: 40px;
+    --type-h2-size: 28px;      --type-h2-lh: 32px;
+    --section-sm: var(--space-6);   /* 32 */
+    --section-md: var(--space-7);   /* 48 */
+    --section-lg: var(--space-8);   /* 64 */
+  }
+}

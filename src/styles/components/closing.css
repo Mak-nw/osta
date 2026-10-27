@@ -22,3 +22,20 @@
 .home-closing__actions .btn--outline-on-accent.is-hover { background: var(--surface-white); color: var(--accent); }
 .home-closing__actions .btn--outline-on-accent:active,
 .home-closing__actions .btn--outline-on-accent.is-pressed { background: var(--surface-muted); color: var(--accent); transform: translateY(1px); }
+
+/* ==========================================================================
+   Responsive closing panel. Tablet: heading across the whole panel (the 10-of-12-columns cap does not apply). Mobile: buttons stacked full width, taller scene.
+   ========================================================================== */
+@media (max-width: 1199px) {
+  .home-closing { padding-bottom: var(--space-7); }
+  .home-closing__panel { padding-top: var(--section-lg); }
+  .home-closing__body { max-width: none; padding-inline: var(--space-5); }
+  .home-closing__scene { aspect-ratio: 3 / 1; }
+}
+@media (max-width: 767px) {
+  .home-closing { padding-bottom: var(--space-6); }
+  .home-closing__body { padding-inline: var(--space-4); }
+  .home-closing__actions { flex-direction: column; align-items: stretch; width: 100%; margin-top: var(--space-3); }
+  .home-closing__actions .btn { width: 100%; }
+  .home-closing__scene { aspect-ratio: 3 / 2; margin-top: var(--space-4); }
+}

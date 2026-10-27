@@ -49,3 +49,10 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 main { flex: 1; }
+
+/* ---- Responsive typography (tablet <= 1199, mobile <= 767): hard <br> line breaks of desktop headings are dropped (i18n.js puts a space before every <br>, so words never glue together);
+   long (German) words hyphenate or break instead of overflowing. ---- */
+@media (max-width: 1199px) {
+  :is(.t-display, .t-h1, .t-h2, .t-lead, .hero__sub, .section-label) br { display: none; }
+  h1, h2, h3, h4, p, dd, li, .t-display, .t-h1, .t-h2, .t-h3 { overflow-wrap: break-word; hyphens: auto; }
+}

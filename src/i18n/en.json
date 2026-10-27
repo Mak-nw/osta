@@ -14,7 +14,9 @@
     "services": "Services",
     "about": "About Us",
     "products": "Products",
-    "contact": "Contact Us"
+    "contact": "Contact Us",
+    "menu": "Menu",
+    "menu_close": "Close menu"
   },
   "common": {
     "know_more": "Know more",
@@ -164,6 +166,7 @@
   "catalog": {
     "title": "Products",
     "search_placeholder": "Search by Name",
+    "filters": "Filters",
     "categories": "Categories",
     "cat_all": "All",
     "cat_api": "API",

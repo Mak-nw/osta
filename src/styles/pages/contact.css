@@ -46,3 +46,25 @@
 .contact-form__status .icon { color: var(--accent); }
 .contact-form__status[hidden] { display: none; }
 .contact-form .btn[disabled] { pointer-events: none; }
+
+/* ==========================================================================
+   Responsive contact. Tablet / mobile: single column. The photo becomes a banner under the floating header (not sticky), then title, contacts, rule and form.
+   Tablet: contact people 2 columns, name fields side by side. Mobile: everything stacked, the send button full width.
+   ========================================================================== */
+@media (max-width: 1199px) {
+  .contact-split { display: flex; flex-direction: column; align-items: stretch; }
+  .contact-split__body { display: block; }
+  .contact-split__content { display: flex; flex-direction: column; padding: var(--section-sm) var(--gutter) var(--section-md); gap: var(--space-6); }
+  .contact-split__media { position: relative; top: auto; height: auto; aspect-ratio: 16 / 9; width: 100%; }
+  .contact-split__rule { margin: 0; }
+  .contact-info, .contact-form { width: 100%; }
+}
+@media (max-width: 767px) {
+  .contact-split__media { aspect-ratio: 4 / 3; }
+  .contact-split__content { gap: var(--space-5); }
+  .contact-people { grid-template-columns: minmax(0, 1fr); gap: var(--space-5); }
+  .contact-form__row { grid-template-columns: minmax(0, 1fr); gap: var(--space-6); }
+  .contact-form__actions .btn { width: 100%; }
+  .contact-person__link, .contact-link { min-height: var(--control-md); }
+  .contact-link { display: inline-flex; align-items: center; }
+}

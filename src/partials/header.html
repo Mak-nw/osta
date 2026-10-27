@@ -1,7 +1,8 @@
 <header class="header">
   <div class="container">
-    <div class="header__panel">
-      <nav class="header__nav" aria-label="Main">
+    <div class="header__panel" data-header-panel>
+      <button class="header__burger" type="button" data-adaptive data-menu-toggle aria-expanded="false" aria-controls="site-nav" aria-label="Menu" data-i18n-attr="aria-label:nav.menu"><svg class="icon icon-text header__burger-open" aria-hidden="true"><use href="/assets/icons/sprite.svg#menu"/></svg><svg class="icon icon-text header__burger-close" aria-hidden="true"><use href="/assets/icons/sprite.svg#close"/></svg></button>
+      <nav class="header__nav" id="site-nav" aria-label="Main">
         <a class="nav-pill nav-pill--md nav-pill--outline" href="/catalog.html" data-nav="products"><span data-i18n="nav.products">Products</span></a>
         <a class="nav-pill nav-pill--md" href="/services.html" data-nav="services"><span data-i18n="nav.services">Services</span></a>
         <a class="nav-pill nav-pill--md" href="/about.html" data-nav="about"><span data-i18n="nav.about">About Us</span></a>

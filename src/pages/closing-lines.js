@@ -10,6 +10,7 @@ import {
   WebGLRenderer, Scene, OrthographicCamera, Group, Vector3, Color, SRGBColorSpace, BufferGeometry, BufferAttribute, Float32BufferAttribute,
   ShaderMaterial, LineSegments, LineBasicMaterial, LineLoop, Mesh, PlaneGeometry, Sphere, Clock,
 } from 'three';
+import { capDpr } from '../utils/dpr.js';
 
 const HALF_W = 16 / 9, R = 0.25, MAX_DPR = 2, STATIC_T = 3, ZOOM = 0.88;   // ZOOM < 1 = camera closer: trims the empty top/bottom of the frame (line shape unchanged, ends cropped)
 const SEG = 240, N = 18, CYC = 1.7;
@@ -175,7 +176,7 @@ export function initClosingLines(host) {
   const resize = () => {
     W = host.clientWidth; Hh = host.clientHeight;
     if (!W || !Hh) return false;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, MAX_DPR));
+    renderer.setPixelRatio(capDpr(MAX_DPR));
     renderer.setSize(W, Hh, false);
     const aspect = W / Hh;
     let hh;

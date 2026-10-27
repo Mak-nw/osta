@@ -29,7 +29,7 @@ export async function applyLang(lang = currentLang()) {
   });
   document.querySelectorAll('[data-i18n-html]').forEach((el) => {
     const v = dict.get(el.dataset.i18nHtml);
-    if (typeof v === 'string') el.innerHTML = withBase(v);
+    if (typeof v === 'string') el.innerHTML = withBase(v).replace(/<br\s*\/?>/gi, ' <br>'); // space before <br>: collapses at the line end (desktop unchanged), lets tablet/mobile CSS hide the <br> without gluing words
   });
   document.querySelectorAll('[data-i18n-attr]').forEach((el) => {
     // format: "placeholder:key;aria-label:key2"

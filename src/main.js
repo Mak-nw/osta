@@ -1,5 +1,6 @@
 import { initI18n } from './i18n.js';
 import './motion.js';
+import './header-menu.js';
 
 // Mark active nav pill
 const page = document.body.dataset.page;

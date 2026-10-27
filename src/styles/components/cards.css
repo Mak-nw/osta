@@ -75,3 +75,21 @@
 .fact-tile > * { margin: 0; }
 .fact-tile__title { color: var(--text-on-accent); }
 
+
+/* ==========================================================================
+   Responsive cards. Tablet (8 cols): people-card = photo (cols 1-3) + quote and contacts (cols 4-8). Mobile: one column, photo 4:3.
+   Fact tiles, meta list, CTA block adapt to the narrower grid.
+   ========================================================================== */
+@media (max-width: 1199px) {
+  .people-card { row-gap: var(--space-2); }
+  .people-card__photo { grid-column: 1 / span 3; grid-row: 1 / span 2; align-self: start; }
+  .people-card__body { grid-column: 4 / -1; grid-row: 1; padding-block: var(--space-4) 0; }
+  .people-card__contacts { grid-column: 4 / -1; grid-row: 2; padding-block: 0 var(--space-4); margin-top: 0; }
+  .fact-tile { padding: var(--space-5); }
+}
+@media (max-width: 767px) {
+  .people-card__photo { grid-column: 1 / -1; grid-row: 1; aspect-ratio: 4 / 3; }
+  .people-card__body { grid-column: 1 / -1; grid-row: 2; padding-block: var(--space-4) 0; gap: var(--space-4); }
+  .people-card__contacts { grid-column: 1 / -1; grid-row: 3; padding-block: var(--space-3) var(--space-4); }
+  .contact-line { min-height: var(--control-md); }
+}

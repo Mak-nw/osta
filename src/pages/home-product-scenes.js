@@ -9,6 +9,7 @@ import {
 import { LineSegments2 } from 'three/examples/jsm/lines/LineSegments2.js';
 import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry.js';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
+import { capDpr } from '../utils/dpr.js';
 
 const PERIOD = 24, MAX_DPR = 2, STATIC_PHASE = 0.9, TAU = Math.PI * 2;
 const LINE_PX = 2; // outline width in screen px (customer decision for these three illustrations: fat lines, ~2px)
@@ -158,7 +159,7 @@ export function initHomeProductScenes(hosts) {
 
   const resize = (it) => {
     const w = it.host.clientWidth, h = it.host.clientHeight; if (!w || !h) return false;
-    const d = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+    const d = capDpr(MAX_DPR);
     it.d = d; it.W = Math.round(w * d); it.H = Math.round(h * d); it.canvas.width = it.W; it.canvas.height = it.H; return true;
   };
   let lost = false, raf = 0; const t0 = performance.now();

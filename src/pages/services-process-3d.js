@@ -16,6 +16,7 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import { LineSegments2 } from 'three/examples/jsm/lines/LineSegments2.js';
 import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry.js';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
+import { capDpr } from '../utils/dpr.js';
 
 const PITCH = MathUtils.degToRad(30);   // isometric: yaw 45deg, pitch 30deg
 const LINE_PX = 0.5, GRID_PX = 0.4, GRID_ALPHA = 0.55;   // css px: every object line is the SAME width (x DPR once); active = white fill, never a thicker line
@@ -426,7 +427,7 @@ export function initProcessScene(host) {
     if (!reduced.matches && (visible || host.isConnected) && !document.hidden && (performance.now() - t0) / 1000 < DUR[stageShown - 1] + 0.1) raf = requestAnimationFrame(draw);
   };
   const resize = () => {
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(capDpr(2));
     renderer.setSize(host.clientWidth, host.clientHeight, false);
     draw();
   };

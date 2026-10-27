@@ -19,3 +19,16 @@
 .service-list.is-3d .service-list__canvas { opacity: 1; }
 .service-list.is-3d .service-card__fallback { opacity: 0; }
 @media (prefers-reduced-motion: reduce) { .service-list__canvas, .service-card__fallback { transition: none !important; } }
+
+/* Responsive service list (About blue block). Tablet (8 cols): number | text (cols 2-6) | 3D slot (cols 7-8). Mobile (4 cols): number + slot on top, text below. */
+@media (max-width: 1199px) {
+  .service-card { padding: var(--space-5) 0; }
+  .service-card::before { grid-column: 1 / span 1; }
+  .service-card__body { grid-column: 2 / span 5; }
+  .service-card__media { grid-column: 7 / span 2; height: calc(var(--space-9) + var(--space-5)); }
+}
+@media (max-width: 767px) {
+  .service-card::before { grid-column: 1 / span 2; }
+  .service-card__body { grid-column: 1 / -1; grid-row: 2; }
+  .service-card__media { grid-column: 3 / span 2; height: calc(var(--space-9)); }
+}

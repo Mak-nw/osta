@@ -7,7 +7,9 @@
 import {
   WebGLRenderer, Scene, PerspectiveCamera, Group, Vector3, Color, MathUtils, BufferGeometry, BufferAttribute, ShaderMaterial, Points, LineBasicMaterial, Line, LineSegments, QuadraticBezierCurve3,
 } from 'three';
+import { capDpr } from '../utils/dpr.js';
 
+const DESIGN_ASPECT = 16 / 5; // frame the scene was drawn for (desktop strip); a narrower host widens the FOV so the whole scene stays in view
 const CAM_D = 10, FOV = 45, MAX_DPR = 2, MAX_LABELS = 14, DOT_PX = 5, MAX_DOTS = 30, MIN_DOTS = 16, FADE = 0.08;
 // ISO codes only; no CIS countries and no UA
 const CODES = ['DE', 'NL', 'BE', 'FR', 'IT', 'ES', 'PL', 'CH', 'AT', 'GB', 'SE', 'TR', 'IN', 'CN', 'JP', 'KR', 'US', 'BR', 'AE', 'CA', 'MX', 'IE', 'NO', 'FI', 'PT', 'GR', 'AR', 'CL', 'CO'];
@@ -194,11 +196,13 @@ export function initHeroTrajectories(host) {
   const resize = () => {
     W = host.clientWidth; H = host.clientHeight;
     if (!W || !H) return false;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, MAX_DPR));
+    renderer.setPixelRatio(capDpr(MAX_DPR));
     renderer.setSize(W, H, false);
     dotMat.uniforms.uSize.value = DOT_PX * renderer.getPixelRatio();
-    camera.aspect = W / H; camera.updateProjectionMatrix();
-    const visH = 2 * CAM_D * Math.tan(MathUtils.degToRad(FOV / 2)), visW = visH * camera.aspect;
+    camera.aspect = W / H;
+    camera.fov = camera.aspect < DESIGN_ASPECT * 0.98 ? MathUtils.radToDeg(2 * Math.atan(Math.tan(MathUtils.degToRad(FOV / 2)) * DESIGN_ASPECT / camera.aspect)) : FOV;
+    camera.updateProjectionMatrix();
+    const visH = 2 * CAM_D * Math.tan(MathUtils.degToRad(camera.fov / 2)), visW = visH * camera.aspect;
     world.position.set(-visW / 2 + 0.18 * visW, -visH / 2 - 0.07 * visH, 0);
     layoutMarkers();
     return true;
@@ -223,7 +227,7 @@ export function initHeroTrajectories(host) {
     }
     dotObj.visible = !reduced && started;
     if (dotObj.visible) updateDots(t);
-    const pxToWorld = (2 * Math.tan(MathUtils.degToRad(FOV / 2))) / H;
+    const pxToWorld = (2 * Math.tan(MathUtils.degToRad(camera.fov / 2))) / H;
     for (const m of active) {
       const drawn = ease(m.c.line.prog) >= m.c.t && m.c.line.prog > 0;
       m.mesh.visible = drawn;

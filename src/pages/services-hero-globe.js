@@ -11,6 +11,7 @@ import {
 import { LineSegments2 } from 'three/examples/jsm/lines/LineSegments2.js';
 import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry.js';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
+import { capDpr } from '../utils/dpr.js';
 
 const D2R = Math.PI / 180;
 // camera: low above the surface south of Europe, looking north along the surface (tangent-ish view)
@@ -213,7 +214,7 @@ export async function initHeroGlobe(host) {
   const resize = () => {
     W = host.clientWidth; H = host.clientHeight;
     if (!W || !H) return false;
-    const pr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+    const pr = capDpr(MAX_DPR);
     renderer.setPixelRatio(pr);
     renderer.setSize(W, H, false);
     camera.aspect = W / H; camera.updateProjectionMatrix();

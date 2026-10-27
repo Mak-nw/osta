@@ -9,6 +9,7 @@ import {
   WebGLRenderer, Scene, OrthographicCamera, Group, Vector2, Vector3, Color, SRGBColorSpace, BufferGeometry, BufferAttribute, Float32BufferAttribute,
   ShaderMaterial, LineSegments, LineBasicMaterial, LineLoop, Sphere, DynamicDrawUsage, Clock,
 } from 'three';
+import { capDpr } from '../utils/dpr.js';
 
 const VIEW_H = 3.1, MAX_DPR = 2;
 const RC = 0.58, H = 0.82;                       // capsule: cap radius, half cylinder length (sphere radius = 1)
@@ -210,7 +211,7 @@ export function initHomeHeroPill(host) {
   const resize = () => {
     W = host.clientWidth; Hh = host.clientHeight;
     if (!W || !Hh) return false;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, MAX_DPR));
+    renderer.setPixelRatio(capDpr(MAX_DPR));
     renderer.setSize(W, Hh, false);
     const aspect = W / Hh, halfH = (VIEW_H / 2) * Math.max(1, 1 / aspect);   // narrow container: grow the view so the silhouette stays inside
     camera.left = -halfH * aspect; camera.right = halfH * aspect; camera.top = halfH; camera.bottom = -halfH;

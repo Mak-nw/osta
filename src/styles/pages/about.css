@@ -39,3 +39,33 @@
 .hero-sphere__hud g { stroke: var(--accent); }
 .hero-sphere__hud.is-on { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .hero-sphere__hud { transition: none; } }
+
+/* ==========================================================================
+   Responsive About. Tablet (8 cols) / mobile (4 cols).
+   Intro: title, lead, meta list, two text paragraphs (2 columns on tablet), photo. Blue services block: texts in 2 columns (tablet) / stacked (mobile).
+   ========================================================================== */
+@media (max-width: 1199px) {
+  .about-intro__grid { row-gap: var(--space-5); }
+  .about-intro__head { grid-column: 1 / -1; grid-row: 1; margin-bottom: var(--space-3); }
+  .about-intro__lead { grid-column: 1 / -1; grid-row: 2; }
+  .about-intro__aside { grid-column: 1 / -1; grid-row: 3; }
+  .about-intro__text { grid-column: 1 / -1; grid-row: 4; }
+  .about-intro__text > p:first-child { grid-column: 1 / span 4; grid-row: 1; }
+  .about-intro__text > p + p { grid-column: 5 / span 4; grid-row: 1; }
+  .about-intro__figure { grid-column: 1 / -1; grid-row: 2; margin-top: var(--space-5); }
+  .about-intro__figure .about-intro__photo { aspect-ratio: 16 / 9; }
+  .about-services__top { padding-bottom: var(--space-8); }
+  .about-services__texts { row-gap: var(--space-5); }
+  .about-services__head { grid-column: 1 / -1; }
+  .about-services__texts > p:first-of-type { grid-column: 1 / span 4; grid-row: 2; }
+  .about-services__texts > p:last-of-type { grid-column: 5 / span 4; grid-row: 2; }
+}
+@media (max-width: 767px) {
+  .about-intro__text > p:first-child { grid-column: 1 / -1; grid-row: 1; }
+  .about-intro__text > p + p { grid-column: 1 / -1; grid-row: 2; }
+  .about-intro__figure { grid-row: 3; }
+  .about-intro__figure .about-intro__photo { aspect-ratio: 4 / 3; }
+  .about-services__top { padding-bottom: var(--space-7); }
+  .about-services__texts > p:first-of-type { grid-column: 1 / -1; grid-row: 2; }
+  .about-services__texts > p:last-of-type { grid-column: 1 / -1; grid-row: 3; }
+}

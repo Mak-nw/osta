@@ -4,6 +4,7 @@
    shader fails, the canvas is removed and the solid --surface background stays. */
 
 import { tokenToRgb } from '../utils/css-color.js';
+import { capDpr } from '../utils/dpr.js';
 
 const CONFIG = {
   lineStrength: 0.7,    // 0..1: line strength
@@ -186,7 +187,7 @@ function init() {
     const drawNow = () => draw(motionQuery.matches ? STATIC_TIME : (performance.now() - t0) / 1000);
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+      const dpr = capDpr(MAX_DPR);
       const w = Math.max(1, Math.round(window.innerWidth * dpr));
       const h = Math.max(1, Math.round(window.innerHeight * dpr));
       if (canvas.width !== w || canvas.height !== h) {

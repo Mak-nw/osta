@@ -104,3 +104,45 @@
 .hero-scene__label { position: absolute; left: 0; top: 0; opacity: 0; transition: opacity var(--dur-slow) var(--ease-out); color: var(--accent); font: var(--font-weight-regular) var(--type-label-size)/var(--type-label-lh) var(--font-sans); white-space: nowrap; }
 .hero-scene__label.is-on { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .hero-scene__label { transition: none; } }
+
+/* ==========================================================================
+   Responsive Services. Tablet (8 cols) / mobile (4 cols).
+   Hero strip taller. Process: the pinned 200svh scene is KEPT; inside it the parts stack: title on top, 3D in the middle, the four stages below (4 columns on tablet, 2 x 2 on mobile).
+   Service cards 2 x 2 / 1 column. Supply: text stacks. How we work: no sticky column, the step list under the intro.
+   ========================================================================== */
+@media (max-width: 1199px) {
+  .hero__media--scene { aspect-ratio: 16 / 8; }
+  .process-scroll__grid { grid-template-rows: auto minmax(0, 1fr) auto; row-gap: var(--space-4); align-items: stretch; padding-block: var(--space-5); }
+  .process-scroll__frame { display: contents; }
+  .process-scroll__head { grid-column: 1 / -1; grid-row: 1; margin-top: 0; }
+  .process-scroll__art { grid-column: 1 / -1; grid-row: 2; height: auto; min-height: 0; }
+  .process-steps { grid-column: 1 / -1; grid-row: 3; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--grid-gap); }
+  .process-steps::before { display: none; }
+  .process-steps__row { gap: var(--space-3); align-items: center; }
+  .process-steps__name { font-size: var(--type-body-size); line-height: var(--type-body-lh); letter-spacing: 0; }
+  .process-text__body { grid-column: 1 / span 6; gap: var(--space-5); }
+  .svc-card { grid-column: span 4; }
+  .svc-card__window { aspect-ratio: 3 / 2; }
+  .svc-services__head { margin-bottom: var(--space-6); }
+  .svc-supply__head { grid-column: 1 / -1; }
+  .svc-supply__text--1 { grid-column: 1 / span 6; grid-row: 2; }
+  .svc-supply__text--2 { grid-column: 1 / span 6; grid-row: 3; }
+  .svc-supply__cta { grid-column: 1 / span 6; grid-row: 4; }
+  .how-split { row-gap: var(--space-6); }
+  .how-split__sticky { grid-column: 1 / -1; position: static; }
+  .how-split__sticky > p.t-body { width: auto; max-width: 560px; }
+  .how-list { grid-column: 1 / -1; display: block; }
+  .how-step { min-height: 0; grid-template-columns: var(--chip-lg) minmax(0, 1fr) auto; column-gap: var(--space-4); }
+  .how-step__icon { grid-column: 1; grid-row: 1; margin-top: 0; }
+  .how-step__title { grid-column: 2; grid-row: 1; align-self: center; }
+  .how-step__num { grid-column: 3; grid-row: 1; align-self: center; }
+  .how-step__text { grid-column: 2 / -1; grid-row: 2; }
+}
+@media (max-width: 767px) {
+  .hero__media--scene { aspect-ratio: 2 / 1; }
+  .process-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--space-2); }
+  .process-text__body { grid-column: 1 / -1; }
+  .svc-card { grid-column: 1 / -1; }
+  .svc-supply__text--1, .svc-supply__text--2, .svc-supply__cta { grid-column: 1 / -1; }
+  .svc-supply__cta { width: 100%; }
+}

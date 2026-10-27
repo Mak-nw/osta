@@ -36,3 +36,37 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
 .hero__aside { grid-column: 1 / span 6; grid-row: 2; margin-top: var(--space-7); display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-6); }
 .hero__points { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); margin: var(--space-7) 0 0; padding: var(--space-5) 0 0; list-style: none; border-top: 1px solid var(--border); }
 .hero__point { grid-column: span 3; display: flex; align-items: center; gap: var(--space-4); min-width: 0; color: var(--text-accent-subtle); }
+
+/* ==========================================================================
+   Responsive heroes. Tablet (<= 1199) / mobile (<= 767).
+   About / Services hero: facts and CTA stack centred; media keeps full bleed, taller aspect.
+   Home hero: H1, button, scene BELOW the text (tablet 360 / mobile 280 high), then the four facts (2 x 2 on tablet, 1 column on mobile).
+   ========================================================================== */
+@media (max-width: 1199px) {
+  .hero { padding-top: calc(var(--header-h) + var(--space-7)); }
+  .hero__sub { margin-top: var(--space-4); }
+  .hero__facts { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); margin-top: var(--space-6); }
+  .hero__fact { white-space: normal; text-align: center; }
+  .hero__fact--l, .hero__fact--r { text-align: center; }
+  .hero__media { margin-top: var(--space-6); aspect-ratio: 16 / 9; }
+
+  .hero--home { min-height: 0; padding-bottom: var(--section-sm); gap: var(--space-7); }
+  .hero--home .hero__grid { row-gap: var(--space-6); align-items: start; }
+  .hero--home .hero__title { grid-column: 1 / -1; grid-row: 1; }
+  .hero--home .hero__aside { grid-column: 1 / -1; grid-row: 2; margin-top: 0; }
+  .hero__scene { grid-column: 1 / -1; grid-row: 3; height: 360px; align-self: auto; }
+  .hero__points { margin-top: 0; padding-top: var(--space-5); row-gap: var(--space-4); }
+  .hero__point { grid-column: span 4; }
+}
+@media (max-width: 767px) {
+  .hero { padding-top: calc(var(--header-h) + var(--space-6)); }
+  .hero__facts { margin-top: var(--space-5); }
+  .hero__media { aspect-ratio: 4 / 3; max-height: none; }
+  .link-cta { display: inline-flex; align-items: center; min-height: var(--control-md); }
+
+  .hero--home { gap: var(--space-6); }
+  .hero--home .hero__grid { row-gap: var(--space-5); }
+  .hero--home .hero__aside .btn { width: 100%; }
+  .hero__scene { height: 280px; }
+  .hero__point { grid-column: 1 / -1; }
+}

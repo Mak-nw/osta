@@ -77,3 +77,14 @@ search.addEventListener('input', () => { state.query = search.value; state.shown
 more.addEventListener('click', () => { state.shown += PAGE; render(); });
 search.value = state.query;
 render();
+
+// Tablet / mobile: the category list is a collapsed "Filters" block above the results (the toggle is hidden by CSS on desktop).
+const filtersToggle = document.querySelector('[data-filters-toggle]');
+if (filtersToggle) {
+  const box = filtersToggle.closest('.catalog__filters');
+  filtersToggle.addEventListener('click', () => {
+    const open = filtersToggle.getAttribute('aria-expanded') !== 'true';
+    filtersToggle.setAttribute('aria-expanded', String(open));
+    box.classList.toggle('is-open', open);
+  });
+}

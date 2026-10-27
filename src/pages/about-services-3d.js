@@ -9,6 +9,7 @@ import {
 import { LineSegments2 } from 'three/examples/jsm/lines/LineSegments2.js';
 import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry.js';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
+import { capDpr } from '../utils/dpr.js';
 
 const SPIN = 0.15;                  // rad/s around the vertical axis
 const TARGET = 3.5;                 // normalised model size (scene units)
@@ -228,7 +229,7 @@ export function initServicesScene(root) {
   const resize = () => {
     const w = root.clientWidth, h = root.clientHeight;
     if (!w || !h) return;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(capDpr(2));
     renderer.setSize(w, h, false);
     if (reduced.matches || !ready) draw();
   };

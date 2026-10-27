@@ -18,3 +18,8 @@
 .text-cols-2 { columns: 2; column-gap: var(--space-8); }
 .text-cols-2 > p { margin: 0 0 var(--space-3); }
 .text-cols-2 > p:last-child { margin-bottom: 0; }
+
+/* Responsive editorial: two-column text flows into one column on mobile */
+@media (max-width: 767px) {
+  .text-cols-2 { columns: 1; }
+}

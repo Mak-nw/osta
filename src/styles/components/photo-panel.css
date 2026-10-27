@@ -11,3 +11,16 @@
 .photo-panel__head .section-label, .photo-panel__head h2 { color: var(--text-on-accent); }
 .photo-panel__aside { grid-column: 6 / span 3; grid-row: 2; align-self: end; }
 .photo-panel__aside > p { margin: 0; }
+
+/* Responsive photo panel: head across the width, text below (tablet cols 1-6, mobile full), compact paddings */
+@media (max-width: 1199px) {
+  .photo-panel { min-height: 600px; }
+  .photo-panel__grid { padding-block: var(--space-7); row-gap: var(--section-md); }
+  .photo-panel__head { grid-column: 1 / -1; }
+  .photo-panel__aside { grid-column: 1 / span 6; }
+}
+@media (max-width: 767px) {
+  .photo-panel { min-height: 560px; }
+  .photo-panel__grid { padding-block: var(--space-6); }
+  .photo-panel__aside { grid-column: 1 / -1; }
+}
