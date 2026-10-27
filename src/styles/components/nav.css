@@ -111,26 +111,25 @@
 .lang-menu__list:focus-visible .lang-menu__option.is-focus:not([aria-selected="true"]) { outline: var(--focus-outline); outline-offset: var(--focus-offset); }
 
 /* ==========================================================================
-   Responsive header.
-   Burger button: hidden on desktop and tablet; mobile (<= 767px) shows it.
-   Tablet (768-1199): the same floating panel, full container width, tighter gaps.
-   Mobile (<= 767): compact panel [logo | EN | burger]; burger opens the same panel downwards with Products / Services / About Us and Contact Us.
+   Responsive header (<= 1199, tablet and mobile): ONE bar of 64px, left to right:
+   burger (44) | Products (outline pill, as on desktop)  .  LOGO exactly at the panel centre  .  language | Contact Us (right edge).
+   Services and About Us live in the burger menu that unfolds under the bar inside the same white panel.
+   Grid: minmax(0,1fr) auto minmax(0,1fr) keeps the logo centred whatever the side contents are; header-menu.js re-parents the nodes so Tab = visual order.
    ========================================================================== */
+.header__left { display: contents; }
 .header__burger { display: none; }
 @media (max-width: 1199px) {
-  .header__panel { width: 100%; column-gap: var(--space-4); }
-}
-@media (max-width: 767px) {
   .header__panel {
-    height: auto; min-height: var(--header-bar-h); align-content: start; padding: calc(var(--header-bar-pad) - 1px) var(--space-2);
-    grid-template-columns: minmax(0, 1fr) auto auto; column-gap: var(--space-1); row-gap: 0;
-    grid-template-areas: "logo lang burger" "nav nav nav" "cta cta cta";
+    width: 100%; height: auto; min-height: var(--header-bar-h); align-content: start; padding: calc(var(--header-bar-pad) - 1px) var(--space-2);
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); column-gap: 0; row-gap: 0;
+    grid-template-areas: "left logo actions" "menu menu menu";
   }
-  .header__logo { grid-area: logo; justify-self: start; padding-left: var(--space-2); }
-  .header__actions { display: contents; }
-  .header__panel .lang-menu { grid-area: lang; }
+  .header__left { grid-area: left; display: flex; align-items: center; justify-content: flex-start; gap: var(--space-1); min-width: 0; }
+  .header__logo { grid-area: logo; justify-self: center; display: flex; align-items: center; min-height: var(--control-md); } /* tap target >= 44 even when the image is smaller */
+  .header__actions { grid-area: actions; min-width: 0; gap: 0; }
+  .header__cta { margin-left: var(--space-1); }
   .header__burger {
-    grid-area: burger; display: inline-grid; place-items: center; width: var(--control-md); height: var(--control-md); box-sizing: border-box;
+    display: inline-grid; place-items: center; flex: none; width: var(--control-md); height: var(--control-md); box-sizing: border-box;
     border: 1px solid transparent; border-radius: var(--radius-md); color: var(--text-accent);
     transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease), color var(--dur) var(--ease);
   }
@@ -140,13 +139,34 @@
   .header__burger .icon-text { color: inherit; }
   .header__burger-close, .header__burger[aria-expanded="true"] .header__burger-open { display: none; }
   .header__burger[aria-expanded="true"] .header__burger-close { display: block; }
-  /* closed: only the bar. open: the links and Contact Us unfold inside the same white panel */
-  .header__nav, .header__cta { display: none; }
+  /* closed: only the bar. open: Services and About Us unfold under it inside the same white panel */
+  .header__nav { display: none; }
   .header__panel.is-menu-open .header__nav {
-    grid-area: nav; display: flex; flex-direction: column; align-items: stretch; gap: var(--space-1);
+    grid-area: menu; display: flex; flex-direction: column; align-items: stretch; gap: var(--space-1);
     margin-top: var(--space-2); padding-top: var(--space-2); border-top: 1px solid var(--border);
   }
-  .header__panel.is-menu-open .nav-pill { width: 100%; justify-content: flex-start; }
-  .header__panel.is-menu-open .header__cta { grid-area: cta; display: flex; margin: var(--space-3) 0 var(--space-2); min-width: 0; width: 100%; justify-content: space-between; }
+  .header__panel.is-menu-open .header__nav .nav-pill { width: 100%; justify-content: flex-start; }
   .lang-menu__list { right: 0; min-width: calc(var(--control-md) + var(--space-6)); }
+}
+/* narrow phones: the five items must share the bar without overlapping the centred logo (tokens only; nothing is hidden, font stays >= 14px).
+   <= 560: no arrow in Contact Us, language without the globe. <= 420: smaller logo, tighter pill padding.
+   <= 360: Contact Us is shown as the short label "Contact" (same link, full name in aria-label), pills pad 4px. */
+.header__cta-short { display: none; }
+@media (max-width: 560px) {
+  .header__cta { margin-left: 0; }
+  .header__cta .icon { display: none; }
+  .header .lang-switch .icon:not(.lang-switch__chevron) { display: none; }
+}
+@media (max-width: 420px) {
+  .header__logo img { height: calc(var(--logo-header-h) - var(--space-3)); }
+  .header__cta { --_px: var(--space-2); min-width: 0; }
+  .header .lang-switch { padding-inline: var(--space-2); gap: var(--space-1); }
+  .header__left .nav-pill { padding-inline: var(--space-2); }
+}
+@media (max-width: 360px) {
+  .header__panel { padding-inline: var(--space-1); }
+  .header__left { gap: 0; }
+  .header__left .nav-pill { padding-inline: var(--space-1); }
+  .header__cta-full { display: none; }
+  .header__cta-short { display: inline; }
 }

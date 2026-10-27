@@ -56,9 +56,8 @@
   .footer__row dd { display: block; }
   .footer__mission { grid-column: 1 / -1; }
   .footer__cta { grid-column: 1 / -1; width: 100%; margin-top: calc(-1 * var(--space-2)); }
-  .footer__contacts { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-5); }
-  .footer__row { gap: var(--space-1); }
-  .footer__row .footer__label { flex-direction: row; align-items: center; gap: var(--space-3); }
+  .footer__contacts { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--space-6); } /* 2 x 2: Phone | Fax, Mail | Address; icon on top, label, value */
+  .footer__row .footer__label { gap: var(--space-3); }
   .footer__wordmark { margin-top: var(--space-7); min-height: var(--control-md); }
   .footer__copy { padding-block: var(--space-4) var(--space-5); }
 }

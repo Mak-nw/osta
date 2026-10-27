@@ -16,15 +16,22 @@
 .how-step__text { grid-column: 2 / span 3; grid-row: 2; } /* description = exactly 3 of the list's 6 columns: 50% - gap/2 (gap 16) */
 @media (prefers-reduced-motion: reduce) { .how-step { opacity: 1; transition: none; } }
 
-/* Tablet (<= 1199): no sticky column, the step list under the intro (Services and Home) */
+/* Tablet (<= 1199): no sticky column, the step list under the intro (Services and Home). The step rows sit on the page grid (8 / 4 columns, subgrid):
+   icon in column 1, title + description start at the left edge of column 2, the number is in the last column (right). */
 @media (max-width: 1199px) {
   .how-split { row-gap: var(--space-6); }
   .how-split__sticky { grid-column: 1 / -1; position: static; }
   .how-split__sticky > p.t-body { width: auto; max-width: 560px; }
-  .how-list { grid-column: 1 / -1; display: block; }
-  .how-step { min-height: 0; grid-template-columns: var(--chip-lg) minmax(0, 1fr) auto; column-gap: var(--space-4); }
-  .how-step__icon { grid-column: 1; grid-row: 1; margin-top: 0; }
-  .how-step__title { grid-column: 2; grid-row: 1; align-self: center; }
-  .how-step__num { grid-column: 3; grid-row: 1; align-self: center; }
+  .how-list { grid-column: 1 / -1; }
+  .how-step { min-height: 0; }
+  .how-step__icon { grid-column: 1; grid-row: 1; margin-top: 0; align-self: center; }
+  .how-step__title { grid-column: 2 / calc(var(--grid-cols) - 0); grid-row: 1; align-self: center; min-width: 0; }
+  .how-step__num { grid-column: -2; grid-row: 1; align-self: center; }
   .how-step__text { grid-column: 2 / -1; grid-row: 2; }
+}
+/* mobile (4 columns): columns 2-3 are too narrow for the 28px title ("Manufacturer" would break mid-word), so the title takes columns 2-4
+   and the number moves under the icon (column 1, next to the description) */
+@media (max-width: 767px) {
+  .how-step__title { grid-column: 2 / -1; }
+  .how-step__num { grid-column: 1; grid-row: 2; align-self: start; justify-self: start; }
 }

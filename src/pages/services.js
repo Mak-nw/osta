@@ -48,6 +48,16 @@ const updateProcess = () => {
   proc.dataset.stage = String(stage);
   procItems.forEach((li, i) => { const on = !isStatic() && i + 1 === stage; li.classList.toggle('is-active', on); if (on) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current'); });
   scene3d?.setProgress(p);
+  centreStage(stage);
+};
+// mobile strip of stages (services.css): the active stage glides to the horizontal centre of the strip
+const strip = proc?.querySelector('.process-steps');
+let centred = 0;
+const centreStage = (stage) => {
+  if (!strip || stage === centred || isStatic() || strip.scrollWidth <= strip.clientWidth) return;
+  centred = stage;
+  const li = procItems[stage - 1];
+  strip.scrollTo({ left: li.offsetLeft + li.offsetWidth / 2 - strip.clientWidth / 2, behavior: reduced.matches ? 'auto' : 'smooth' });
 };
 
 // (How we work highlight: src/utils/how-split.js, started from main.js)

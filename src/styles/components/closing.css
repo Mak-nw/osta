@@ -24,7 +24,7 @@
 .home-closing__actions .btn--outline-on-accent.is-pressed { background: var(--surface-muted); color: var(--accent); transform: translateY(1px); }
 
 /* ==========================================================================
-   Responsive closing panel. Tablet: heading across the whole panel (the 10-of-12-columns cap does not apply). Mobile: buttons stacked full width, taller scene.
+   Responsive closing panel. Tablet: heading across the whole panel (the 10-of-12-columns cap does not apply). Mobile: two buttons in one row (14px labels, arrow icons dropped at <= 560), taller scene.
    ========================================================================== */
 @media (max-width: 1199px) {
   .home-closing { padding-bottom: var(--space-7); }
@@ -35,7 +35,9 @@
 @media (max-width: 767px) {
   .home-closing { padding-bottom: var(--space-6); }
   .home-closing__body { padding-inline: var(--space-4); }
-  .home-closing__actions { flex-direction: column; align-items: stretch; width: 100%; margin-top: var(--space-3); }
-  .home-closing__actions .btn { width: 100%; }
+  /* two buttons in ONE row, equal width, one text line; the row wraps to a column only when two labels physically cannot fit side by side (min-width: auto) */
+  .home-closing__actions { flex-direction: row; flex-wrap: wrap; align-items: stretch; column-gap: var(--space-3); width: 100%; margin-top: var(--space-3); }
+  .home-closing__actions .btn { flex: 1 1 0; width: auto; min-width: auto; height: var(--control-md); --_px: var(--space-2); font-size: var(--type-label-size); justify-content: center; }
   .home-closing__scene { aspect-ratio: 3 / 2; margin-top: var(--space-4); }
 }
+@media (max-width: 560px) { .home-closing__actions .btn .icon { display: none; } }
