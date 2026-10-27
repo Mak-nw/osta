@@ -29,8 +29,7 @@
 
 /* Managers: plain text blocks, no cards */
 .contact-people { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--grid-gap); }
-.contact-person { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
-.contact-person .t-label { margin-bottom: var(--space-2); }
+.contact-person { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
 .contact-person__link { display: flex; align-items: center; gap: var(--space-3); color: var(--text); overflow-wrap: anywhere; transition: color var(--dur) var(--ease); }
 .contact-person__link:hover { color: var(--text-accent); }
 

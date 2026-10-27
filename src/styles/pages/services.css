@@ -78,23 +78,9 @@
 .svc-supply__text--2 { grid-column: 9 / span 3; }
 .svc-supply__cta { grid-column: 6 / span 3; grid-row: 3; justify-self: start; }
 
-/* ---------- how we work: left cols 1-5 sticky (tag, h2, text, CTA), right cols 7-12 a plain list of 4 steps that scrolls past it; the step nearest the viewport
-   centre is bright, the others are dimmed (services.js: IntersectionObserver sets .is-current) ---------- */
+/* How we work: layout/steps come from components/how-split.css; this page only sets the section surface and its vertical rhythm */
 .svc-how { background: var(--surface); }
-.how-split { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); align-items: start; padding-block: var(--section-lg); }
-.how-split__sticky { grid-column: 1 / span 5; hyphens: manual; position: sticky; top: calc(var(--header-h) + var(--space-8)); display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-5); }
-.how-split__sticky > * { margin: 0; }
-.how-split__sticky > p.t-body { width: calc((100% - 4 * var(--grid-gap)) / 5 * 3 + 2 * var(--grid-gap)); } /* paragraph = exactly 3 grid columns (sticky spans 5) */
-.how-list { grid-column: 6 / -1; display: grid; grid-template-columns: subgrid; list-style: none; margin: 0; padding: 0; }
-.how-step { grid-column: 1 / -1; min-height: 24vh; min-height: 24svh; display: grid; grid-template-columns: subgrid; column-gap: var(--grid-gap); row-gap: var(--space-3); align-items: start; padding-block: var(--space-6); border-top: 1px solid var(--border); opacity: 0.45; transition: opacity var(--dur-base) var(--ease-out); }
-.how-step:last-child { border-bottom: 1px solid var(--border); }
-.how-step.is-current { opacity: 1; }
-.how-step > * { margin: 0; }
-.how-step__icon { grid-column: 1; grid-row: 1; margin-top: calc((var(--type-h2-lh) - var(--chip-lg)) / 2); } /* extra left column: round icon centred on the title line (40px line, 40px chip) */
-.how-step__num { grid-column: 7; grid-row: 1; justify-self: end; color: var(--text-accent-subtle); } /* number on the right, same row as the title */
-.how-step__title { grid-column: 2 / span 5; grid-row: 1; color: var(--text-accent); }
-.how-step__text { grid-column: 2 / span 3; grid-row: 2; } /* description = exactly 3 of the list's 6 columns: 50% - gap/2 (gap 16) */
-@media (prefers-reduced-motion: reduce) { .how-step { opacity: 1; transition: none; } }
+.svc-how .how-split { padding-block: var(--section-lg); }
 
 /* Hero trajectories strip (services.html .hero__media--scene, services-hero-trajectories.js): transparent three.js canvas (the hero surface shows through)
    + HTML ISO-code labels (14px, --accent) projected from 3D; they fade in with the line being drawn. No gradients/shadows/masks. Wider strip than the Home hero media. */

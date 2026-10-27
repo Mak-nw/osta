@@ -1,10 +1,10 @@
 /* Hero (AIDA): title (Attention) > subtitle (Interest) > facts row (Desire) > CTA link (Action) > full-bleed image. Tokens only. */
 .hero { padding-top: calc(var(--header-h) + var(--space-8)); background: var(--surface); text-align: center; }
 .hero__title { margin: 0; }
-.hero__sub { margin: var(--space-5) auto 0; color: var(--text-accent-subtle); }
+.hero__sub { margin: var(--space-5) auto 0; color: var(--text); }
 /* facts row on the 12-col grid: left 1-4 (start), CTA 5-8 (center), right 9-12 (end) */
 .hero__facts { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); align-items: center; margin-top: var(--space-7); }
-.hero__fact { margin: 0; color: var(--text-accent-subtle); white-space: nowrap; }
+.hero__fact { margin: 0; color: var(--text); white-space: nowrap; }
 .hero__fact--l { grid-column: 1 / span 4; text-align: left; }
 .hero__cta { grid-column: 5 / span 4; justify-self: center; }
 .hero__facts .hero__cta { font-size: var(--type-body-size); line-height: var(--type-body-lh); } /* same size as facts; beats .link-cta (body size) by specificity */
@@ -35,4 +35,4 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
 .hero__scene { grid-column: 9 / span 4; grid-row: 1 / span 2; align-self: stretch; position: relative; min-height: 0; } /* decorative three.js scene (home-hero-pill.js), transparent canvas, no frame; height = H1 + CTA block */
 .hero__aside { grid-column: 1 / span 6; grid-row: 2; margin-top: var(--space-7); display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-6); }
 .hero__points { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); margin: var(--space-7) 0 0; padding: var(--space-5) 0 0; list-style: none; border-top: 1px solid var(--border); }
-.hero__point { grid-column: span 3; display: flex; align-items: center; gap: var(--space-4); min-width: 0; color: var(--text-accent-subtle); }
+.hero__point { grid-column: span 3; display: flex; align-items: center; gap: var(--space-4); min-width: 0; color: var(--text); }

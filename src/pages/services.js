@@ -1,7 +1,6 @@
 // Services page behaviour:
 // 1) hero 3D trajectories scene (services-hero-trajectories.js, lazy after first paint; the old globe services-hero-globe.js is disconnected);
 // 2) Process scroll: sticky scene, the scroll progress through the 200svh wrapper picks the active stage 01-04 and drives the 3D scene (lazy);
-// 3) How we work: the step nearest the viewport centre is bright, the others dimmed.
 // Everything scroll-linked is read in one rAF per scroll/resize; prefers-reduced-motion = static layout (CSS) and no updates here.
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
@@ -49,18 +48,10 @@ const updateProcess = () => {
   scene3d?.setProgress(p);
 };
 
-// 3) How we work: the step nearest the viewport centre is bright (.is-current), the others are dimmed
-const steps = [...document.querySelectorAll('.how-step')];
-const updateHow = () => {
-  if (!steps.length) return;
-  const mid = window.innerHeight / 2;
-  let best = 0, dist = Infinity;
-  steps.forEach((s, i) => { const r = s.getBoundingClientRect(); const d = Math.abs((r.top + r.bottom) / 2 - mid); if (d < dist) { dist = d; best = i; } });
-  steps.forEach((s, i) => s.classList.toggle('is-current', i === best));
-};
+// (How we work highlight: src/utils/how-split.js, started from main.js)
 
 let ticking = false;
-function update() { ticking = false; updateProcess(); updateHow(); }
+function update() { ticking = false; updateProcess(); }
 const request = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
 addEventListener('scroll', request, { passive: true });
 addEventListener('resize', request);

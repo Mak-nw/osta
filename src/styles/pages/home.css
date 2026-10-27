@@ -15,10 +15,7 @@
 .home-products__head { grid-column: 6 / -1; grid-row: 1; }
 .home-products__cards { grid-column: 1 / -1; grid-row: 2; }
 
-/* Services: title cols 1-9; row 2: summary + button cols 1-3; row 3: 4 compact link cards in ONE row (4 x 3 cols, each card = link to /services.html) */
-.home-services__head { grid-column: 1 / span 9; grid-row: 1; }
-.home-services__aside { grid-column: 1 / span 3; grid-row: 2; }
-.home-services__list { grid-column: 1 / -1; grid-row: 3; }
+/* Services: the shared How-we-work split (components/how-split.css): sticky tag + title + text + button left, 4 step rows right; the section padding (--section-md) comes from .home-section */
 
 /* Supply & logistics: the photo panel is full viewport width (edge to edge); the section adds no space around it, so it butts directly against the neighbouring sections */
 .home-supply { padding-block: 0; background: var(--surface); }
