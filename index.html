@@ -5,45 +5,40 @@
   <title>OSTA Trading | APIs &amp; Excipients from Hamburg</title>
   <meta name="description" content="OSTA Trading GmbH distributes APIs, excipients and specialty ingredients for pharma, food and cosmetics. Warehouse in Reinbek near Hamburg.">
   <link rel="stylesheet" href="/src/styles/pages/home.css">
-  <script type="module">
-    // Hero scene (three.js "fiber pill", home-hero-pill.js): after first paint; no WebGL or any failure hides the decorative container.
-    const scene = () => document.querySelector('[data-hero-scene]');
-    const fallback = () => { const s = scene(); if (s) s.hidden = true; };
-    const start = () => import('/src/pages/home-hero-pill.js')
-      .then((m) => { if (!m.initHomeHeroPill(scene())) fallback(); })
-      .catch(fallback);
-    const idle = () => ('requestIdleCallback' in window ? requestIdleCallback(start, { timeout: 800 }) : setTimeout(start, 0));
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', idle); else idle();
-  </script>
 </head>
 <body data-page="home">
   <!--@include partials/header.html-->
   <main>
-    <!-- 1. Hero (Attention): own Home composition (.hero--home): title left, primary CTA right, four facts, wide isometric illustration of the Hamburg-area hub -->
+    <!-- 1. Hero (Attention): own Home composition (.hero--home): text layer on top (title, CTA, four facts) over a media panel with the drone photo of a warehouse that slides under the layer -->
     <section class="hero hero--home" aria-labelledby="home-hero-title">
-      <div class="container hero__grid">
-        <h1 class="t-display t-accent hero__title" id="home-hero-title" data-reveal-load="0" data-i18n-html="home.hero_title">One partner<br>to settle your supply<br>of APIs, excipients<br>and specialty<br>ingredients</h1>
-        <div class="hero__aside" data-reveal-load="1">
-          <a class="btn btn--primary btn--md btn--split" href="/catalog.html"><span data-i18n="home.hero_cta">Explore products</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
-        </div>
-        <div class="hero__scene" data-hero-scene role="img" aria-label="Abstract flowing lines forming a sphere and a capsule" data-i18n-attr="aria-label:home.hero_scene_label"></div>
-      </div>
       <div class="container">
-        <ul class="hero__points" data-reveal-load="2">
-          <li class="hero__point"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#globe"/></svg></span><span class="t-body" data-i18n="home.hero_fact_l1">Europe & worldwide</span></li>
-          <li class="hero__point"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#pin"/></svg></span><span class="t-body" data-i18n="home.hero_fact_l2">Located in the Hamburg area</span></li>
-          <li class="hero__point"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#shield-check"/></svg></span><span class="t-body" data-i18n="home.hero_fact_r1">EudraGMDP registered</span></li>
-          <li class="hero__point"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#home"/></svg></span><span class="t-body" data-i18n="home.hero_fact_r2">GDP warehouse</span></li>
-        </ul>
+        <div class="hero__layer">
+          <div class="hero__grid">
+            <h1 class="t-display t-accent hero__title" id="home-hero-title" data-reveal-load="0" data-i18n-html="home.hero_title">One partner<br>to settle your supply<br>of APIs, excipients<br>and specialty<br>ingredients</h1>
+            <div class="hero__aside" data-reveal-load="1">
+              <a class="btn btn--primary btn--md btn--split" href="/catalog.html"><span data-i18n="home.hero_cta">Explore products</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
+            </div>
+          </div>
+          <ul class="hero__points" data-reveal-load="2">
+            <li class="hero__point"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#globe"/></svg></span><span class="t-body" data-i18n="home.hero_fact_l1">Europe & worldwide</span></li>
+            <li class="hero__point"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#pin"/></svg></span><span class="t-body" data-i18n="home.hero_fact_l2">Located in the Hamburg area</span></li>
+            <li class="hero__point"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#shield-check"/></svg></span><span class="t-body" data-i18n="home.hero_fact_r1">EudraGMDP registered</span></li>
+            <li class="hero__point"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#home"/></svg></span><span class="t-body" data-i18n="home.hero_fact_r2">GDP warehouse</span></li>
+          </ul>
+        </div>
+        <!-- AI-generated image: client approval required -->
+        <div class="hero__scene"><img class="hero__photo" src="/assets/img/warehouse-drone.jpg" width="2000" height="1000" loading="eager" fetchpriority="high" alt="Aerial view of a modern logistics warehouse" data-i18n-attr="alt:home.hero_photo_alt"></div>
       </div>
     </section>
 
     <!-- 2. About (Interest: who we are): tag + two-sentence title, no button -->
     <section class="home-section home-about" id="about" aria-labelledby="home-about-title">
       <div class="container home-grid">
+        <!-- AI-generated image (placeholder): client approval required -->
+        <img class="home-about__photo" src="/assets/img/team-group-ai.jpg" width="900" height="900" loading="lazy" decoding="async" alt="Team photo (placeholder)" data-i18n-attr="alt:home.about_photo_alt" data-reveal="fade">
         <div class="section-head home-about__head">
           <p class="section-label t-accent" data-reveal="fade" data-i18n="home.about_label">About us</p>
-          <h2 class="t-display t-accent" id="home-about-title" data-i18n-html="home.about_title">OSTA Trading GmbH<br>supplies the pharmaceutical,<br>food and cosmetics<br>industries across Europe<br>and worldwide.<br>Our warehouse is in Reinbek,<br>in the Hamburg metropolitan area</h2>
+          <h2 class="t-display t-accent" id="home-about-title" data-i18n-html="home.about_title">OSTA Trading GmbH<br>supplies the<br>pharmaceutical, food and<br>cosmetics industries across<br>Europe and worldwide.<br>Our warehouse is in Reinbek,<br>in the Hamburg metropolitan area</h2>
         </div>
       </div>
     </section>

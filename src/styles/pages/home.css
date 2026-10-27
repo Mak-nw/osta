@@ -10,6 +10,8 @@
 
 /* About: only tag + title (two sentences) cols 1-12; no button (customer decision 0de4082e) */
 .home-about__head { grid-column: 1 / -1; grid-row: 1; }
+/* Team photo placeholder (AI-generated, client approval required): top right, 2 cols (11-12), square; its top = top of the head (tag) */
+.home-about__photo { grid-column: 11 / -1; grid-row: 1; width: 100%; aspect-ratio: 1 / 1; height: auto; object-fit: cover; border-radius: var(--radius-lg); display: block; }
 
 /* Products (blue): row 1: title block (tag + h2) cols 6-12 (customer c7b686dd); row 2: 4 portrait cards (4 x 3 cols = full width): 3 category link cards + a white text card (summary + View all, customer df7f1d78) */
 .home-products__head { grid-column: 6 / -1; grid-row: 1; }

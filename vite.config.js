@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { includePartials, baseLinks } from './vite-plugin-include.js';
 import { reviewMode } from './vite-plugin-review.js';
 
-const pages = ['index', 'about', 'catalog', 'product', 'contact', 'services', 'design-system'];
+const pages = ['index', 'about', 'catalog', 'product', 'contact', 'services', 'design-system', 'privacy', 'terms', 'data-processing'];
 
 export default defineConfig(({ command, isPreview }) => ({
   // Production is served from a sub-path (https://mak-nw.github.io/osta/); dev stays at '/'. Override with VITE_BASE.

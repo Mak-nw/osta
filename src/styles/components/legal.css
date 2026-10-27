@@ -1,0 +1,13 @@
+/* Legal pages template (privacy / terms / data-processing): hero and body start at column 4 of the 12-col grid (cols 1-3 empty). */
+.legal { padding-bottom: var(--section-md); }
+.legal__hero { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--space-3); padding-block: var(--space-8) var(--section-sm); }
+.legal__title, .legal__updated { grid-column: 4 / -1; margin: 0; }
+.legal__updated { color: var(--text-muted); }
+.legal__grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); align-items: start; }
+.legal__body { grid-column: 4 / 11; display: flex; flex-direction: column; gap: var(--section-sm); }
+.legal__section { display: flex; flex-direction: column; gap: var(--space-4); }
+.legal__heading { margin: 0; }
+.legal__text, .legal__section > p { margin: 0; color: var(--text); }
+/* Lists inside a section: <ul class="legal__list t-body"> / <ol class="legal__list legal__list--numbered t-body"> */
+.legal__list { display: flex; flex-direction: column; gap: var(--space-2); margin: 0; padding-left: var(--space-5); color: var(--text); list-style: disc; }
+.legal__list--numbered { list-style: decimal; }
