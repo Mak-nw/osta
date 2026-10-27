@@ -94,7 +94,7 @@
 /* ==========================================================================
    Responsive Services. Tablet (8 cols) / mobile (4 cols).
    Hero strip taller. Process: the pinned 200svh scene is KEPT; inside it the parts stack: title on top, 3D in the middle, the four stages below (4 columns on tablet, 2 x 2 on mobile).
-   Service cards 2 x 2 / 1 column. Supply: text stacks. How we work: no sticky column, the step list under the intro.
+   Service cards 2 x 2 / 1 column. Supply: text stacks. How we work: see components/how-split.css.
    ========================================================================== */
 @media (max-width: 1199px) {
   .hero__media--scene { aspect-ratio: 16 / 8; }
@@ -105,7 +105,7 @@
   .process-steps { grid-column: 1 / -1; grid-row: 3; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--grid-gap); }
   .process-steps::before { display: none; }
   .process-steps__row { gap: var(--space-3); align-items: center; }
-  .process-steps__name { font-size: var(--type-body-size); line-height: var(--type-body-lh); letter-spacing: 0; }
+  .process-steps__name { font-size: var(--type-body-size); line-height: var(--type-body-lh); letter-spacing: 0; } /* t-lead (24/32) does not fit the 4 / 2 stage columns ("Qualification" ~170px vs ~115px): documented in design-system.md, Adaptive */
   .process-text__body { grid-column: 1 / span 6; gap: var(--space-5); }
   .svc-card { grid-column: span 4; }
   .svc-card__window { aspect-ratio: 3 / 2; }
@@ -114,15 +114,15 @@
   .svc-supply__text--1 { grid-column: 1 / span 6; grid-row: 2; }
   .svc-supply__text--2 { grid-column: 1 / span 6; grid-row: 3; }
   .svc-supply__cta { grid-column: 1 / span 6; grid-row: 4; }
-  .how-split { row-gap: var(--space-6); }
-  .how-split__sticky { grid-column: 1 / -1; position: static; }
-  .how-split__sticky > p.t-body { width: auto; max-width: 560px; }
-  .how-list { grid-column: 1 / -1; display: block; }
-  .how-step { min-height: 0; grid-template-columns: var(--chip-lg) minmax(0, 1fr) auto; column-gap: var(--space-4); }
-  .how-step__icon { grid-column: 1; grid-row: 1; margin-top: 0; }
-  .how-step__title { grid-column: 2; grid-row: 1; align-self: center; }
-  .how-step__num { grid-column: 3; grid-row: 1; align-self: center; }
-  .how-step__text { grid-column: 2 / -1; grid-row: 2; }
+}
+/* Landscape phones / small tablets (height <= 560): the pinned 200svh scene would leave the 3D art ~20px high, so the pin is switched off:
+   the scene is a normal block (same as prefers-reduced-motion), with a minimum height from the tokens, all four stages shown. services.js mirrors this query. */
+@media (max-width: 1199px) and (max-height: 560px) {
+  .process-scroll { height: auto; }
+  .process-scroll__stage { position: static; height: auto; padding-block: var(--space-7); }
+  .process-scroll__grid { height: auto; grid-template-rows: auto auto auto; }
+  .process-scroll__art { aspect-ratio: 21 / 9; min-height: calc(var(--space-9) * 2); }
+  .process-steps__item .process-steps__row { color: var(--text-on-accent); }
 }
 @media (max-width: 767px) {
   .hero__media--scene { aspect-ratio: 2 / 1; }

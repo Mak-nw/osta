@@ -51,8 +51,11 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 main { flex: 1; }
 
 /* ---- Responsive typography (tablet <= 1199, mobile <= 767): hard <br> line breaks of desktop headings are dropped (i18n.js puts a space before every <br>, so words never glue together);
-   long (German) words hyphenate or break instead of overflowing. ---- */
+   long words break instead of overflowing; automatic hyphenation only for German (<html lang="de", set by i18n.js), manual (&shy;) elsewhere. ---- */
 @media (max-width: 1199px) {
   :is(.t-display, .t-h1, .t-h2, .t-lead, .hero__sub, .section-label) br { display: none; }
-  h1, h2, h3, h4, p, dd, li, .t-display, .t-h1, .t-h2, .t-h3 { overflow-wrap: break-word; hyphens: auto; }
+  h1, h2, h3, h4, p, dd, li, .t-display, .t-h1, .t-h2, .t-h3 { overflow-wrap: break-word; }
+  :root { hyphens: manual; }
+  :root:lang(de) { hyphens: auto; }
+  :root:not(:lang(de)) :is(.link-card__title, .link-card__text) { hyphens: manual; }
 }

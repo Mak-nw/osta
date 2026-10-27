@@ -127,9 +127,9 @@ function wrapWords(node, ctx) {
   [...node.childNodes].forEach((n) => {
     if (n.nodeType === 3) {
       const frag = document.createDocumentFragment();
-      n.textContent.split(/(\s+)/).forEach((p) => {
+      n.textContent.split(/([ \t\n\r]+)/).forEach((p) => {
         if (!p) return;
-        if (/^\s+$/.test(p)) { frag.append(p); return; }
+        if (/^[ \t\n\r]+$/.test(p)) { frag.append(p); return; } // ASCII whitespace only: NBSP stays inside its word
         const w = document.createElement('span');
         w.className = 'word';
         w.setAttribute('aria-hidden', 'true');

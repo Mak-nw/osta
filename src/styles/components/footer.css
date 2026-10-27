@@ -59,7 +59,6 @@
   .footer__contacts { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-5); }
   .footer__row { gap: var(--space-1); }
   .footer__row .footer__label { flex-direction: row; align-items: center; gap: var(--space-3); }
-  .footer__wordmark { margin-top: var(--space-7); }
+  .footer__wordmark { margin-top: var(--space-7); min-height: var(--control-md); }
   .footer__copy { padding-block: var(--space-4) var(--space-5); }
 }
-@media (max-width: 767px) { .footer__wordmark { min-height: var(--control-md); } }

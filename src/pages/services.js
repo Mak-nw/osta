@@ -29,6 +29,8 @@ const stickyProgress = (wrap, stage) => {
 };
 
 // 2) Process scroll
+const noPin = matchMedia('(max-width: 1199px) and (max-height: 560px)'); // landscape phones: CSS switches the pin off (services.css), the scene is static like reduced motion
+const isStatic = () => reduced.matches || noPin.matches;
 const proc = document.querySelector('[data-process-scroll]');
 const procStage = proc?.querySelector('.process-scroll__stage');
 const procItems = proc ? [...proc.querySelectorAll('.process-steps__item')] : [];
@@ -41,10 +43,10 @@ if (art) {
 }
 const updateProcess = () => {
   if (!proc) return;
-  const p = reduced.matches ? 1 : stickyProgress(proc, procStage);
+  const p = isStatic() ? 1 : stickyProgress(proc, procStage);
   const stage = Math.min(4, Math.floor(p * 4) + 1);
   proc.dataset.stage = String(stage);
-  procItems.forEach((li, i) => { const on = !reduced.matches && i + 1 === stage; li.classList.toggle('is-active', on); if (on) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current'); });
+  procItems.forEach((li, i) => { const on = !isStatic() && i + 1 === stage; li.classList.toggle('is-active', on); if (on) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current'); });
   scene3d?.setProgress(p);
 };
 
@@ -56,5 +58,6 @@ const request = () => { if (!ticking) { ticking = true; requestAnimationFrame(up
 addEventListener('scroll', request, { passive: true });
 addEventListener('resize', request);
 reduced.addEventListener('change', request);
+noPin.addEventListener('change', request);
 document.fonts?.ready.then(request);
 update();

@@ -44,5 +44,5 @@
   .cta-block__art { height: 160px; }
   .cta-block__foot .round-btn { align-self: start; }
   .breadcrumbs { flex-wrap: wrap; row-gap: var(--space-1); }
-  .breadcrumbs a { display: inline-flex; align-items: center; min-height: var(--control-md); }
+  .breadcrumbs a { display: inline-flex; align-items: center; justify-content: center; min-height: var(--control-md); min-width: var(--control-md); }
 }

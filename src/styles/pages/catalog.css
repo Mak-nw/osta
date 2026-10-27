@@ -31,10 +31,11 @@
     border: 1px solid var(--border-strong); border-radius: var(--radius-md); color: var(--text-accent); font-size: var(--type-body-size); text-align: left;
     transition: background-color var(--dur) var(--ease);
   }
-  .catalog__filters-toggle:hover { background: var(--surface-white); }
-  .catalog__filters-toggle[aria-expanded="true"] .lang-switch__chevron { transform: rotate(180deg); }
+  @media (hover: hover) { .catalog__filters-toggle:hover { background: var(--surface-white); } }
+  .catalog__filters-chevron { transition: transform var(--dur-fast) var(--ease-out); }
+  .catalog__filters-toggle[aria-expanded="true"] .catalog__filters-chevron { transform: rotate(180deg); }
   .catalog__filters:not(.is-open) .filter-list { display: none; }
-  .catalog__filters .filter-list { padding: var(--space-2); background: var(--surface-raised); border-radius: var(--radius-lg); }
+  .catalog__filters .filter-item.is-active { background: var(--surface-white); } /* list sits on the page surface (as on desktop); the active item is white so it stays clearly distinct */
   .catalog__help { margin-top: var(--space-3); }
   .catalog__help .btn { width: auto; align-self: flex-start; min-width: var(--btn-split-w); }
 }

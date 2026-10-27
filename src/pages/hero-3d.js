@@ -7,7 +7,6 @@ import {
   MathUtils, NormalBlending,
 } from 'three';
 import { tokenToCss } from '../utils/css-color.js';
-import { capDpr } from '../utils/dpr.js';
 
 /* ---- customer parameters (unchanged) ---- */
 const PER_RUNG = 260;
@@ -77,7 +76,7 @@ export function initHero3d(container) {
   }
   const gl = renderer.getContext();
   if (!gl) return false;
-  renderer.setPixelRatio(capDpr(MAX_DPR));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, MAX_DPR));
   renderer.setClearColor(0x000000, 0);
   const canvas = renderer.domElement;
   canvas.setAttribute('aria-hidden', 'true');

@@ -18,10 +18,14 @@ export function currentLang() {
   return LOADERS[l] ? l : DEFAULT;
 }
 
+let activeDict = null;
+export const t = (key) => activeDict?.get(key); // translation of the language applied last (undefined before the first applyLang)
+
 export async function applyLang(lang = currentLang()) {
   const base = (await LOADERS[DEFAULT]()).default;
   const own = lang === DEFAULT ? base : (await LOADERS[lang]()).default;
   const dict = { get: (key) => { const v = get(own, key); return typeof v === 'string' && v !== '' ? v : get(base, key); } };
+  activeDict = dict;
   document.documentElement.lang = lang;
   document.querySelectorAll('[data-i18n]').forEach((el) => {
     const v = dict.get(el.dataset.i18n);

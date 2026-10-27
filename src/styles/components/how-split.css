@@ -15,3 +15,16 @@
 .how-step__title { grid-column: 2 / span 5; grid-row: 1; color: var(--text-accent); }
 .how-step__text { grid-column: 2 / span 3; grid-row: 2; } /* description = exactly 3 of the list's 6 columns: 50% - gap/2 (gap 16) */
 @media (prefers-reduced-motion: reduce) { .how-step { opacity: 1; transition: none; } }
+
+/* Tablet (<= 1199): no sticky column, the step list under the intro (Services and Home) */
+@media (max-width: 1199px) {
+  .how-split { row-gap: var(--space-6); }
+  .how-split__sticky { grid-column: 1 / -1; position: static; }
+  .how-split__sticky > p.t-body { width: auto; max-width: 560px; }
+  .how-list { grid-column: 1 / -1; display: block; }
+  .how-step { min-height: 0; grid-template-columns: var(--chip-lg) minmax(0, 1fr) auto; column-gap: var(--space-4); }
+  .how-step__icon { grid-column: 1; grid-row: 1; margin-top: 0; }
+  .how-step__title { grid-column: 2; grid-row: 1; align-self: center; }
+  .how-step__num { grid-column: 3; grid-row: 1; align-self: center; }
+  .how-step__text { grid-column: 2 / -1; grid-row: 2; }
+}
