@@ -11,3 +11,15 @@
 /* Lists inside a section: <ul class="legal__list t-body"> / <ol class="legal__list legal__list--numbered t-body"> */
 .legal__list { display: flex; flex-direction: column; gap: var(--space-2); margin: 0; padding-left: var(--space-5); color: var(--text); list-style: disc; }
 .legal__list--numbered { list-style: decimal; }
+
+/* Responsive legal pages: tablet / mobile = one column from the container's left edge (the 3 empty desktop columns are dropped), tighter vertical rhythm from tokens */
+@media (max-width: 1199px) {
+  .legal__hero { padding-block: var(--space-7) var(--section-sm); }
+  .legal__title, .legal__updated, .legal__body { grid-column: 1 / -1; }
+  .legal__body { gap: var(--space-7); }
+}
+@media (max-width: 767px) {
+  .legal__hero { padding-block: var(--space-6) var(--section-sm); }
+  .legal__body { gap: var(--space-6); }
+  .legal__list { padding-left: var(--space-5); }
+}

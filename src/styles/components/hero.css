@@ -86,6 +86,6 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
   .hero--home .hero__grid { row-gap: var(--space-5); }
   .hero--home .hero__aside .btn { width: 100%; }
   .hero__points { margin-top: var(--space-5); }
+  .hero__scene { aspect-ratio: auto; height: calc(var(--space-9) * 3); min-height: 0; } /* a fixed height: aspect-ratio + min-height would widen the panel past the container */
   .hero__point { grid-column: 1 / -1; }
-}
 }

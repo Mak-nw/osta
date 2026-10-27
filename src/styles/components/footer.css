@@ -52,6 +52,11 @@
   .footer__cta { grid-column: 1 / span 4; grid-row: 3; margin-top: calc(-1 * var(--space-4)); }
   .footer__contacts { grid-row: 4; grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--space-6); margin-top: 0; }
   .footer__wordmark { margin-top: var(--space-8); }
+  /* bottom row: legal links in one centred row, copyright and company name centred under them */
+  .footer__bottom { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-2); justify-items: center; padding-block: var(--space-5); }
+  .footer__legal { flex-direction: row; flex-wrap: wrap; justify-content: center; column-gap: var(--space-5); row-gap: 0; white-space: normal; }
+  .footer__legal a { display: inline-flex; align-items: center; min-height: var(--control-md); }
+  .footer__copy, .footer__company { text-align: center; white-space: normal; }
 }
 @media (max-width: 767px) {
   .footer__top { row-gap: var(--space-6); padding-top: var(--space-6); }
@@ -69,8 +74,4 @@
   .footer__contacts { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--space-6); } /* 2 x 2: Phone | Fax, Mail | Address; icon on top, label, value */
   .footer__row .footer__label { gap: var(--space-3); }
   .footer__wordmark { margin-top: var(--space-7); min-height: var(--control-md); }
-  .footer__bottom { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-2); justify-items: center; padding-block: var(--space-5); }
-  .footer__legal { flex-direction: row; flex-wrap: wrap; justify-content: center; column-gap: var(--space-5); row-gap: 0; white-space: normal; }
-  .footer__legal a { display: inline-flex; align-items: center; min-height: var(--control-md); }
-  .footer__copy, .footer__company { text-align: center; white-space: normal; }
 }

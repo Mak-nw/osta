@@ -35,6 +35,9 @@
    ========================================================================== */
 @media (max-width: 1199px) {
   .home-grid { row-gap: var(--space-6); }
+  /* About: the square team photo sits ABOVE the heading (left edge), smaller than on desktop, so it never touches the h2 */
+  .home-about__photo { grid-column: 1 / span 2; grid-row: 1; width: calc(var(--space-9) * 1.5); }
+  .home-about__head { grid-row: 2; }
   .home-products__head, .home-quality__head { grid-column: 1 / -1; }
   .link-cards { row-gap: var(--grid-gap); }
   .link-cards > li, .link-cards--3 > li { grid-column: span 4; }
@@ -45,6 +48,7 @@
 }
 @media (max-width: 767px) {
   .home-grid { row-gap: var(--space-5); }
+  .home-about__photo { width: var(--space-9); }
   .home-quality__aside { grid-column: 1 / -1; }
   .link-cards > li, .link-cards--3 > li { grid-column: 1 / -1; }
   .link-cards--3 .link-card { aspect-ratio: auto; min-height: 340px; }
