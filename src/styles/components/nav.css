@@ -125,7 +125,7 @@
     grid-template-areas: "left logo actions" "menu menu menu";
   }
   .header__left { grid-area: left; display: flex; align-items: center; justify-content: flex-start; gap: var(--space-1); min-width: 0; }
-  .header__logo { grid-area: logo; justify-self: center; display: flex; align-items: center; min-height: var(--control-md); } /* tap target >= 44 even when the image is smaller */
+  .header__logo { grid-area: logo; justify-self: center; display: flex; align-items: center; justify-content: center; min-height: var(--control-md); min-width: var(--control-md); } /* tap target >= 44 even when the image is smaller */
   .header__actions { grid-area: actions; min-width: 0; gap: 0; }
   .header__cta { margin-left: var(--space-1); }
   .header__burger {
