@@ -64,23 +64,23 @@
       </div>
     </section>
 
-    <!-- 4. Services (Interest: what we do): short summary + button left, compact list of 4 rows right (each row links to /services.html) -->
+    <!-- 4. Services (Interest: what we do): the shared How-we-work split (sticky summary + button left, 4 step rows right, active row highlighted on scroll) -->
     <section class="home-section home-services" id="services" aria-labelledby="home-services-title">
-      <div class="container home-grid">
-        <div class="section-head home-services__head">
-          <p class="section-label t-accent" data-reveal="fade" data-i18n="home.services_label">Services</p>
-          <h2 class="t-display t-accent" id="home-services-title" data-i18n-html="home.services_title">We support your project<br>from first inquiry<br>to regular supply</h2>
-        </div>
-        <div class="home-aside home-services__aside" data-reveal>
+      <div class="container how-split">
+        <div class="how-split__sticky">
+          <div class="section-head">
+            <p class="section-label t-accent" data-i18n="home.services_label">Services</p>
+            <h2 class="t-display t-accent" id="home-services-title" data-i18n-html="home.services_title">We support your project<br>from first inquiry<br>to regular supply</h2>
+          </div>
           <p class="t-body" data-i18n="home.services_text">We search for manufacturers, coordinate regulatory documents, collect samples and agree specifications and quality with you. Logistics is part of the same service.</p>
-          <a class="btn btn--primary btn--md btn--split" href="/services.html"><span data-i18n="home.services_cta">Learn more</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
+          <a class="btn btn--primary btn--lg btn--split" href="/services.html"><span data-i18n="home.services_cta">Learn more</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
         </div>
-        <ul class="link-cards home-services__list" data-reveal-stagger>
-          <li data-reveal><a class="link-card" href="/services.html"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#search-check"/></svg></span><h3 class="t-h3 link-card__title" data-i18n-html="home.service_manufacturer_title">Manufacturer search</h3><p class="t-body link-card__text" data-i18n="home.service_manufacturer_text">Sources matched to your technical, quality, regulatory and commercial requirements.</p></a></li>
-          <li data-reveal><a class="link-card" href="/services.html"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#file"/></svg></span><h3 class="t-h3 link-card__title" data-i18n-html="home.service_regulatory_title">Regulatory documents</h3><p class="t-body link-card__text" data-i18n="home.service_regulatory_text">One point of contact for the documentation your project requires.</p></a></li>
-          <li data-reveal><a class="link-card" href="/services.html"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#box-arrow"/></svg></span><h3 class="t-h3 link-card__title" data-i18n-html="home.service_samples_title">Samples</h3><p class="t-body link-card__text" data-i18n="home.service_samples_text">Samples for your evaluation and qualification procedures.</p></a></li>
-          <li data-reveal><a class="link-card" href="/services.html"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#check"/></svg></span><h3 class="t-h3 link-card__title" data-i18n-html="home.service_specs_title">Specs &amp; quality</h3><p class="t-body link-card__text" data-i18n="home.service_specs_text">Specifications and quality requirements agreed before supply starts.</p></a></li>
-        </ul>
+        <ol class="how-list" data-how-list>
+          <li class="how-step" data-step="1"><span class="icon-ring how-step__icon" aria-hidden="true"><svg class="icon icon-text"><use href="/assets/icons/sprite.svg#search-check"/></svg></span><span class="how-step__num t-h2" aria-hidden="true">01</span><h3 class="t-h2 how-step__title" data-i18n-html="home.service_manufacturer_title">Manufacturer search</h3><p class="t-body how-step__text" data-i18n="home.service_manufacturer_text">Sources matched to your technical, quality, regulatory and commercial requirements.</p></li>
+          <li class="how-step" data-step="2"><span class="icon-ring how-step__icon" aria-hidden="true"><svg class="icon icon-text"><use href="/assets/icons/sprite.svg#file"/></svg></span><span class="how-step__num t-h2" aria-hidden="true">02</span><h3 class="t-h2 how-step__title" data-i18n-html="home.service_regulatory_title">Regulatory documents</h3><p class="t-body how-step__text" data-i18n="home.service_regulatory_text">One point of contact for the documentation your project requires.</p></li>
+          <li class="how-step" data-step="3"><span class="icon-ring how-step__icon" aria-hidden="true"><svg class="icon icon-text"><use href="/assets/icons/sprite.svg#box-arrow"/></svg></span><span class="how-step__num t-h2" aria-hidden="true">03</span><h3 class="t-h2 how-step__title" data-i18n-html="home.service_samples_title">Samples</h3><p class="t-body how-step__text" data-i18n="home.service_samples_text">Samples for your evaluation and qualification procedures.</p></li>
+          <li class="how-step" data-step="4"><span class="icon-ring how-step__icon" aria-hidden="true"><svg class="icon icon-text"><use href="/assets/icons/sprite.svg#check"/></svg></span><span class="how-step__num t-h2" aria-hidden="true">04</span><h3 class="t-h2 how-step__title" data-i18n-html="home.service_specs_title">Specs &amp; quality</h3><p class="t-body how-step__text" data-i18n="home.service_specs_text">Specifications and quality requirements agreed before supply starts.</p></li>
+        </ol>
       </div>
     </section>
 
