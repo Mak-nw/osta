@@ -46,19 +46,23 @@
     "menu_docs": "Dokumentation",
     "menu_team": "Team",
     "contact_manager": "Manager kontaktieren",
-    "copyright": "© 2016-2026 OSTA Trading GmbH"
+    "copyright": "© 2016-2026",
+    "company": "OSTA Trading GmbH",
+    "legal_privacy": "Datenschutzerklärung",
+    "legal_terms": "Nutzungsbedingungen",
+    "legal_data": "Datenverarbeitung"
   },
   "closing": {
     "scene_label": "Abstrakte Linien, die sich in einem Punkt treffen"
   },
   "home": {
-    "hero_title": "Ein Partner, der Ihre<br>Versorgung mit Wirkstoffen,<br>Hilfsstoffen und<br>Spezialzutaten<br>regelt",
+    "hero_title": "Ein Partner, der Ihre Versorgung<br>mit Wirkstoffen, Hilfsstoffen<br>und Spezialzutaten regelt",
     "hero_fact_l1": "Europa & weltweit",
     "hero_fact_l2": "Standort im Raum Hamburg",
     "hero_fact_r1": "EudraGMDP-registriert",
     "hero_fact_r2": "GDP-Lager",
     "hero_cta": "Produkte entdecken",
-    "hero_scene_label": "Abstrakte fließende Linien, die eine Kugel und eine Kapsel bilden",
+    "hero_photo_alt": "Luftaufnahme eines modernen Logistiklagers",
     "about_label": "Über uns",
     "about_title": "Die OSTA Trading GmbH<br>beliefert die Pharma-,<br>Lebensmittel- und<br>Kosmetikindustrie in<br>Europa und weltweit.<br>Unser Lager befindet sich<br>in Reinbek, im Großraum Hamburg",
     "products_label": "Produkte",
@@ -278,5 +282,61 @@
     "supply_text_2": "Gemeinsam mit Logistikpartnern, die Erfahrung mit pharmazeutischen und anderen chemischen Produkten haben, koordinieren wir internationale Transporte, Import- und Exportverfahren sowie die Versanddokumente.",
     "row_title": "Begleitung im gesamten<br>Versorgungsprozess",
     "row_label": "Leistungen"
+  },
+  "legal": {
+    "last_updated": "Zuletzt aktualisiert: [Datum]",
+    "toc_label": "Auf dieser Seite",
+    "placeholder": "Inhalt folgt.",
+    "privacy": {
+      "title": "Datenschutzerklärung",
+      "s1_title": "1. Verantwortlicher",
+      "s1_text": "Inhalt folgt.",
+      "s2_title": "2. Erhobene Daten",
+      "s2_text": "Inhalt folgt.",
+      "s3_title": "3. Zweck und Rechtsgrundlage",
+      "s3_text": "Inhalt folgt.",
+      "s4_title": "4. Empfänger",
+      "s4_text": "Inhalt folgt.",
+      "s5_title": "5. Speicherdauer",
+      "s5_text": "Inhalt folgt.",
+      "s6_title": "6. Ihre Rechte",
+      "s6_text": "Inhalt folgt.",
+      "s7_title": "7. Kontakt",
+      "s7_text": "Inhalt folgt."
+    },
+    "terms": {
+      "title": "Nutzungsbedingungen",
+      "s1_title": "1. Geltungsbereich",
+      "s1_text": "Inhalt folgt.",
+      "s2_title": "2. Angebote und Bestellungen",
+      "s2_text": "Inhalt folgt.",
+      "s3_title": "3. Preise und Zahlung",
+      "s3_text": "Inhalt folgt.",
+      "s4_title": "4. Lieferung",
+      "s4_text": "Inhalt folgt.",
+      "s5_title": "5. Gewährleistung und Haftung",
+      "s5_text": "Inhalt folgt.",
+      "s6_title": "6. Anwendbares Recht",
+      "s6_text": "Inhalt folgt.",
+      "s7_title": "7. Kontakt",
+      "s7_text": "Inhalt folgt."
+    },
+    "data": {
+      "title": "Datenverarbeitung",
+      "s1_title": "1. Überblick",
+      "s1_text": "Inhalt folgt.",
+      "s2_title": "2. Datenkategorien",
+      "s2_text": "Inhalt folgt.",
+      "s3_title": "3. Verarbeitungszwecke",
+      "s3_text": "Inhalt folgt.",
+      "s4_title": "4. Auftragsverarbeiter und Übermittlungen",
+      "s4_text": "Inhalt folgt.",
+      "s5_title": "5. Sicherheitsmaßnahmen",
+      "s5_text": "Inhalt folgt.",
+      "s6_title": "6. Betroffenenanfragen",
+      "s6_text": "Inhalt folgt.",
+      "s7_title": "7. Kontakt",
+      "s7_text": "Inhalt folgt."
+    }
   }
 }

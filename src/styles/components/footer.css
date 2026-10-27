@@ -28,4 +28,14 @@
 .footer__wordmark { display: block; container-type: inline-size; margin-top: var(--space-9); }
 .footer__wordmark:hover { text-decoration: none; }
 .footer__wordmark span { display: block; font-weight: var(--font-weight-medium); font-size: calc(100cqw * var(--wordmark-k)); line-height: 0.8; letter-spacing: -0.04em; color: var(--accent); white-space: nowrap; margin-left: -0.05em; }
-.footer__copy { margin: 0; padding-block: var(--space-5) var(--space-6); text-align: center; font-size: var(--type-label-size); line-height: var(--type-label-lh); color: var(--text-accent); }
+/* Bottom row: legal links (left) | copyright (centre = window centre) | company name (right); 1fr auto 1fr keeps the centre symmetric. */
+.footer__bottom { display: grid; grid-template-columns: 1fr auto 1fr; align-items: baseline; column-gap: var(--grid-gap); padding-block: var(--space-5) var(--space-6); }
+.footer__legal { display: flex; flex-wrap: nowrap; gap: var(--space-6); font-size: var(--type-body-size); line-height: var(--type-body-lh); white-space: nowrap; }
+.footer__legal a { color: var(--text-accent); }
+.footer__copy, .footer__company { margin: 0; font-size: var(--type-label-size); line-height: var(--type-label-lh); color: var(--text-accent); white-space: nowrap; }
+.footer__copy { text-align: center; }
+.footer__company { text-align: right; }
+/* <=1280: three links no longer fit beside the centred copyright: stack them in a column */
+@media (max-width: 1280px) {
+  .footer__legal { flex-direction: column; gap: var(--space-2); }
+}

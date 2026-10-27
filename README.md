@@ -25,12 +25,22 @@ The review overlay (`vite-plugin-review.js`, `dev-tools/`) is dev-only and is no
 
 ## Structure
 
-- `*.html` in the root: one file per page (`index`, `about`, `services`, `catalog`, `product`, `contact`, `design-system`); shared head/header/footer in `src/partials/`.
+- `*.html` in the root: one file per page (`index`, `about`, `services`, `catalog`, `product`, `contact`, `design-system`, `privacy`, `terms`, `data-processing`); shared head/header/footer in `src/partials/`.
 - `src/styles/`: `tokens.css` (all design tokens), `base.css`, `layout.css`, `components/`, `pages/`.
 - `src/i18n/`: translations (`en.json`, `de.json`); English is the default language.
 - `src/pages/`: per-page scripts and 3D scenes; `src/data/`: product data.
 - `public/assets/`: fonts, icons, images (served from `/assets/`).
 - `design-system.md`: components, role-to-token table and layout rules.
+
+## Legal pages
+
+`privacy.html`, `terms.html`, `data-processing.html` share one template (`src/styles/components/legal.css`): title, "Last updated" line, sticky table of contents and numbered sections. Texts are placeholders.
+
+- Texts live in `src/i18n/en.json` and `de.json` under `legal`: shared keys `legal.last_updated`, `legal.toc_label`; per page `legal.<privacy|terms|data>.title` and, per section, `s1_title`, `s1_text`, ... `s7_title`, `s7_text`. Replace the values to fill in a page (use `<br>` only with `data-i18n-html`).
+- Add a section: copy one `<section class="legal__section" id="sN">` block in the page HTML (with its `data-i18n` keys) and the matching `<li>` link in `.legal__toc-list`, then add `sN_title` / `sN_text` to both JSON files.
+- Add a paragraph: add another `<p class="t-body legal__text" data-i18n="legal.<page>.sN_text2">` inside the section and a key in both JSON files. Lists: `<ul class="legal__list t-body">` (bullets) or `<ol class="legal__list legal__list--numbered t-body">`.
+- Footer links: `footer.legal_privacy`, `footer.legal_terms`, `footer.legal_data`; copyright `footer.copyright`, company name `footer.company`.
+- A new legal page also needs an entry in the `pages` array in `vite.config.js`.
 
 ## Rules
 

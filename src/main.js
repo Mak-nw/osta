@@ -1,6 +1,7 @@
 import { initI18n } from './i18n.js';
 import './motion.js';
 import { initHowSplit } from './utils/how-split.js';
+import { initHeroGrow } from './utils/hero-grow.js';
 
 // Mark active nav pill
 const page = document.body.dataset.page;
@@ -9,6 +10,7 @@ document.querySelectorAll('[data-nav]').forEach((a) => {
 });
 
 initI18n();
+initHeroGrow(); // Home hero: panel grows to full width on scroll (desktop, motion allowed)
 initHowSplit(); // active-step highlight of the How-we-work split (Services, Home Services)
 
 // Closing CTA scene (Home, About, Services): three.js converge lines, loaded lazily only where the block exists; no WebGL or any failure hides the container.

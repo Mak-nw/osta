@@ -25,14 +25,33 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
 .link-cta--on-accent, .link-cta--on-accent:hover { color: var(--text-on-accent); }
 .link-cta--on-accent:focus-visible { outline-color: var(--text-on-accent); }
 
-/* Hero, Home variant (.hero--home): the entry point of the site, its own composition (not the centred About/Services hero).
-   Row 1 (12-col grid): H1 t-display cols 1-8 left-aligned, the one primary button LEFT under it (cols 1-6, --space-7 gap).
-   Then (own .container): the four short facts (.hero__points: icon ring B 40 + t-body) cols 1-3 / 4-6 / 7-9 / 10-12 under a 1px --border line, at the BOTTOM of the block. Right part (cols 9-12): decorative transparent three.js scene `.hero__scene` (fiber pill: lines sphere <-> capsule, colour token --accent), height = H1 + CTA block, no frame/background. */
-.hero--home { text-align: left; padding-bottom: var(--section-sm); display: flex; flex-direction: column; justify-content: space-between; min-height: 100vh; min-height: 100svh; }
-.hero--home > .container { width: 100%; }
+/* Hero, Home variant (.hero--home): the entry point of the site, its own composition (not the centred About/Services hero). Two layers (container width):
+   TOP = text layer `.hero__layer` (opaque --surface, square corners with a straight bottom edge, z-index 1, height by content, no min-height): H1 t-display cols 1-12 (3 lines), the one primary button under it (--space-7 gap), then the four short facts (.hero__points: icon ring B 40 + t-body, cols 1-3 / 4-6 / 7-9 / 10-12 under a 1px --border line).
+   BOTTOM = media panel `.hero__scene` (--surface-raised, --radius-lg, overflow hidden, aspect 3/1 + min-height): drone photo of a warehouse (`.hero__photo`, object-fit cover). The panel is pulled up by --hero-overlap (negative margin-top), so its top part and the top of the photo slide UNDER the bottom edge of the text layer; the layer's straight bottom edge is a hard line over the panel (the panel's own rounded corners stay as they are). */
+.hero--home { --hero-overlap: var(--space-9); text-align: left; padding-bottom: 0; }
+.hero__layer { position: relative; z-index: 1; background: var(--surface); border-radius: 0; padding-bottom: var(--space-7); }
 .hero--home .hero__grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); align-items: end; }
-.hero--home .hero__title { grid-column: 1 / span 8; grid-row: 1; }
-.hero__scene { grid-column: 9 / span 4; grid-row: 1 / span 2; align-self: stretch; position: relative; min-height: 0; } /* decorative three.js scene (home-hero-pill.js), transparent canvas, no frame; height = H1 + CTA block */
+.hero--home .hero__title { grid-column: 1 / -1; grid-row: 1; }
 .hero__aside { grid-column: 1 / span 6; grid-row: 2; margin-top: var(--space-7); display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-6); }
 .hero__points { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); margin: var(--space-7) 0 0; padding: var(--space-5) 0 0; list-style: none; border-top: 1px solid var(--border); }
 .hero__point { grid-column: span 3; display: flex; align-items: center; gap: var(--space-4); min-width: 0; color: var(--text); }
+.hero__scene { position: relative; z-index: 0; box-sizing: border-box; margin-top: calc(-1 * var(--hero-overlap)); aspect-ratio: 3 / 1; min-height: calc(var(--space-9) * 3); overflow: hidden; background: var(--surface-raised); border-radius: var(--radius-lg); } /* media panel under the text layer; photo fills the whole panel */
+.hero__photo { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
+/* Home hero scroll-grow (desktop 1200+, motion allowed). JS (src/utils/hero-grow.js) only writes --hero-grow (0..1) on .hero--home; all geometry is CSS.
+   p=0 equals the static state above (width of the container, 3/1 height >= 288, radius-lg, overlap under the text layer). p=1: panel is edge to edge (100cqw = hero width, no scrollbar overflow),
+   height = viewport minus sticky header, radius 0, overlap 0 (so the panel never covers the text layer; About shifts with it, nothing overlaps).
+   Effect length (JS, measured): scroll until the panel top reaches the header panel bottom (≈ 0.55-0.65 of the viewport height). */
+.hero--home { --hero-grow: 0; }
+@media (min-width: 1200px) and (prefers-reduced-motion: no-preference) {
+  .hero--home { container-type: inline-size; overflow-anchor: none;
+    --hero-w0: calc(min(100cqw, var(--container) + 2 * var(--gutter)) - 2 * var(--gutter)); /* panel width at p=0 (container content box) */
+    --hero-h0: max(calc(var(--space-9) * 3), calc(var(--hero-w0) / 3)); /* panel height at p=0 */
+    --hero-h1: max(var(--hero-h0), calc(100svh - var(--header-h))); /* panel height at p=1 */ }
+  .hero--home .hero__scene { aspect-ratio: auto; min-height: 0; box-sizing: border-box;
+    width: calc(100% + var(--hero-grow) * (100cqw - 100%));
+    margin-inline: calc(var(--hero-grow) * (100% - 100cqw) / 2);
+    margin-top: calc(-1 * var(--hero-overlap) * (1 - var(--hero-grow)));
+    height: calc(var(--hero-h0) + var(--hero-grow) * (var(--hero-h1) - var(--hero-h0)));
+    border-radius: calc(var(--radius-lg) * (1 - var(--hero-grow)));
+    clip-path: inset(calc(var(--hero-overlap) * (1 - var(--hero-grow))) 0 0 0); } /* hides the part of the wider panel that lies beside the text layer (the overlap zone), so no 'ears' appear next to the layer's bottom edge */
+}

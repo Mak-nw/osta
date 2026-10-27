@@ -46,19 +46,23 @@
     "menu_docs": "Documentation",
     "menu_team": "Team",
     "contact_manager": "Contact manager",
-    "copyright": "© 2016-2026 OSTA Trading GmbH"
+    "copyright": "© 2016-2026",
+    "company": "OSTA Trading GmbH",
+    "legal_privacy": "Privacy Policy",
+    "legal_terms": "Terms of Use",
+    "legal_data": "Data processing"
   },
   "closing": {
     "scene_label": "Abstract lines converging into one point"
   },
   "home": {
-    "hero_title": "One partner<br>to settle your supply<br>of APIs, excipients<br>and specialty<br>ingredients",
+    "hero_title": "One partner to settle your supply<br>of APIs, excipients<br>and specialty ingredients",
     "hero_fact_l1": "Europe & worldwide",
     "hero_fact_l2": "Located in the Hamburg area",
     "hero_fact_r1": "EudraGMDP registered",
     "hero_fact_r2": "GDP warehouse",
     "hero_cta": "Explore products",
-    "hero_scene_label": "Abstract flowing lines forming a sphere and a capsule",
+    "hero_photo_alt": "Aerial view of a modern logistics warehouse",
     "about_label": "About us",
     "about_title": "OSTA Trading GmbH<br>supplies the pharmaceutical,<br>food and cosmetics<br>industries across Europe<br>and worldwide.<br>Our warehouse is in Reinbek,<br>in the Hamburg metropolitan area",
     "products_label": "Products",
@@ -278,5 +282,61 @@
     "supply_text_2": "Together with logistics partners experienced in pharmaceutical and other chemical products, we coordinate international transport, import and export procedures and the shipping documents.",
     "row_title": "Support throughout<br>the entire supply process",
     "row_label": "Services"
+  },
+  "legal": {
+    "last_updated": "Last updated: [date]",
+    "toc_label": "On this page",
+    "placeholder": "Content to be added.",
+    "privacy": {
+      "title": "Privacy Policy",
+      "s1_title": "1. Controller",
+      "s1_text": "Content to be added.",
+      "s2_title": "2. Data we collect",
+      "s2_text": "Content to be added.",
+      "s3_title": "3. Purpose and legal basis",
+      "s3_text": "Content to be added.",
+      "s4_title": "4. Recipients",
+      "s4_text": "Content to be added.",
+      "s5_title": "5. Retention",
+      "s5_text": "Content to be added.",
+      "s6_title": "6. Your rights",
+      "s6_text": "Content to be added.",
+      "s7_title": "7. Contact",
+      "s7_text": "Content to be added."
+    },
+    "terms": {
+      "title": "Terms of Use",
+      "s1_title": "1. Scope",
+      "s1_text": "Content to be added.",
+      "s2_title": "2. Offers and orders",
+      "s2_text": "Content to be added.",
+      "s3_title": "3. Prices and payment",
+      "s3_text": "Content to be added.",
+      "s4_title": "4. Delivery",
+      "s4_text": "Content to be added.",
+      "s5_title": "5. Warranty and liability",
+      "s5_text": "Content to be added.",
+      "s6_title": "6. Governing law",
+      "s6_text": "Content to be added.",
+      "s7_title": "7. Contact",
+      "s7_text": "Content to be added."
+    },
+    "data": {
+      "title": "Data processing",
+      "s1_title": "1. Overview",
+      "s1_text": "Content to be added.",
+      "s2_title": "2. Categories of data",
+      "s2_text": "Content to be added.",
+      "s3_title": "3. Processing purposes",
+      "s3_text": "Content to be added.",
+      "s4_title": "4. Processors and transfers",
+      "s4_text": "Content to be added.",
+      "s5_title": "5. Security measures",
+      "s5_text": "Content to be added.",
+      "s6_title": "6. Data subject requests",
+      "s6_text": "Content to be added.",
+      "s7_title": "7. Contact",
+      "s7_text": "Content to be added."
+    }
   }
 }
