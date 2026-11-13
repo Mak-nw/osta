@@ -1,0 +1,343 @@
+{
+  "404": {
+    "placeholder": true,
+    "priority": 0.5,
+    "source": "404.html",
+    "path": "/404.html",
+    "slug": "404",
+    "robots": "noindex",
+    "langs": [
+      "en"
+    ],
+    "type": "WebPage",
+    "en": {
+      "title": "Page Not Found (404) | OSTA Trading",
+      "description": "This page could not be found. Search the OSTA Trading product catalogue or browse APIs, excipients and food grade ingredients.",
+      "name": "Page not found"
+    },
+    "de": {
+      "title": "Seite nicht gefunden (404) | OSTA Trading",
+      "description": "Diese Seite wurde nicht gefunden. Durchsuchen Sie den Produktkatalog von OSTA Trading oder stöbern Sie bei Wirkstoffen und Hilfsstoffen.",
+      "name": "Seite nicht gefunden"
+    }
+  },
+  "_notes": {
+    "readme": "Single registry of per-page SEO texts. Key = page key. Edit title/description here; the build (vite-plugin-seo) reads it. 'placeholder: true' = draft copy written by the team, review before launch. 'contentPlaceholder: true' = the page BODY is a placeholder (lorem/legal) -> page is noindex and excluded from the sitemap until you remove robots:noindex.",
+    "gmdp": "PLACEHOLDER: fill in the EudraGMDP / WDA / GDP numbers in site.config.json -> credentials (they appear in Organization JSON-LD and the Impressum).",
+    "lengths": "Title 30-60 chars (brand ' | OSTA Trading' at the end), description 70-160 chars; the audit (npm run audit:seo) checks both."
+  },
+  "_product": {
+    "en": {
+      "categoryTitle": {
+        "api": "API supplier",
+        "excipients": "excipient supplier",
+        "food-grade": "food-grade supplier"
+      },
+      "fallbackDescription": "Pharmaceutical ingredient from the OSTA Trading catalogue. Request a quotation or sourcing from our team in Hamburg.",
+      "note": "Product title: '{name} — {category} | OSTA Trading'; description is composed from product facts (name, CAS, first sentence of the description, availability)."
+    },
+    "placeholder": true,
+    "priority": 0.7
+  },
+  "_shim": {
+    "note": "/product.html?slug=x: redirect-only shim (noindex)."
+  },
+  "index": {
+    "placeholder": true,
+    "priority": 1,
+    "source": "index.html",
+    "path": "/",
+    "slug": "",
+    "type": "WebPage",
+    "en": {
+      "title": "APIs & Excipients Distributor, Hamburg | OSTA Trading",
+      "description": "OSTA Trading GmbH supplies APIs, excipients and specialty ingredients for pharma, food and cosmetics from Reinbek near Hamburg. Request a quotation.",
+      "name": "Home"
+    },
+    "de": {
+      "title": "Wirkstoffe & Hilfsstoffe Großhandel Hamburg | OSTA Trading",
+      "description": "OSTA Trading GmbH liefert Wirkstoffe (API), Hilfsstoffe und Spezialzutaten für Pharma, Lebensmittel und Kosmetik aus Reinbek bei Hamburg. Jetzt anfragen.",
+      "name": "Startseite"
+    }
+  },
+  "about": {
+    "placeholder": true,
+    "priority": 0.8,
+    "source": "about.html",
+    "path": "/about.html",
+    "slug": "about",
+    "type": "AboutPage",
+    "en": {
+      "title": "About Us: Pharma Ingredient Distributor | OSTA Trading",
+      "description": "OSTA Trading GmbH is a specialised distributor of APIs, excipients and specialty ingredients, EudraGMDP-registered, with a GDP-compliant warehouse in Reinbek.",
+      "name": "About Us"
+    },
+    "de": {
+      "title": "Über uns: Pharma-Großhandel aus Hamburg | OSTA Trading",
+      "description": "OSTA Trading GmbH ist Distributor für Wirkstoffe, Hilfsstoffe und Spezialzutaten, in EudraGMDP registriert, mit GDP-konformem Lager in Reinbek bei Hamburg.",
+      "name": "Über uns"
+    }
+  },
+  "services": {
+    "placeholder": true,
+    "priority": 0.8,
+    "source": "services.html",
+    "path": "/services.html",
+    "slug": "services",
+    "type": "WebPage",
+    "en": {
+      "title": "Sourcing, Samples & Logistics Services | OSTA Trading",
+      "description": "API and excipient sourcing, regulatory documents, samples, specifications and logistics from Reinbek. One partner from first inquiry to regular supply.",
+      "name": "Services"
+    },
+    "de": {
+      "title": "Beschaffung, Muster & Logistik für Pharma | OSTA Trading",
+      "description": "Beschaffung von Wirkstoffen und Hilfsstoffen, Zulassungsdokumente, Muster, Spezifikationen und Logistik ab Reinbek. Ein Partner bis zur Lieferung.",
+      "name": "Leistungen"
+    }
+  },
+  "catalog": {
+    "placeholder": true,
+    "priority": 0.9,
+    "source": "catalog.html",
+    "path": "/catalog.html",
+    "slug": "catalog",
+    "type": "CollectionPage",
+    "en": {
+      "title": "Product Catalogue: APIs & Excipients | OSTA Trading",
+      "description": "Browse APIs, excipients and food grade ingredients in stock at OSTA Trading. Search by name, filter by category and request a quotation for any position.",
+      "name": "Products"
+    },
+    "de": {
+      "title": "Produktkatalog: Wirkstoffe & Hilfsstoffe | OSTA Trading",
+      "description": "Wirkstoffe, Hilfsstoffe und Lebensmittelzutaten von OSTA Trading: nach Name suchen, nach Kategorie filtern und ein Angebot für jede Position anfragen.",
+      "name": "Produkte"
+    }
+  },
+  "faq": {
+    "placeholder": true,
+    "priority": 0.7,
+    "source": "faq.html",
+    "path": "/faq.html",
+    "slug": "faq",
+    "type": "FAQPage",
+    "en": {
+      "title": "FAQ: Ordering APIs & Excipients | OSTA Trading",
+      "description": "Answers on availability, quotation requests, documentation, samples, EudraGMDP, GDP and delivery from OSTA Trading GmbH in Reinbek near Hamburg.",
+      "name": "FAQ"
+    },
+    "de": {
+      "title": "FAQ: Wirkstoffe & Hilfsstoffe bestellen | OSTA Trading",
+      "description": "Antworten zu Verfügbarkeit, Angebotsanfragen, Dokumentation, Mustern, EudraGMDP, GDP und Lieferung von OSTA Trading GmbH in Reinbek bei Hamburg.",
+      "name": "FAQ"
+    }
+  },
+  "contact": {
+    "placeholder": true,
+    "priority": 0.7,
+    "source": "contact.html",
+    "path": "/contact.html",
+    "slug": "contact",
+    "type": "ContactPage",
+    "en": {
+      "title": "Contact & Quotation Request | OSTA Trading",
+      "description": "Contact the OSTA Trading team in Reinbek near Hamburg: request a quote, samples or regulatory documents. Phone +49 40 731 281-76, info@osta-trading.com.",
+      "name": "Contact"
+    },
+    "de": {
+      "title": "Kontakt & Angebotsanfrage | OSTA Trading",
+      "description": "Kontaktieren Sie das Team von OSTA Trading in Reinbek bei Hamburg: Angebot, Muster oder Zulassungsdokumente anfragen. Tel. +49 40 731 281-76.",
+      "name": "Kontakt"
+    }
+  },
+  "impressum": {
+    "placeholder": true,
+    "priority": 0.2,
+    "source": "impressum.html",
+    "path": "/impressum.html",
+    "slug": "impressum",
+    "type": "WebPage",
+    "robots": "noindex",
+    "contentPlaceholder": true,
+    "note": "Placeholder Impressum: fill in HRB, USt-IdNr, Geschaeftsfuehrer with legal counsel, then remove robots:noindex and contentPlaceholder.",
+    "en": {
+      "title": "Imprint and Legal Notice | OSTA Trading GmbH",
+      "description": "Legal notice of OSTA Trading GmbH, Senefelder Ring 83, 21465 Reinbek, Germany: company details, registration data and contact.",
+      "name": "Imprint"
+    },
+    "de": {
+      "title": "Impressum und Anbieterkennzeichnung | OSTA Trading",
+      "description": "Impressum der OSTA Trading GmbH, Senefelder Ring 83, 21465 Reinbek: Angaben zum Unternehmen, Registerdaten und Kontakt.",
+      "name": "Impressum"
+    }
+  },
+  "privacy": {
+    "placeholder": true,
+    "priority": 0.2,
+    "source": "privacy.html",
+    "path": "/privacy.html",
+    "slug": "privacy",
+    "type": "WebPage",
+    "robots": "noindex",
+    "contentPlaceholder": true,
+    "note": "Body is lorem ipsum: noindex until the legal text is provided.",
+    "en": {
+      "title": "Privacy Policy | OSTA Trading GmbH",
+      "description": "How OSTA Trading GmbH processes personal data when you use this website or send an inquiry: controller, data we collect and your rights.",
+      "name": "Privacy Policy"
+    },
+    "de": {
+      "title": "Datenschutzerklärung | OSTA Trading GmbH",
+      "description": "Wie die OSTA Trading GmbH personenbezogene Daten bei der Nutzung dieser Website und bei Anfragen verarbeitet: Verantwortlicher, Daten und Ihre Rechte.",
+      "name": "Datenschutz"
+    }
+  },
+  "terms": {
+    "placeholder": true,
+    "priority": 0.2,
+    "source": "terms.html",
+    "path": "/terms.html",
+    "slug": "terms",
+    "type": "WebPage",
+    "robots": "noindex",
+    "contentPlaceholder": true,
+    "note": "Body is lorem ipsum: noindex until the legal text is provided.",
+    "en": {
+      "title": "Terms of Use | OSTA Trading GmbH",
+      "description": "Terms of use for the OSTA Trading GmbH website: scope, permitted use, liability and applicable law. Please read before using the site.",
+      "name": "Terms of Use"
+    },
+    "de": {
+      "title": "Nutzungsbedingungen | OSTA Trading GmbH",
+      "description": "Nutzungsbedingungen der Website der OSTA Trading GmbH: Geltungsbereich, zulässige Nutzung, Haftung und anwendbares Recht.",
+      "name": "Nutzungsbedingungen"
+    }
+  },
+  "data-processing": {
+    "placeholder": true,
+    "priority": 0.2,
+    "source": "data-processing.html",
+    "path": "/data-processing.html",
+    "slug": "data-processing",
+    "type": "WebPage",
+    "robots": "noindex",
+    "contentPlaceholder": true,
+    "note": "Body is lorem ipsum: noindex until the legal text is provided.",
+    "en": {
+      "title": "Data Processing Information | OSTA Trading GmbH",
+      "description": "Information on data processing at OSTA Trading GmbH: purposes, legal bases, recipients, retention periods and how to contact us about your data.",
+      "name": "Data Processing"
+    },
+    "de": {
+      "title": "Informationen zur Datenverarbeitung | OSTA Trading",
+      "description": "Informationen zur Datenverarbeitung bei der OSTA Trading GmbH: Zwecke, Rechtsgrundlagen, Empfänger, Speicherdauer und Kontakt für Datenschutzfragen.",
+      "name": "Datenverarbeitung"
+    }
+  },
+  "design-system": {
+    "placeholder": true,
+    "priority": 0.5,
+    "source": "design-system.html",
+    "path": "/design-system.html",
+    "slug": "design-system",
+    "robots": "noindex",
+    "langs": [
+      "en"
+    ],
+    "type": "WebPage",
+    "en": {
+      "title": "Design System | OSTA Trading GmbH",
+      "description": "Internal development page: components, tokens and typography of the OSTA Trading site. Not part of the public website.",
+      "name": "Design system"
+    },
+    "de": {
+      "title": "Design System | OSTA Trading GmbH",
+      "description": "Interne Entwicklungsseite: Komponenten, Tokens und Typografie der OSTA-Trading-Website. Nicht Teil der öffentlichen Website.",
+      "name": "Design System"
+    }
+  },
+  "hub-api": {
+    "placeholder": true,
+    "priority": 0.7,
+    "hub": "api",
+    "path": "/products/category/api/",
+    "slug": "products/category/api",
+    "en": {
+      "title": "APIs: Active Pharmaceutical Ingredients | OSTA Trading",
+      "description": "Active pharmaceutical ingredients from OSTA Trading GmbH, Hamburg: APIs in stock and on request, with CAS numbers. Request a quotation for any position.",
+      "name": "API",
+      "h1": "Active pharmaceutical ingredients (APIs)",
+      "intro": "OSTA Trading GmbH supplies active pharmaceutical ingredients (APIs) from Reinbek near Hamburg. This list shows every API product with its availability: in stock or available on request. Open a product page to see CAS number, formula and appearance, and to send a quotation request."
+    },
+    "de": {
+      "title": "Wirkstoffe (API) bestellen | OSTA Trading",
+      "description": "Pharmazeutische Wirkstoffe von OSTA Trading GmbH, Hamburg: APIs auf Lager und auf Anfrage, mit CAS-Nummern. Angebot für jede Position anfragen.",
+      "name": "API",
+      "h1": "Pharmazeutische Wirkstoffe (API)",
+      "intro": "Die OSTA Trading GmbH liefert pharmazeutische Wirkstoffe (API) aus Reinbek bei Hamburg. Diese Liste zeigt jeden API-Artikel mit seiner Verfügbarkeit: auf Lager oder auf Anfrage. Auf der Produktseite finden Sie CAS-Nummer, Formel und Aussehen und können ein Angebot anfragen."
+    }
+  },
+  "hub-excipients": {
+    "placeholder": true,
+    "priority": 0.7,
+    "hub": "excipients",
+    "path": "/products/category/excipients/",
+    "slug": "products/category/excipients",
+    "en": {
+      "title": "Pharmaceutical Excipients Supplier | OSTA Trading",
+      "description": "Pharmaceutical excipients from OSTA Trading GmbH, Hamburg: in stock and on request, with CAS numbers. Request a quotation for any position.",
+      "name": "Excipients",
+      "h1": "Pharmaceutical excipients",
+      "intro": "OSTA Trading GmbH supplies pharmaceutical excipients from Reinbek near Hamburg. This list shows every excipient with its availability: in stock or available on request. Open a product page to see CAS number, formula and appearance, and to send a quotation request."
+    },
+    "de": {
+      "title": "Hilfsstoffe für die Pharmaindustrie | OSTA Trading",
+      "description": "Pharmazeutische Hilfsstoffe von OSTA Trading GmbH, Hamburg: auf Lager und auf Anfrage, mit CAS-Nummern. Angebot für jede Position anfragen.",
+      "name": "Hilfsstoffe",
+      "h1": "Pharmazeutische Hilfsstoffe",
+      "intro": "Die OSTA Trading GmbH liefert pharmazeutische Hilfsstoffe aus Reinbek bei Hamburg. Diese Liste zeigt jeden Hilfsstoff mit seiner Verfügbarkeit: auf Lager oder auf Anfrage. Auf der Produktseite finden Sie CAS-Nummer, Formel und Aussehen und können ein Angebot anfragen."
+    }
+  },
+  "hub-food-grade": {
+    "placeholder": true,
+    "priority": 0.7,
+    "hub": "food-grade",
+    "path": "/products/category/food-grade/",
+    "slug": "products/category/food-grade",
+    "en": {
+      "title": "Food Grade Ingredients Supplier | OSTA Trading",
+      "description": "Food grade ingredients from OSTA Trading GmbH, Hamburg: in stock and on request, with CAS numbers. Request a quotation for any position.",
+      "name": "Food Grade",
+      "h1": "Food grade ingredients",
+      "intro": "OSTA Trading GmbH supplies food grade ingredients from Reinbek near Hamburg. This list shows every food grade product with its availability: in stock or available on request. Open a product page to see CAS number, formula and appearance, and to send a quotation request."
+    },
+    "de": {
+      "title": "Lebensmittelzutaten Großhandel | OSTA Trading",
+      "description": "Lebensmittelzutaten von OSTA Trading GmbH, Hamburg: auf Lager und auf Anfrage, mit CAS-Nummern. Angebot für jede Position anfragen.",
+      "name": "Lebensmittelzutaten",
+      "h1": "Lebensmittelzutaten",
+      "intro": "Die OSTA Trading GmbH liefert Lebensmittelzutaten aus Reinbek bei Hamburg. Diese Liste zeigt jedes Produkt mit seiner Verfügbarkeit: auf Lager oder auf Anfrage. Auf der Produktseite finden Sie CAS-Nummer, Formel und Aussehen und können ein Angebot anfragen."
+    }
+  },
+  "hub-a-z": {
+    "placeholder": true,
+    "priority": 0.8,
+    "hub": "az",
+    "path": "/products/a-z/",
+    "slug": "products/a-z",
+    "en": {
+      "title": "Product Index A–Z: APIs & Excipients | OSTA Trading",
+      "description": "Alphabetical index of all APIs, excipients and food grade ingredients at OSTA Trading, with availability status. Request a quotation for any position.",
+      "name": "A–Z index",
+      "h1": "Product index A–Z",
+      "intro": "This index lists all products of OSTA Trading GmbH alphabetically, with their category and availability: in stock or available on request. Choose a letter to jump to the position, open a product page for CAS number and formula, and send a quotation request."
+    },
+    "de": {
+      "title": "Produktindex A–Z: Wirkstoffe & Hilfsstoffe | OSTA Trading",
+      "description": "Alphabetischer Index aller Wirkstoffe, Hilfsstoffe und Lebensmittelzutaten von OSTA Trading mit Verfügbarkeit. Angebot für jede Position anfragen.",
+      "name": "A–Z-Index",
+      "h1": "Produktindex A–Z",
+      "intro": "Dieser Index listet alle Produkte der OSTA Trading GmbH alphabetisch mit Kategorie und Verfügbarkeit: auf Lager oder auf Anfrage. Wählen Sie einen Buchstaben, öffnen Sie die Produktseite für CAS-Nummer und Formel und senden Sie eine Angebotsanfrage."
+    }
+  }
+}

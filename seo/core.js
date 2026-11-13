@@ -30,7 +30,7 @@ const words = (s) => (String(s || '').trim().match(/\S+/g) || []).length;
 
 export function loadSite({ base = '/' } = {}) {
   const config = readJson(resolve(ROOT, 'site.config.json'));
-  const registry = readJson(resolve(ROOT, '../content/seo/pages.json'));
+  const registry = readJson(resolve(ROOT, 'seo/pages.json'));
   const rawProducts = readJson(resolve(ROOT, 'src/data/products.json'));
   const details = readJson(resolve(ROOT, 'src/data/product-details.json'));
   const dicts = { en: readJson(resolve(ROOT, 'src/i18n/en.json')), de: readJson(resolve(ROOT, 'src/i18n/de.json')) };
