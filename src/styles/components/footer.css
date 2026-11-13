@@ -1,78 +1,67 @@
-.footer { background: var(--surface-sunken); color: var(--text-accent); }
-.footer__top { container-type: inline-size; display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); grid-template-rows: auto 1fr auto; align-items: start; padding-top: var(--space-8); font-size: var(--type-body-size); line-height: var(--type-body-lh); }
-.footer__menu { grid-column: 1 / span 6; grid-row: 1 / span 2; justify-self: start; width: max-content; max-width: calc(12.5cqw - 14px); display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; }
-/* Три списки стоять в одній комірці (ширина = найширший за вмістом W, рівна для всіх) і зсунуті: Products x=32, About = лівa межа col 4 (x4-32 = 25cqw + 4px), Services рівно посередині (гапи рівні). max-width: gap >= 16px, інакше довгі пункти переносяться. */
-.footer__menu > .footer__group { grid-area: 1 / 1; position: relative; }
-.footer__menu > .footer__group:nth-child(2) { left: calc(12.5cqw + 2px); }
-.footer__menu > .footer__group:nth-child(3) { left: calc(25cqw + 4px); }
-.footer__group { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
-.footer__group .footer__label { margin-bottom: var(--space-1); }
-.footer__contacts { grid-column: 1 / -1; grid-row: 3; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--grid-gap); margin: var(--space-9) 0 0; }
-.footer__cta { grid-column: 7 / span 4; grid-row: 2; justify-self: start; margin-top: var(--space-7); }
-.footer__col { display: contents; }
-.footer__mission { grid-column: 7 / span 4; grid-row: 1; margin: 0; color: var(--text-accent); font-size: var(--type-lead-size); line-height: var(--type-lead-lh); letter-spacing: var(--type-lead-ls); }
-/* >1280: місія на cols 7–10 (зсув на 2 cols ліворуч, коментар замовника), CTA на тому ж start (cols 7, ліва межа = ліва межа місії). ≤1280: абзац місії (24px) і CTA беруть cols 7–12, щоб рядок не був ~30 символів; меню cols 1–4 — без перетину (місія тут не зсувається: cols 5+ перетнули б меню) */
-@media (max-width: 1280px) {
-  .footer__mission, .footer__cta { grid-column: 7 / span 6; }
-}
-.footer__row { display: flex; flex-direction: column; gap: var(--space-2); }
-.footer__row { min-width: 0; }
-.footer__row dd { margin: 0; overflow-wrap: anywhere; }
-.footer__label { display: block; margin-bottom: var(--space-1); font-size: var(--type-label-size); line-height: var(--type-label-lh); letter-spacing: var(--type-label-ls); color: var(--text); }
-.footer__row .footer__label { margin-bottom: 0; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); }
-.footer address { font-style: normal; }
-/* Hover лінків футера; кнопки .btn (CTA «Contact manager») виключені — їх hover задає .btn--primary:hover */
-.footer a:not(.btn):not(.footer__wordmark):hover,
-.footer a.is-hover:not(.btn):not(.footer__wordmark) { color: var(--accent); text-decoration: underline; }
-/* Giant wordmark: font-size is a fraction of the container's inline size (cqw), so "OSTA" always spans the 12-col width. */
-.footer__wordmark { display: block; container-type: inline-size; margin-top: var(--space-9); }
-.footer__wordmark:hover { text-decoration: none; }
-.footer__wordmark span { display: block; font-weight: var(--font-weight-medium); font-size: calc(100cqw * var(--wordmark-k)); line-height: 0.8; letter-spacing: -0.04em; color: var(--accent); white-space: nowrap; margin-left: -0.05em; }
-/* Bottom row: legal links (left) | copyright (centre = window centre) | company name (right); 1fr auto 1fr keeps the centre symmetric. */
-.footer__bottom { display: grid; grid-template-columns: 1fr auto 1fr; align-items: baseline; column-gap: var(--grid-gap); padding-block: var(--space-5) var(--space-6); }
-.footer__legal { display: flex; flex-wrap: nowrap; gap: var(--space-6); font-size: var(--type-label-size); line-height: var(--type-label-lh); white-space: nowrap; }
-.footer__legal a { color: var(--text-accent); }
-.footer__copy, .footer__company { margin: 0; font-size: var(--type-label-size); line-height: var(--type-label-lh); color: var(--text-accent); white-space: nowrap; }
-.footer__copy { text-align: center; }
-.footer__company { text-align: right; }
-/* <=1280: three links no longer fit beside the centred copyright: stack them in a column */
-@media (max-width: 1280px) {
-  .footer__legal { flex-direction: column; gap: var(--space-2); }
-}
-
-/* ==========================================================================
-   Responsive footer. Tablet (<= 1199): 8 columns: menu in 3 columns, mission + CTA, contacts 2 x 2, wordmark.
-   Mobile (<= 767): 4 columns: Products + About side by side, Services full width in 2 columns, mission, CTA, contacts in one column.
-   ========================================================================== */
+/* Footer V1c-3: menu Services / Products / About (4/4/4, cols 1 / 5 / 9), logo at mid-height, Contact row (mail · phone · block CTA), 4-item technical row. No lines. */
+.footer { background: var(--surface-sunken); color: var(--text-accent); font-size: var(--type-body-size); line-height: var(--type-body-lh); }
+.footer__grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); }
+.footer__group { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); min-width: 0; }
+.footer__group--end { align-items: flex-end; text-align: right; }
+.footer__label { display: block; font-size: var(--type-label-size); line-height: var(--type-label-lh); letter-spacing: var(--type-label-ls); color: var(--text-muted); }
+.footer__group > .footer__label { margin-bottom: var(--space-3); }
+.footer a:not(.btn):not(.footer__label):not(.footer__logo) { color: var(--text-accent); }
+.footer a:not(.btn):not(.footer__logo):hover, .footer a.is-hover:not(.btn):not(.footer__logo) { color: var(--accent); text-decoration: underline; }
+.footer__menu { padding-top: var(--space-8); align-items: start; }
+.footer__menu > .footer__group { grid-column: span 4; }
+.footer__mark { display: flex; justify-content: center; padding-block: var(--space-8); }
+.footer__logo { display: block; }
+.footer__logo img { display: block; height: var(--logo-footer-h); width: auto; }
+/* Tops aligned (mail, phone, fax, CTA): the phone group is two rows tall on all widths, so centring would drop the mail row. */
+.footer__reach { align-items: start; row-gap: var(--space-3); }
+.footer__reach-label { grid-column: 1 / -1; }
+.footer__reach > .footer__group { grid-column: span 4; }
+.footer__reach > .footer__group--cta { align-items: stretch; }
+/* Footer CTA: one line on desktop; on narrow widths the label wraps to 2 lines. min-height stays 44 (--control-md), text and arrow stay vertically centred (.btn align-items). */
+.footer__cta { height: auto; min-height: var(--control-md); white-space: normal; line-height: var(--type-body-lh); text-align: left; }
+.footer__cta > span { min-width: 0; }
+/* Contact link row (mail, phone; several rows can stack in one .footer__group): 40 px ring (= --chip-lg, as on Contact) at the row start; the text's first line is centred on the ring via (ring − body line) / 2 padding, so the row is 40 px tall and rows stack at a 48 px pitch. */
+.footer__contact { display: flex; align-items: flex-start; gap: var(--space-3); }
+.footer__contact > .icon-ring { margin: 0; }
+.footer__contact > span:last-child { padding-block: calc((var(--chip-lg) - var(--type-body-lh)) / 2); }
+/* Technical row exception: padding-top keeps the footer rhythm (--space-8); padding-bottom is halved on purpose (client request: technical links sit closer to the page edge). Desktop 64 -> 32. */
+.footer__bottom { align-items: baseline; padding-top: var(--space-8); padding-bottom: var(--space-6); font-size: var(--type-label-size); line-height: var(--type-label-lh); }
+.footer__bottom > * { grid-column: span 4; margin: 0; white-space: nowrap; }
+.footer__bottom > a:nth-child(2) { grid-column: 5 / span 2; }
+.footer__bottom > a:nth-child(3) { grid-column: 7 / span 2; }
+.footer__bottom > a:nth-child(4) { grid-column: 9 / span 2; }
+.footer__bottom > a:nth-child(5) { grid-column: 11 / span 2; justify-self: end; }
 @media (max-width: 1199px) {
-  .footer__top { grid-template-rows: none; row-gap: var(--space-7); padding-top: var(--space-7); }
-  .footer__menu { grid-column: 1 / -1; grid-row: 1; width: 100%; max-width: none; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--grid-gap); }
-  .footer__menu > .footer__group, .footer__menu > .footer__group:nth-child(2), .footer__menu > .footer__group:nth-child(3) { grid-area: auto; left: 0; }
-  .footer__mission { grid-column: 1 / span 6; grid-row: 2; }
-  .footer__cta { grid-column: 1 / span 4; grid-row: 3; margin-top: calc(-1 * var(--space-4)); }
-  .footer__contacts { grid-row: 4; grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--space-6); margin-top: 0; }
-  .footer__wordmark { margin-top: var(--space-8); }
-  /* bottom row: legal links in one centred row, copyright and company name centred under them */
-  .footer__bottom { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-2); justify-items: center; padding-block: var(--space-5); }
-  .footer__legal { flex-direction: row; flex-wrap: wrap; justify-content: center; column-gap: var(--space-5); row-gap: 0; white-space: normal; }
-  .footer__legal a { display: inline-flex; align-items: center; min-height: var(--control-md); }
-  .footer__copy, .footer__company { text-align: center; white-space: normal; }
+  .footer__menu { padding-top: var(--space-7); }
+  .footer__menu > .footer__group:nth-child(1) { grid-column: 1 / span 3; }
+  .footer__menu > .footer__group:nth-child(2) { grid-column: 4 / span 2; }
+  .footer__menu > .footer__group:nth-child(3) { grid-column: 6 / span 3; }
+  .footer__mark { padding-block: var(--space-7); }
+  .footer__reach > .footer__group { grid-column: span 4; }
+  .footer__reach > .footer__group--cta { grid-column: 1 / -1; margin-top: var(--space-4); }
+  /* Exception (see above): tablet/mobile padding-top stays --space-6; padding-bottom --space-6 -> --space-5 (24, the minimum floor). */
+  .footer__bottom { display: flex; flex-direction: column; align-items: center; padding-top: var(--space-6); padding-bottom: var(--space-5); }
+  /* Responsive footer rhythm (customer rule): between link items --footer-gap-items (5), group label -> first item --footer-gap-label (7); same for menu, contacts and the technical links.
+     Gaps are between LINE BOXES (text), so the links lose min-height 44; the click zone is a ::after strip that grows the box by half a gap up and down (never overlaps a neighbour). */
+  .footer__group { gap: var(--footer-gap-items); }
+  .footer__group > .footer__label { margin-bottom: calc(var(--footer-gap-label) - var(--footer-gap-items)); }
+  .footer__reach { row-gap: var(--footer-gap-items); }
+  .footer__reach-label { margin-bottom: calc(var(--footer-gap-label) - var(--footer-gap-items)); }
+  .footer a:not(.btn):not(.footer__logo) { position: relative; display: inline-flex; align-items: center; }
+  .footer a:not(.btn):not(.footer__logo)::after { content: ""; position: absolute; inset: calc(var(--footer-gap-items) / -2) calc(-1 * var(--space-1)); }
+  /* CTA -> copyright = copyright -> technical links = --space-6; technical links one under another, 5 apart */
+  .footer__bottom { row-gap: var(--footer-gap-items); padding-top: var(--space-6); }
+  .footer__bottom > .footer__owner { margin-bottom: calc(var(--space-6) - var(--footer-gap-items)); }
 }
 @media (max-width: 767px) {
-  .footer__top { row-gap: var(--space-6); padding-top: var(--space-6); }
-  .footer__menu { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--space-5); }
-  .footer__menu > .footer__group:nth-child(1) { grid-column: 1; grid-row: 1; }
-  .footer__menu > .footer__group:nth-child(3) { grid-column: 2; grid-row: 1; }
-  .footer__menu > .footer__group:nth-child(2) { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--grid-gap); align-content: start; }
-  .footer__menu > .footer__group:nth-child(2) > .footer__label { grid-column: 1 / -1; }
-  .footer__group { gap: 0; }
-  .footer__group .footer__label { margin-bottom: 0; }
-  .footer a:not(.btn):not(.footer__wordmark) { display: inline-flex; align-items: center; min-height: var(--control-md); }
-  .footer__row dd { display: block; }
-  .footer__mission { grid-column: 1 / -1; }
-  .footer__cta { grid-column: 1 / -1; width: 100%; margin-top: calc(-1 * var(--space-2)); }
-  .footer__contacts { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--space-6); } /* 2 x 2: Phone | Fax, Mail | Address; icon on top, label, value */
-  .footer__contacts .footer__row dd > a:not(.btn) { align-items: flex-start; } /* values top-aligned: link keeps 44px touch box, text starts at the top like plain-text values */
-  .footer__row .footer__label { gap: var(--space-4); }
-  .footer__wordmark { margin-top: var(--space-7); min-height: var(--control-md); }
+  .footer__menu { padding-top: var(--space-6); row-gap: var(--space-6); }
+  .footer__menu > .footer__group:nth-child(1) { grid-column: 1 / span 2; }
+  .footer__menu > .footer__group:nth-child(2) { grid-column: 3 / span 2; }
+  .footer__menu > .footer__group:nth-child(3) { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--grid-gap); align-items: start; align-content: start; justify-items: start; text-align: left; }
+  .footer__menu > .footer__group:nth-child(3) > .footer__label { grid-column: 1 / -1; }
+  .footer__menu > .footer__group:nth-child(3) { row-gap: var(--footer-gap-items); }
+  .footer__mark { padding-block: var(--space-6); }
+  .footer__reach { align-items: start; }
+  .footer__reach > .footer__group { grid-column: 1 / -1; }
+  .footer__reach > .footer__group--cta { margin-top: calc(var(--space-5) - var(--footer-gap-items)); } /* row-gap 5 already sits above: total 24 */
 }

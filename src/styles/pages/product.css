@@ -46,3 +46,14 @@
   .breadcrumbs { flex-wrap: wrap; row-gap: var(--space-1); }
   .breadcrumbs a { display: inline-flex; align-items: center; justify-content: center; min-height: var(--control-md); min-width: var(--control-md); }
 }
+
+/* SEO pages (static product page + hubs): hub/answer rows, wide info tile with the parameter table */
+.product-hero__inner > .row { justify-content: center; flex-wrap: wrap; }
+.product-info > .info-card--wide { grid-column: 1 / -1; }
+.spec-table { width: 100%; border-collapse: collapse; }
+.spec-table th, .spec-table td { padding-block: var(--space-2); text-align: left; vertical-align: top; border-top: 1px solid var(--border); }
+.spec-table tr:first-child th, .spec-table tr:first-child td { border-top: 0; }
+.spec-table th { width: 40%; padding-right: var(--space-4); color: var(--text-muted); font-weight: 400; }
+@media (max-width: 767px) {
+  .spec-table th { width: 45%; }
+}

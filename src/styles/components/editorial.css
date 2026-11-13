@@ -3,8 +3,9 @@
 /* small section marker: label, no decorative shapes */
 .section-label { font-size: var(--type-label-size); line-height: var(--type-label-lh); letter-spacing: var(--type-label-ls); font-weight: var(--font-weight-regular); }
 .section-label::before { content: "# "; }
-/* Section head: the ONE way to place a section tag. Tag ALWAYS above the heading, gap --space-3; used in every section after the hero except closing. --center = centred heading (Services row). */
-.section-head { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); }
+/* Section head = the heading GROUP: tag (.section-label) > heading > description (p) > CTA (.btn / .home-closing__actions). ONE wrapper, ONE gap --section-head-gap (24) between every neighbouring pair; no margins on the members.
+   Used by every section after the hero (also closing, how-split left column, About Quality intro). --center = centred heading (Services row). Where the description / CTA sit in other grid columns (About intro / Services, Services Supply) the grid row-gap = --section-head-gap. */
+.section-head { display: flex; flex-direction: column; align-items: flex-start; gap: var(--section-head-gap); }
 .section-head > * { margin: 0; }
 .section-head--center { align-items: center; text-align: center; }
 

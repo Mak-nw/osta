@@ -11,9 +11,11 @@ const KEY = 'osta-lang';
 
 const get = (obj, path) => path.split('.').reduce((o, k) => (o == null ? o : o[k]), obj);
 
+// Every page is prerendered in ONE language (<html lang data-ssr>, EN at /, DE at /de/): that language wins.
+// localStorage ('osta-lang') only remembers the visitor's last choice; it never re-translates a prerendered page.
 export function currentLang() {
-  let l = null;
-  try { l = localStorage.getItem(KEY); } catch { /* ignore */ }
+  let l = document.documentElement.dataset.ssr || null;
+  if (!l) { try { l = localStorage.getItem(KEY); } catch { /* ignore */ } }
   l = l || document.documentElement.lang || DEFAULT;
   return LOADERS[l] ? l : DEFAULT;
 }
@@ -27,11 +29,12 @@ export async function applyLang(lang = currentLang()) {
   const dict = { get: (key) => { const v = get(own, key); return typeof v === 'string' && v !== '' ? v : get(base, key); } };
   activeDict = dict;
   document.documentElement.lang = lang;
-  document.querySelectorAll('[data-i18n]').forEach((el) => {
+  // prerendered elements carry data-i18n-done: already in the page language, left untouched; only client-built nodes (catalog cards, ...) are translated
+  document.querySelectorAll('[data-i18n]:not([data-i18n-done])').forEach((el) => {
     const v = dict.get(el.dataset.i18n);
     if (typeof v === 'string') el.textContent = v;
   });
-  document.querySelectorAll('[data-i18n-html]').forEach((el) => {
+  document.querySelectorAll('[data-i18n-html]:not([data-i18n-done])').forEach((el) => {
     const v = dict.get(el.dataset.i18nHtml);
     if (typeof v === 'string') el.innerHTML = withBase(v).replace(/<br\s*\/?>/gi, ' <br>'); // space before <br>: collapses at the line end (desktop unchanged), lets tablet/mobile CSS hide the <br> without gluing words
   });
@@ -48,9 +51,12 @@ export async function applyLang(lang = currentLang()) {
   window.__titleWords?.(); // motion.js: re-split big headings into words after the text changed
 }
 
+// Language switch = navigation to the URL of the other language (data-alt-<lang> on <html>, set at build time; no client-side text swap).
 export function setLang(lang) {
   if (!LOADERS[lang]) return;
   try { localStorage.setItem(KEY, lang); } catch { /* ignore */ }
+  const target = document.documentElement.dataset[`alt${lang[0].toUpperCase()}${lang.slice(1)}`];
+  if (lang !== currentLang() && target) { location.assign(target + location.search + location.hash); return; }
   return applyLang(lang);
 }
 

@@ -1,101 +1,122 @@
-// Home Products cards: three looping three.js scenes (API molecule, Excipients cubes, Food Grade sprout) in the illustration language:
-// fat 2px LineSegments2 outlines (--il-ink), main object = white flat fill (--il-fill), secondary objects = light-blue flat fill (--il-soft), free lines = --il-soft; tokens from CSS (.link-card__art in link-list.css), no lighting/shadows.
+// Home Products cards: three looping three.js scenes (API molecule, Excipients cubes, Food Grade sprout) in the hero language: DOTS + THIN LINES (1 device px) over flat fills.
+// Main objects (centre sphere, white cube pieces, leaves) = flat white fill (--il-fill) with thin --il-bg (card blue) edges; secondary objects (outer nodes, other cube pieces, grains, soil, stem, bonds) = NO fill, thin white outline (--il-soft at 70%, an opaque pre-mixed colour so coinciding lines never get brighter);
+// they use a depth-only occluder (no colour) so lines behind them stay hidden. White round dots sit at the vertices / on the contours. Fills are pushed back / shrunk a hair so edges never z-fight with them.
+// Every node also has a screen-facing silhouette ring drawn without depth test, so each ball always has a visible outer contour.
 // ONE shared WebGLRenderer (offscreen canvas) renders each visible card and copies the frame into that card's 2D canvas, so Home keeps a single extra WebGL context.
 // Seamless loop: every motion is a function of phase = 2*PI*t/PERIOD with integer harmonics only, so the state at t = PERIOD equals t = 0 (no start, no end).
 // Renders only cards on screen and while the tab is visible; prefers-reduced-motion = one static frame; DPR <= 2; destroy() frees everything. No WebGL -> returns null.
 import {
-  WebGLRenderer, Scene, PerspectiveCamera, Group, Color, BufferGeometry, Float32BufferAttribute, MeshBasicMaterial, Mesh, SphereGeometry, CircleGeometry, BoxGeometry, EdgesGeometry, Vector3, DoubleSide,
+  WebGLRenderer, Scene, PerspectiveCamera, Group, Color, BufferGeometry, Float32BufferAttribute, BufferAttribute, LineBasicMaterial, LineSegments, LineLoop, Points, ShaderMaterial,
+  BoxGeometry, EdgesGeometry, SphereGeometry, Mesh, MeshBasicMaterial, DoubleSide, Vector3, Quaternion,
 } from 'three';
-import { LineSegments2 } from 'three/examples/jsm/lines/LineSegments2.js';
-import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry.js';
-import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
 import { capDpr } from '../utils/dpr.js';
 
 const PERIOD = 24, MAX_DPR = 2, STATIC_PHASE = 0.9, TAU = Math.PI * 2;
-const LINE_PX = 2; // outline width in screen px (customer decision for these three illustrations: fat lines, ~2px)
+const SHRINK = 0.965;       // fill meshes are a hair smaller than the outline so edges stay in front
+const DOT_PX = 3;          // dot diameter in CSS px (scaled by DPR)
+const LINE_ALPHA = 0.7;    // line opacity over the card background (lines are 1 device px: native GL lines)
+const FILL = 0.68;         // scene diameter as a share of the art-zone's smaller side
+const TAN = Math.tan((30 / 2) * Math.PI / 180);
 
 const geoOf = (pts) => { const g = new BufferGeometry(); g.setAttribute('position', new Float32BufferAttribute(pts.flat(), 3)); return g; };
 const circle = (r, n = 48) => Array.from({ length: n }, (_, i) => { const a = (i / n) * TAU; return [Math.cos(a) * r, Math.sin(a) * r, 0]; });
-// polyline -> flat segment pairs for LineSegments2 (closed = also join last to first)
+// polyline -> flat segment pairs (closed = also join last to first)
 const pairs = (pts, closed = false) => { const out = []; const n = pts.length; for (let i = 0; i < n - 1; i++) out.push(...pts[i], ...pts[i + 1]); if (closed) out.push(...pts[n - 1], ...pts[0]); return out; };
+const segGeo = (flat) => { const g = new BufferGeometry(); g.setAttribute('position', new Float32BufferAttribute(flat, 3)); return g; };
 
 export function initHomeProductScenes(hosts) {
   hosts = [...hosts].filter(Boolean);
   if (!hosts.length) return null;
   const reducedMq = matchMedia('(prefers-reduced-motion: reduce)');
-  // all colours come from CSS: local illustration tokens --il-fill / --il-ink / --il-soft on .link-card__art (link-list.css)
+  // all colours come from CSS: local illustration tokens on .link-card__art (link-list.css)
   const probe = document.createElement('span'); probe.style.display = 'none'; hosts[0].appendChild(probe);
   const tok = (name) => { probe.style.backgroundColor = `var(${name})`; return new Color(getComputedStyle(probe).backgroundColor); };
-  const cFill = tok('--il-fill'), cInk = tok('--il-ink'), cSoft = tok('--il-soft'); probe.remove();
+  const cDot = tok('--il-fill'), cLine = tok('--il-soft'), cBg = tok('--il-bg'); probe.remove();
+  cLine.set(cBg.clone().lerp(cLine, LINE_ALPHA));
 
   const gl = document.createElement('canvas');
   let renderer;
   try { renderer = new WebGLRenderer({ canvas: gl, antialias: true, alpha: true }); } catch { return null; }
   renderer.setClearColor(0x000000, 0);
   renderer.setPixelRatio(1);
-  const lineMats = [];
-  const lineMat = (color) => {
-    const m = new LineMaterial({ color, linewidth: LINE_PX, worldUnits: false });
-    m.polygonOffset = true; m.polygonOffsetFactor = -1; m.polygonOffsetUnits = -1;
-    lineMats.push(m); return m;
-  };
-  const mInk = lineMat(cInk), mSoft = lineMat(cSoft);
-  // flat fills (no lighting, no shadows), pushed back with polygonOffset so edges stay on top and hidden lines are occluded
-  const fillMat = (color) => new MeshBasicMaterial({ color, side: DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
-  const fillWhite = fillMat(cFill), fillSoft = fillMat(cSoft);
+  const lineMat = new LineBasicMaterial({ color: cLine });                       // white outline (70% pre-mixed), depth-tested
+  const inkMat = new LineBasicMaterial({ color: cBg });                         // card-blue thin edges on white fills
+  const silMat = new LineBasicMaterial({ color: cLine, depthTest: false, depthWrite: false });   // silhouette rings: always visible
+  const fillWhite = new MeshBasicMaterial({ color: cDot, side: DoubleSide, polygonOffset: true, polygonOffsetFactor: 2, polygonOffsetUnits: 2 });
+  const occluder = new MeshBasicMaterial({ side: DoubleSide, colorWrite: false, polygonOffset: true, polygonOffsetFactor: 2, polygonOffsetUnits: 2 });
+  const dotMat = new ShaderMaterial({
+    uniforms: { uSize: { value: DOT_PX }, uColor: { value: cDot } }, transparent: true, depthWrite: false,
+    vertexShader: 'uniform float uSize; void main(){ gl_PointSize = uSize; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+    fragmentShader: 'uniform vec3 uColor; void main(){ float d = length(gl_PointCoord - 0.5); if (d > 0.5) discard; gl_FragColor = vec4(uColor, 1.0 - smoothstep(0.38, 0.5, d)); }',
+  });
   const geos = [];
   const track = (g) => { geos.push(g); return g; };
-  const lineObj = (flat, m) => { const o = new LineSegments2(track(new LineSegmentsGeometry().setPositions(flat)), m); o.renderOrder = 1; return o; };
-  const loop = (pts, m = mInk) => lineObj(pairs(pts, true), m);
-  const strip = (pts, m = mInk) => lineObj(pairs(pts), m);
-  const segs = (flat, m = mInk) => lineObj(flat, m);
-  // sphere drawn as three great circles over a flat fill; geometries shared between all spheres
-  let sphereGeo, circGeo;
-  const sphere = (r, fm = fillWhite) => {
-    sphereGeo ||= track(new SphereGeometry(1, 28, 18)); circGeo ||= track(new LineSegmentsGeometry().setPositions(pairs(circle(1), true)));
-    const g = new Group();
-    const ring = () => { const o = new LineSegments2(circGeo, mInk); o.renderOrder = 1; return o; };
-    const a = ring(), b = ring(), c = ring(); b.rotation.x = Math.PI / 2; c.rotation.y = Math.PI / 2;
-    g.add(new Mesh(sphereGeo, fm), a, b, c); g.scale.setScalar(r); return g;
-  };
+  const lineSeg = (flat, m = lineMat) => { const o = new LineSegments(track(segGeo(flat)), m); o.renderOrder = 1; o.frustumCulled = false; return o; };
+  const loopOf = (geo, m = lineMat) => { const o = new LineLoop(geo, m); o.renderOrder = 1; o.frustumCulled = false; return o; };
+  const dots = (pts) => { const o = new Points(track(geoOf(pts)), dotMat); o.renderOrder = 3; o.frustumCulled = false; return o; };
+  const dotsGeo = (geo) => { const o = new Points(geo, dotMat); o.renderOrder = 3; o.frustumCulled = false; return o; };
 
-  /* ---------- scenes: each returns { root, update(phase) } ---------- */
+  // small point-sphere: screen-facing silhouette ring (always visible outer contour) + 3 great circles + 6 axis dots + centre dot
+  let ringGeo, ballDotGeo, sphereGeo;
+  const billboards = [];
+  // filled = white flat sphere with card-blue great circles; otherwise outline-only (white great circles over a depth-only occluder)
+  const ball = (filled) => {
+    ringGeo ||= track(geoOf(circle(1, 32)));
+    sphereGeo ||= track(new SphereGeometry(1, 24, 16));
+    ballDotGeo ||= track(geoOf([[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1], [0, 0, 0]]));
+    const g = new Group();
+    const body = new Mesh(sphereGeo, filled ? fillWhite : occluder); body.scale.setScalar(SHRINK); g.add(body);
+    const sil = loopOf(ringGeo, silMat); sil.renderOrder = 2; g.add(sil); billboards.push({ obj: sil, parent: g });
+    const m = filled ? inkMat : lineMat;
+    const a = loopOf(ringGeo, m), b = loopOf(ringGeo, m); a.rotation.x = Math.PI / 2; b.rotation.y = Math.PI / 2;
+    g.add(a, b, dotsGeo(ballDotGeo));
+    return g;
+  };
+  const Q = new Quaternion();
+  const faceCamera = () => billboards.forEach(({ obj, parent }) => { parent.getWorldQuaternion(Q).invert(); obj.quaternion.copy(Q); });
+
+  /* ---------- scenes: each returns { root, R (scene radius), update(phase) } ---------- */
   const molecule = () => {
     const root = new Group(); const spin = new Group(); root.add(spin);
     const nodes = [[0, 0, 0, 0.42], [1.25, 0.7, 0.2, 0.3], [-1.15, 0.9, 0.5, 0.32], [0.3, -1.25, 0.8, 0.28], [-0.7, -0.85, -0.95, 0.32], [0.95, 0.1, -1.15, 0.26], [-0.2, 1.4, -0.85, 0.24]];
     const bonds = [[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [2, 6], [1, 5], [3, 4]];
-    const sp = []; const bl = [];
+    const sp = [];
     // vertical float per node: [amplitude, integer harmonic, phase]; centre node moves least
     const fl = [[0.08, 1, 0], [0.26, 2, 0.6], [0.24, 3, 2.1], [0.27, 2, 3.7], [0.22, 3, 5.2], [0.25, 1, 1.3], [0.23, 2, 4.4]];
-    nodes.forEach((n, i) => { const s = sphere(1, i === 0 ? fillWhite : fillSoft); s.position.set(n[0], n[1], n[2]); spin.add(s); sp.push(s); });
-    // bond = unit line along +z, oriented/stretched between node surfaces every frame so it follows the nodes
-    const unit = track(new LineSegmentsGeometry().setPositions([0, 0, 0, 0, 0, 1]));
-    const Z = new Vector3(0, 0, 1), A = new Vector3(), Bv = new Vector3(), D = new Vector3();
-    bonds.forEach(([i, j]) => { const o = new LineSegments2(unit, mSoft); o.renderOrder = 1; o.frustumCulled = false; spin.add(o); bl.push({ o, i, j }); });
+    nodes.forEach((n, i) => { const s = ball(i === 0); s.position.set(n[0], n[1], n[2]); spin.add(s); sp.push(s); });
+    // bonds: one dynamic segment buffer, endpoints on the node surfaces, updated every frame
+    const bg = track(new BufferGeometry()); const bpos = new Float32BufferAttribute(new Float32Array(bonds.length * 6), 3); bg.setAttribute('position', bpos);
+    const bl = new LineSegments(bg, lineMat); bl.renderOrder = 1; bl.frustumCulled = false; spin.add(bl);
+    const A = new Vector3(), Bv = new Vector3(), D = new Vector3();
     root.rotation.x = 0.35;
-    return { root, update: (p) => {
+    return { root, R: 1.95, update: (p) => {
       spin.rotation.y = p;
       sp.forEach((s, i) => { s.scale.setScalar(nodes[i][3] * (1 + 0.12 * Math.sin(2 * p + i * 1.1))); s.position.y = nodes[i][1] + fl[i][0] * Math.sin(fl[i][1] * p + fl[i][2]); });
-      bl.forEach(({ o, i, j }) => {
-        A.copy(sp[i].position); Bv.copy(sp[j].position); D.subVectors(Bv, A); const len = D.length(); D.divideScalar(len);
+      bonds.forEach(([i, j], k) => {
+        A.copy(sp[i].position); Bv.copy(sp[j].position); D.subVectors(Bv, A).normalize();
         const ra = sp[i].scale.x, rb = sp[j].scale.x;
-        o.position.copy(A).addScaledVector(D, ra); o.quaternion.setFromUnitVectors(Z, D); o.scale.set(1, 1, Math.max(0.001, len - ra - rb));
+        bpos.setXYZ(k * 2, A.x + D.x * ra, A.y + D.y * ra, A.z + D.z * ra); bpos.setXYZ(k * 2 + 1, Bv.x - D.x * rb, Bv.y - D.y * rb, Bv.z - D.z * rb);
       });
+      bpos.needsUpdate = true;
     } };
   };
 
-  // Excipients: a levitating 3x3x3 cube built of 27 equal small cubes. Pieces only translate (never scale/overlap) into 3 point-symmetric forms and back.
-  // Piece at lattice cell g in {-1,0,1}^3 sits at g * CUBE * f(class); class = |g|_1 (0 centre, 1 face, 2 edge, 3 corner). All factors f >= 1 =>
-  // two pieces always differ by >= CUBE on some axis, so they touch at most by faces and never intersect. Opposite cells share class and colour => point symmetry.
+  // Excipients: a levitating 3x3x3 cube built of 27 equal small cubes drawn as wireframes with a dot at each corner. Pieces only translate (never scale) into 3 point-symmetric forms and back.
+  // Piece at lattice cell g in {-1,0,1}^3 sits at g * CUBE * f(class); class = |g|_1 (0 centre, 1 face, 2 edge, 3 corner). All factors f >= 1 => pieces never intersect.
+  // Lines have no depth test and a pre-mixed opaque colour: where edges of touching pieces coincide they look like one line (never doubled, never hidden).
   // Timeline in seconds of PERIOD: idle, 3 x [expand, hold, collapse, breath], idle (state at the end = state at the start).
   const cubes = () => {
     const root = new Group(); const spin = new Group(); root.add(spin);
-    const box = track(new BoxGeometry(1, 1, 1)); const edge = track(new LineSegmentsGeometry().setPositions(new EdgesGeometry(box).attributes.position.array));
+    const box = track(new BoxGeometry(1, 1, 1)); const edge = track(new EdgesGeometry(box));
+    const cornerGeo = track(geoOf([-0.5, 0.5].flatMap((x) => [-0.5, 0.5].flatMap((y) => [-0.5, 0.5].map((z) => [x, y, z])))));
     const CUBE = 0.44;                               // edge of one piece (main cube edge = 3 * CUBE, constant)
     const pieces = [];
     for (let x = -1; x <= 1; x++) for (let y = -1; y <= 1; y++) for (let z = -1; z <= 1; z++) {
       const cls = Math.abs(x) + Math.abs(y) + Math.abs(z);
-      const g = new Group(); const l = new LineSegments2(edge, mInk); l.renderOrder = 1; g.add(new Mesh(box, cls % 2 ? fillSoft : fillWhite), l);
+      const filled = cls % 2 === 0;
+      const g = new Group(); const l = new LineSegments(edge, filled ? inkMat : lineMat); l.renderOrder = 1; l.frustumCulled = false;
+      const body = new Mesh(box, filled ? fillWhite : occluder); body.scale.setScalar(SHRINK);
+      g.add(body, l, dotsGeo(cornerGeo));
       g.scale.setScalar(CUBE); spin.add(g); pieces.push({ g, q: [x, y, z], cls });
     }
     // per-class spread factors [centre, face, edge, corner]: exploded lattice / octahedral star / vertex shell
@@ -105,7 +126,7 @@ export function initHomeProductScenes(hosts) {
     const ss = (x) => { const c = Math.min(1, Math.max(0, x)); return c * c * (3 - 2 * c); };
     const amount = (t, i) => { const u = t - S - i * seg; if (u < 0 || u > seg) return 0; return u < E ? ss(u / E) : u < E + H ? 1 : u < E + H + E ? 1 - ss((u - E - H) / E) : 0; };
     root.rotation.x = 0.4; root.scale.setScalar(1.28);
-    return { root, staticPhase: 0, update: (p) => {
+    return { root, R: 2.3, staticPhase: 0, update: (p) => {
       const t = (p / TAU) * PERIOD; let tot = 0; const f = [1, 1, 1, 1];
       forms.forEach((fm, i) => { const e = amount(t, i); tot = Math.max(tot, e); for (let c = 0; c < 4; c++) f[c] += (fm[c] - 1) * e; });
       pieces.forEach((o) => { const k = CUBE * f[o.cls]; o.g.position.set(o.q[0] * k, o.q[1] * k, o.q[2] * k); });
@@ -116,30 +137,35 @@ export function initHomeProductScenes(hosts) {
   const sprout = () => {
     const root = new Group(); const spin = new Group(); const sway = new Group(); root.add(spin); spin.add(sway);
     const leaf = (dirAng, base, L, W, yaw) => {
-      const up = [], down = [];
-      for (let i = 0; i <= 16; i++) {
-        const u = i / 16, w = W * Math.pow(Math.sin(Math.PI * u), 0.85);
+      const N = 16, up = [], down = [];
+      for (let i = 0; i <= N; i++) {
+        const u = i / N, w = W * Math.pow(Math.sin(Math.PI * u), 0.85);
         const c = [Math.cos(dirAng) * L * u, Math.sin(dirAng) * L * u];
         const n = [-Math.sin(dirAng), Math.cos(dirAng)];
         up.push([c[0] + n[0] * w, c[1] + n[1] * w, 0.2 * u * u]);
         down.push([c[0] - n[0] * w, c[1] - n[1] * w, 0.2 * u * u]);
       }
-      const idx = []; for (let i = 0; i < 16; i++) { idx.push(i, 17 + i, i + 1, i + 1, 17 + i, 18 + i); }
-      const fg = track(new BufferGeometry()); fg.setAttribute('position', new Float32BufferAttribute([...up, ...down].flat(), 3)); fg.setIndex(idx);
-      const outline = loop([...up, ...down.slice().reverse().slice(1, -1)], mInk);
-      const rib = strip(Array.from({ length: 17 }, (_, i) => { const u = i / 16; return [Math.cos(dirAng) * L * u, Math.sin(dirAng) * L * u, 0.2 * u * u]; }), mInk);
-      const g = new Group(); g.add(new Mesh(fg, fillWhite), outline, rib); g.position.set(...base); g.rotation.y = yaw; return g;
+      const outline = [...up, ...down.slice().reverse().slice(1, -1)];
+      const rib = Array.from({ length: N + 1 }, (_, i) => { const u = i / N; return [Math.cos(dirAng) * L * u, Math.sin(dirAng) * L * u, 0.2 * u * u]; });
+      const g = new Group();
+      const idx = []; for (let i = 0; i < N; i++) idx.push(i, N + 1 + i, i + 1, i + 1, N + 1 + i, N + 2 + i);
+      const fg = track(geoOf([...up, ...down])); fg.setIndex(idx);
+      g.add(new Mesh(fg, fillWhite), lineSeg([...pairs(outline, true), ...pairs(rib)], inkMat), dots(outline.filter((_, i) => i % 2 === 0)), dots([rib[0], rib[N]]));
+      g.position.set(...base); g.rotation.y = yaw; return g;
     };
-    sway.add(strip(Array.from({ length: 21 }, (_, i) => { const u = i / 20; return [0.1 * Math.sin(u * Math.PI), -1.2 + 1.9 * u, 0]; }), mSoft));
+    const stem = Array.from({ length: 21 }, (_, i) => { const u = i / 20; return [0.1 * Math.sin(u * Math.PI), -1.2 + 1.9 * u, 0]; });
+    sway.add(lineSeg(pairs(stem)), dots(stem.filter((_, i) => i % 4 === 0)));
     sway.add(leaf(0.75, [0.0, -0.15, 0], 1.45, 0.38, 0.5));
     sway.add(leaf(2.35, [0.0, 0.3, 0], 1.25, 0.34, -0.4));
-    root.add(loop(circle(1.0, 64).map(([x, y]) => [x, -1.2, y]), mInk));
-    const soil = new Mesh(track(new CircleGeometry(1.0, 64)), fillSoft); soil.rotation.x = -Math.PI / 2; soil.position.y = -1.2; root.add(soil);
+    // soil: two concentric dotted rings on the ground plane
+    const ring = (r, n) => circle(r, n).map(([x, y]) => [x, -1.2, y]);
+    const r1 = ring(1.0, 64), r2 = ring(0.52, 40);
+    root.add(lineSeg([...pairs(r1, true), ...pairs(r2, true)]), dots(r1.filter((_, i) => i % 4 === 0)), dots(r2.filter((_, i) => i % 5 === 0)));
     const grains = [[-1.5, -0.5, 0.4, 0], [1.55, -0.1, -0.3, 2], [1.0, -0.95, 1.0, 4]].map((q) => {
-      const g = new Group(); const s = sphere(1, fillSoft); s.scale.set(0.13, 0.22, 0.13); g.add(s); g.position.set(q[0], q[1], q[2]); root.add(g); return { g, q };
+      const g = ball(false); g.scale.setScalar(0.17); g.position.set(q[0], q[1], q[2]); root.add(g); return { g, q };
     });
     root.rotation.x = 0.28;
-    return { root, update: (p) => {
+    return { root, R: 1.95, update: (p) => {
       spin.rotation.y = p; sway.rotation.z = 0.07 * Math.sin(2 * p);
       grains.forEach((o) => { o.g.position.y = o.q[1] + 0.12 * Math.sin(3 * p + o.q[3]); o.g.rotation.y = 2 * p; });
     } };
@@ -147,7 +173,6 @@ export function initHomeProductScenes(hosts) {
   const factories = { api: molecule, excipients: cubes, food: sprout };
 
   const camera = new PerspectiveCamera(30, 1, 0.1, 50);
-  camera.position.set(0, 0, 13.1);
   const items = hosts.map((host) => {
     const make = factories[host.dataset.scene]; if (!make) return null;
     const scene = new Scene(); const s = make(); scene.add(s.root);
@@ -166,8 +191,10 @@ export function initHomeProductScenes(hosts) {
   const draw = (it, phase) => {
     if (lost || !it.W) return;
     if (gl.width !== it.W || gl.height !== it.H) { renderer.setSize(it.W, it.H, false); camera.aspect = it.W / it.H; camera.updateProjectionMatrix(); }
-    lineMats.forEach((m) => { m.resolution.set(it.W, it.H); m.linewidth = LINE_PX * it.d; });
+    dotMat.uniforms.uSize.value = DOT_PX * it.d;
+    camera.position.set(0, 0, it.s.R / (FILL * TAN * Math.min(1, it.W / it.H)));   // scene fills FILL of the art zone's smaller side
     it.s.update(phase === STATIC_PHASE && it.s.staticPhase !== undefined ? it.s.staticPhase : phase);
+    it.scene.updateMatrixWorld(true); faceCamera();
     renderer.render(it.scene, camera);
     it.ctx.clearRect(0, 0, it.W, it.H);
     it.ctx.drawImage(gl, 0, 0);
@@ -196,7 +223,7 @@ export function initHomeProductScenes(hosts) {
     if (raf) cancelAnimationFrame(raf); raf = 0; lost = true;
     ro.disconnect(); io.disconnect();
     document.removeEventListener('visibilitychange', sync); reducedMq.removeEventListener('change', sync); gl.removeEventListener('webglcontextlost', onLost);
-    geos.forEach((g) => g.dispose()); lineMats.forEach((m) => m.dispose()); fillWhite.dispose(); fillSoft.dispose(); renderer.dispose();
+    geos.forEach((g) => g.dispose()); [lineMat, inkMat, silMat, fillWhite, occluder, dotMat].forEach((m) => m.dispose()); renderer.dispose();
     items.forEach((it) => it.canvas.remove());
   };
   return { destroy, get running() { return !!raf; } };

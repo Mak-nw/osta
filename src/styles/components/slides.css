@@ -32,7 +32,7 @@
 .slide--split { min-height: var(--slide-split-h); }
 /* Panel = side + columns 1-5 (ends at column 6 start, no gap); photo = columns 6-12 + side, full-bleed to the right edge. */
 .slide__panel { grid-column: 1 / 7; margin-right: calc(var(--grid-gap) * -1); background: var(--surface-accent); }
-.slide__photo { grid-column: 7 / -1; }
+.slide__photo { grid-column: 7 / -1; overflow: hidden; isolation: isolate; } /* zoom mask */
 .slide__photo > img { object-position: center 60%; }
 /* Text = columns 1-3 only (max width of 3 grid columns); columns 4-5 of the panel stay empty. */
 .slide__content { grid-column: 2 / 5; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; padding-block: var(--section-md); }

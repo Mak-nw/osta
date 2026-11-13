@@ -1,0 +1,33 @@
+{
+  "_readme": "Single place for the site address and global SEO switches. Change siteUrl when moving from GitHub Pages to the real domain (e.g. https://osta-trading.com); the Vite base path, canonical, hreflang, sitemap, robots and OG URLs follow it.",
+  "siteUrl": "https://mak-nw.github.io/osta",
+  "siteName": "OSTA Trading",
+  "indexing": true,
+  "aiTrainingBots": "allow",
+  "defaultLocale": "en",
+  "locales": ["en", "de"],
+  "ogLocale": { "en": "en_GB", "de": "de_DE" },
+  "themeColor": "#0a3782",
+  "titleBrand": " | OSTA Trading",
+  "limits": { "titleMin": 30, "titleMax": 60, "descMin": 70, "descMax": 160 },
+  "productGate": { "minWords": 40, "minFacts": 2 },
+  "company": {
+    "legalName": "OSTA Trading GmbH",
+    "streetAddress": "Senefelder Ring 83",
+    "postalCode": "21465",
+    "addressLocality": "Reinbek",
+    "addressCountry": "DE",
+    "email": "info@osta-trading.com",
+    "telephone": "+49 40 731 281-76",
+    "fax": "+49 40 736 762-90",
+    "sameAs": []
+  },
+  "credentials": {
+    "_note": "PLACEHOLDER: fill in the real numbers; null = not published in JSON-LD / Impressum shows a placeholder.",
+    "eudraGmdpNumber": null,
+    "wdaNumber": null,
+    "gdpCertificateNumber": null
+  },
+  "securityTxt": { "contact": "mailto:info@osta-trading.com", "expires": "2027-10-31T00:00:00.000Z", "preferredLanguages": "en, de" },
+  "ogImage": { "path": "/og-default.png", "width": 1200, "height": 630 }
+}

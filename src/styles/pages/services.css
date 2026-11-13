@@ -18,7 +18,7 @@
 .process-scroll__stage { position: sticky; top: var(--header-h); height: calc(100vh - var(--header-h)); height: calc(100svh - var(--header-h)); }
 .process-scroll__grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); align-items: center; height: 100%; }
 .process-scroll__frame { grid-column: 1 / -1; grid-row: 1; display: grid; grid-template-columns: subgrid; }
-.process-scroll__head { grid-column: 1 / span 4; hyphens: manual; grid-row: 1; align-self: start; margin-top: calc(-1 * (var(--type-label-lh) + var(--space-3))); } /* .section-head; tag above, the h2 top = the line top */
+.process-scroll__head { grid-column: 1 / span 4; hyphens: manual; grid-row: 1; align-self: start; margin-top: calc(-1 * (var(--type-label-lh) + var(--section-head-gap))); } /* .section-head; tag above, the h2 top = the line top */
 .process-steps { grid-column: 10 / span 3; grid-row: 1; position: relative; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: calc(var(--space-8) + var(--space-4)); }
 .process-steps::before { content: ""; position: absolute; left: calc(var(--chip-lg) / 2); top: calc(var(--chip-lg) / 2); bottom: calc(var(--chip-lg) / 2); border-left: 1px solid var(--divider-on-accent); pointer-events: none; } /* the vertical stage line, through the circle centres */
 .process-steps__item { position: relative; }
@@ -27,8 +27,8 @@
 .process-steps__item.is-active .process-steps__row { color: var(--text-on-accent); }
 .process-steps__item.is-active .process-steps__dot { background: var(--accent-contrast); border-color: var(--accent-contrast); color: var(--accent); }
 .process-scroll__art { grid-column: 4 / span 6; grid-row: 1; position: relative; height: 80%; }
-.process-scroll__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity var(--dur-slow) var(--ease-out); }
-.process-scroll__art.is-3d .process-scroll__canvas { opacity: 1; }
+/* 3D scene is a media block: no opacity fade-in. The WebGL canvas is transparent (alpha, clear 0) until its first frame, so it appears with its content and never fades from 0. */
+.process-scroll__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 1; }
 /* description after the scene: starts on the x of the stage circles (left edge of col 5), no line */
 .process-text { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); padding-block: 0; } /* vertical spacing is set by the section (.svc-process padding-bottom) */
 .process-text__body { grid-column: 6 / span 4; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-7); }
@@ -69,14 +69,25 @@
 
 /* ---------- Supply & logistics: separate wide block under the row; the photo of the warehouse interior is the FULL-BLEED background (no overlay, no dimming, text white
    on top, readability is the customer's accepted trade-off); heading 80px cols 1-8, text in TWO parts of 3 columns (cols 6-8 and 9-11), the button under the first. ---------- */
-.svc-supply { position: relative; isolation: isolate; background: var(--c-sky-supply); color: var(--text-on-accent); min-height: calc(100vh - var(--header-h)); min-height: calc(100svh - var(--header-h)); container-type: inline-size; --supply-photo-h: 56.25cqw; --supply-strip: calc(var(--supply-photo-h) * 0.3); display: flex; }
+.svc-supply { position: relative; isolation: isolate; overflow: clip; background: var(--c-sky-supply); color: var(--text-on-accent); min-height: calc(100vh - var(--header-h)); min-height: calc(100svh - var(--header-h)); container-type: inline-size; --supply-photo-h: 56.25cqw; --supply-strip: calc(var(--supply-photo-h) * 0.3); display: flex; }
 .svc-supply__bg { position: absolute; inset: auto 0 0 0; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; object-position: 50% 100%; z-index: -1; }
-.svc-supply__grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--space-6); align-content: start; align-items: start; min-height: var(--supply-photo-h); padding-block: var(--section-md) calc(var(--section-md) / 2 + var(--supply-strip)); }
-.svc-supply__head { grid-column: 1 / span 8; grid-row: 1; margin-bottom: var(--space-4); } /* .section-head */
+.svc-supply__grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--section-head-gap); align-content: start; align-items: start; min-height: var(--supply-photo-h); padding-block: var(--section-md) calc(var(--section-md) / 2 + var(--supply-strip)); }
+.svc-supply__head { grid-column: 1 / span 8; grid-row: 1; } /* .section-head */
 .svc-supply__text { margin: 0; text-wrap: pretty; grid-row: 2; }
 .svc-supply__text--1 { grid-column: 6 / span 3; }
 .svc-supply__text--2 { grid-column: 9 / span 3; }
 .svc-supply__cta { grid-column: 6 / span 3; grid-row: 3; justify-self: start; }
+/* On the PHOTO (sky, white-on-blue would be 2.9-4.2:1): no H1a disc; fill and colours stay, hover = 1px underline on the label + arrow moves 4px (H3, Opus review hover-review1.md) */
+.svc-supply__cta::before { display: none; }
+.btn--light.svc-supply__cta:hover, .btn--light.svc-supply__cta.is-hover, .btn--light.svc-supply__cta:active, .btn--light.svc-supply__cta.is-pressed { color: var(--accent); border-color: var(--accent-contrast); }
+.svc-supply__cta > span { text-decoration: underline 1px transparent; text-underline-offset: 4px; transition: text-decoration-color var(--dur-fast) var(--ease-out); }
+.svc-supply__cta .icon { transition: transform var(--dur-base) var(--ease-out); }
+@media (hover: hover) {
+  .svc-supply__cta:hover > span { text-decoration-color: currentColor; }
+  .btn.svc-supply__cta:hover .icon:has(use[href$="#arrow-up-right"]) { transform: translate(4px, -4px); }
+}
+.svc-supply__cta.is-hover > span { text-decoration-color: currentColor; }
+.btn.svc-supply__cta.is-hover .icon { transform: translate(4px, -4px); }
 
 /* How we work: layout/steps come from components/how-split.css; this page only sets the section surface and its vertical rhythm */
 .svc-how { background: var(--surface); }

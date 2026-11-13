@@ -6,10 +6,16 @@
   "scripts": {
     "dev": "vite --port 5173 --strictPort",
     "build": "vite build",
-    "preview": "vite preview --port 4175"
+    "preview": "vite preview --port 4175",
+    "audit:hover": "node tools/hover-gate.cjs",
+    "audit:seo": "node tools/seo-audit.cjs",
+    "seo:demo": "node tools/seo-demo.cjs",
+    "seo:assets": "node tools/og.cjs",
+    "audit": "npm run audit:hover"
   },
   "devDependencies": {
     "html2canvas": "^1.4.1",
+    "puppeteer-core": "^25.14.0",
     "vite": "^8.3.4"
   },
   "dependencies": {

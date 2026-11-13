@@ -1,0 +1,28 @@
+{
+  "entries": [
+    {
+      "selector": ".lang-menu__option:not(.header__nav .lang-menu__option)",
+      "skip": [
+        "disc"
+      ],
+      "reason": "Desktop language dropdown rows are popover list rows, not buttons: the hover is a solid --accent-hover fill (dE >> 10) under the same trigger that has the disc; a disc inside a 2-row popover would only slow selection. Burger EN/DE (375) are real outline buttons and DO use the disc."
+    },
+    {
+      "selector": ".lang-menu__option.is-focus:not(.header__nav .lang-menu__option)",
+      "skip": [
+        "disc",
+        "visible"
+      ],
+      "reason": "Option is already highlighted (keyboard/open highlight .is-focus) before the pointer arrives, so rest == hover by design; popover row, see the entry above."
+    },
+    {
+      "selector": ".svc-supply__cta",
+      "skip": [
+        "disc",
+        "visible",
+        "label"
+      ],
+      "reason": "Button on a PHOTO (sky): white-on-blue disc would be 2.9-4.2:1 on the photo; hover = 1px underline + arrow moves 4px (customer rule H3, pages/services.css). Owner decision documented in design-system.md."
+    }
+  ]
+}

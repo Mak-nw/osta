@@ -1,49 +1,41 @@
 <footer class="footer">
   <div class="container">
-    <div class="footer__top">
-      <nav class="footer__menu" aria-label="Site menu">
-        <div class="footer__group"><a class="footer__label" href="/catalog.html" data-i18n="footer.menu_products">Products</a>
-          <a href="/catalog.html" data-i18n="footer.menu_all">All products</a>
-          <a href="/catalog.html?category=api" data-i18n="footer.menu_api">API</a>
-          <a href="/catalog.html?category=excipients" data-i18n="footer.menu_excipients">Excipients</a>
-          <a href="/catalog.html?category=food-grade" data-i18n="footer.menu_food">Food Grade</a>
-        </div>
-        <div class="footer__group"><a class="footer__label" href="/services.html" data-i18n="footer.menu_services">Services</a>
-          <a href="/services.html#manufacturer-search" data-i18n="footer.menu_manufacturer">Manufacturer search</a>
-          <a href="/services.html#regulatory-documents" data-i18n="footer.menu_regulatory">Regulatory documents</a>
-          <a href="/services.html#samples" data-i18n="footer.menu_samples">Samples</a>
-          <a href="/services.html#specs-quality" data-i18n="footer.menu_specs">Specs &amp; quality</a>
-          <a href="/services.html#supply-logistics" data-i18n="footer.menu_supply">Supply &amp; logistics</a>
-          <a href="/services.html#how-we-work" data-i18n="footer.menu_how">How we work</a>
-        </div>
-        <div class="footer__group"><a class="footer__label" href="/about.html#about" data-i18n="footer.menu_about">About</a>
-          <a href="/about.html#about" data-i18n="footer.menu_about_us">About us</a>
-          <a href="/about.html#quality" data-i18n="footer.menu_docs">Documentation</a>
-          <a href="/about.html#team" data-i18n="footer.menu_team">Team</a>
-        </div>
-      </nav>
-      <dl class="footer__contacts">
-        <div class="footer__col">
-          <div class="footer__row"><dt class="footer__label"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true"><use href="/assets/icons/sprite.svg#phone"/></svg></span><span data-i18n="footer.phone">Phone:</span></dt><dd><a href="tel:+494073128176" data-i18n="footer.phone_value">+49 40 731 281 – 76</a></dd></div>
-          <div class="footer__row"><dt class="footer__label"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true"><use href="/assets/icons/sprite.svg#phone"/></svg></span><span data-i18n="footer.fax">Fax:</span></dt><dd data-i18n="footer.fax_value">+49 40 736 762 – 90</dd></div>
-        </div>
-        <div class="footer__col">
-          <div class="footer__row"><dt class="footer__label"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true"><use href="/assets/icons/sprite.svg#mail"/></svg></span><span data-i18n="footer.mail">Mail:</span></dt><dd><a href="mailto:info@osta-trading.com" data-i18n="footer.mail_value">info@osta-trading.com</a></dd></div>
-          <div class="footer__row"><dt class="footer__label"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true"><use href="/assets/icons/sprite.svg#pin"/></svg></span><span data-i18n="footer.address">Address:</span></dt><dd><address data-i18n-html="footer.address_value">OSTA Trading GmbH<br>Senefelder Ring 83<br>21465 Reinbek, Germany</address></dd></div>
-        </div>
-      </dl>
-      <a class="btn btn--primary btn--md btn--split footer__cta" href="/contact.html"><span data-i18n="footer.contact_manager">Contact manager</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
-      <p class="footer__mission" data-i18n="about.intro_lead">OSTA Trading GmbH is a specialised distributor of active pharmaceutical ingredients (APIs), excipients and specialty ingredients for the pharmaceutical, food and cosmetics industries.</p>
+    <nav class="footer__menu footer__grid" aria-label="Site menu">
+      <div class="footer__group"><a class="footer__label" href="/services.html" data-i18n="footer.menu_services">Services</a>
+        <a href="/services.html#manufacturer-search" data-i18n="footer.menu_manufacturer">Manufacturer search</a>
+        <a href="/services.html#regulatory-documents" data-i18n="footer.menu_regulatory">Regulatory documents</a>
+        <a href="/services.html#samples" data-i18n="footer.menu_samples">Samples</a>
+        <a href="/services.html#specs-quality" data-i18n="footer.menu_specs">Specs &amp; quality</a>
+      </div>
+      <div class="footer__group"><a class="footer__label" href="/catalog.html" data-i18n="footer.menu_products">Products</a>
+        <a href="/catalog.html" data-i18n="footer.menu_all">All products</a>
+        <a href="/products/a-z/" data-i18n="footer.menu_az">A–Z index</a>
+        <a href="/products/category/api/" data-i18n="footer.menu_api">API</a>
+        <a href="/products/category/excipients/" data-i18n="footer.menu_excipients">Excipients</a>
+        <a href="/products/category/food-grade/" data-i18n="footer.menu_food">Food Grade</a>
+      </div>
+      <div class="footer__group footer__group--end"><a class="footer__label" href="/about.html#about" data-i18n="footer.menu_about">About</a>
+        <a href="/about.html#about" data-i18n="footer.menu_about_us">About us</a>
+        <a href="/about.html#quality" data-i18n="footer.menu_docs">Documentation</a>
+        <a href="/about.html#team" data-i18n="footer.menu_team">Team</a>
+        <a href="/services.html#supply-logistics" data-i18n="footer.menu_supply">Supply &amp; logistics</a>
+      </div>
+    </nav>
+    <div class="footer__mark">
+      <a class="footer__logo" href="/index.html" aria-label="OSTA Trading"><img src="/assets/img/logo.png" alt="OSTA Trading" /></a>
     </div>
-    <a class="footer__wordmark" href="/index.html" aria-label="OSTA Trading"><span aria-hidden="true">OSTA TRADING</span></a>
-    <div class="footer__bottom">
-      <nav class="footer__legal" aria-label="Legal">
-        <a href="/privacy.html" data-i18n="footer.legal_privacy">Privacy Policy</a>
-        <a href="/terms.html" data-i18n="footer.legal_terms">Terms of Use</a>
-        <a href="/data-processing.html" data-i18n="footer.legal_data">Data processing</a>
-      </nav>
-      <p class="footer__copy" data-i18n="footer.copyright">© 2016-2026</p>
-      <p class="footer__company" data-i18n="footer.company">OSTA Trading GmbH</p>
+    <div class="footer__reach footer__grid">
+      <a class="footer__label footer__reach-label" href="/contact.html" data-i18n="nav.contact_short">Contact</a>
+      <div class="footer__group"><a class="footer__contact" href="mailto:info@osta-trading.com"><span class="icon-ring icon-ring--action"><svg class="icon icon-text" aria-hidden="true"><use href="/assets/icons/sprite.svg#mail"/></svg></span><span data-i18n="footer.mail_value">info@osta-trading.com</span></a></div>
+      <div class="footer__group"><a class="footer__contact" href="tel:+494073128176"><span class="icon-ring icon-ring--action"><svg class="icon icon-text" aria-hidden="true"><use href="/assets/icons/sprite.svg#phone"/></svg></span><span data-i18n="footer.phone_value">+49 40 731 281 – 76</span></a><div class="footer__contact"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true"><use href="/assets/icons/sprite.svg#phone"/></svg></span><span><span data-i18n="footer.fax">Fax:</span> <span data-i18n="footer.fax_value">+49 40 736 762 – 90</span></span></div></div>
+      <div class="footer__group footer__group--cta"><a class="btn btn--primary btn--md btn--split btn--block footer__cta" href="/contact.html"><span data-i18n="footer.contact_manager">Contact manager</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a></div>
+    </div>
+    <div class="footer__bottom footer__grid">
+      <p class="footer__owner"><span data-i18n="footer.copyright">© 2016-2026</span> <span data-i18n="footer.company">OSTA Trading GmbH</span></p>
+      <a href="/privacy.html" data-i18n="footer.legal_privacy">Privacy Policy</a>
+      <a href="/terms.html" data-i18n="footer.legal_terms">Terms of Use</a>
+      <a href="/data-processing.html" data-i18n="footer.legal_data">Data processing</a>
+      <a href="/impressum.html" data-i18n="footer.legal_imprint">Imprint</a>
     </div>
   </div>
 </footer>

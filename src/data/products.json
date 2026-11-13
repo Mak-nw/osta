@@ -5,7 +5,11 @@
     "name": "Anastrozole",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 2,
@@ -14,7 +18,11 @@
     "categories": [
       "api",
       "food-grade"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 3,
@@ -22,7 +30,11 @@
     "name": "Azithromycin",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 4,
@@ -30,7 +42,11 @@
     "name": "Bendazol (Dibazole)",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 5,
@@ -39,7 +55,11 @@
     "categories": [
       "api",
       "food-grade"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 6,
@@ -47,7 +67,11 @@
     "name": "Ciprofloxacin Hydrochloride",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 7,
@@ -55,7 +79,11 @@
     "name": "Copovidone VA64",
     "categories": [
       "excipients"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 8,
@@ -63,7 +91,11 @@
     "name": "Crospovidone Type A",
     "categories": [
       "excipients"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 9,
@@ -71,7 +103,11 @@
     "name": "Crospovidone Type B",
     "categories": [
       "excipients"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 10,
@@ -79,7 +115,11 @@
     "name": "D-Glucosamine HCl",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 11,
@@ -87,7 +127,11 @@
     "name": "Drotaverine HCl",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 12,
@@ -95,7 +139,11 @@
     "name": "Fosfomycin Trometamol",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 13,
@@ -103,7 +151,11 @@
     "name": "Glucosamine Sulfate Sodium Chloride",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 14,
@@ -112,7 +164,11 @@
     "categories": [
       "api",
       "excipients"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 15,
@@ -120,7 +176,11 @@
     "name": "Hydroxyprogesterone Caproate",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 16,
@@ -128,7 +188,11 @@
     "name": "Hydroxypropyl Methylcellulose (HPMC / Hypromellose)",
     "categories": [
       "excipients"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 17,
@@ -136,7 +200,11 @@
     "name": "Ibuprofen",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 18,
@@ -144,7 +212,11 @@
     "name": "Magnesium Hydroxide",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 19,
@@ -152,7 +224,11 @@
     "name": "Metformin Hydrochloride",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 20,
@@ -160,7 +236,11 @@
     "name": "Pancreatin",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 21,
@@ -168,7 +248,11 @@
     "name": "Paracetamol (Acetaminophen)",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 22,
@@ -176,7 +260,11 @@
     "name": "Povidone Iodine",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 23,
@@ -184,7 +272,11 @@
     "name": "Povidone K17 (PVP K17)",
     "categories": [
       "excipients"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 24,
@@ -192,7 +284,11 @@
     "name": "Povidone K25 (PVP K25)",
     "categories": [
       "excipients"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 25,
@@ -200,7 +296,11 @@
     "name": "Povidone K30 (PVP K30)",
     "categories": [
       "excipients"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 26,
@@ -208,7 +308,11 @@
     "name": "Prednisolone Sodium Phosphate",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 27,
@@ -216,7 +320,11 @@
     "name": "Progesterone",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 28,
@@ -224,7 +332,11 @@
     "name": "Pyrantel Pamoate",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 29,
@@ -232,7 +344,11 @@
     "name": "Sorbitol",
     "categories": [
       "excipients"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 30,
@@ -240,7 +356,11 @@
     "name": "Tamoxifen Citrate",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 31,
@@ -248,7 +368,11 @@
     "name": "Tamsulosin HCl SR Pellets 0.2%",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 32,
@@ -256,7 +380,11 @@
     "name": "Ursodeoxycholic Acid (UDCA)",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   },
   {
     "id": 33,
@@ -264,6 +392,10 @@
     "name": "Valsartan",
     "categories": [
       "api"
-    ]
+    ],
+    "availability": "in_stock",
+    "seo_ready": true,
+    "updated_at": "2026-10-11",
+    "synonyms": []
   }
 ]

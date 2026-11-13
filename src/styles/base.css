@@ -39,11 +39,15 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 /* Two icon styles only (the glyph is always the sprite outline: viewBox 24, stroke 1.5, round caps, fill none; never filled, never a filled container).
    A) .icon        : button / link icon, 16 px (= 1 px line), colour = currentColor of the button / link / text.
    B) .icon-text   : icon beside text, 24 px (= 1.5 px line), colour --accent (on an accent surface: --accent-contrast, see .icon-ring--on-accent).
-   B in a ring     : .icon-ring (40 px, 1 px outline of the icon colour, transparent) > svg.icon.icon-text. Remove the ring = drop the .icon-ring wrapper class. */
+   B in a ring     : .icon-ring (decorative, 40 px, 1 px outline of the icon colour, transparent) or .icon-ring--action (clickable link/button icon: same size, filled --icon-ring-action-bg) > svg.icon.icon-text. Remove the ring = drop the .icon-ring wrapper class. */
 .icon { width: var(--icon-sm); height: var(--icon-sm); flex: none; fill: none; stroke: currentColor; }
 .icon-text { width: var(--icon-lg); height: var(--icon-lg); color: var(--accent); }
 .icon-ring { display: inline-grid; place-items: center; flex: none; width: var(--chip-lg); height: var(--chip-lg); box-sizing: border-box; border: 1px solid currentColor; border-radius: var(--radius-full); background: transparent; color: var(--accent); }
 .icon-ring--on-accent { color: var(--accent-contrast); }
+/* Role: .icon-ring = DECORATIVE (outline, not clickable). .icon-ring--action = the ring is the icon of a clickable link/button row (mail, phone): same 40 px / 1 px, filled with --icon-ring-action-bg. Not for rings inside whole-card links (a.link-card). */
+.icon-ring--action { background: var(--icon-ring-action-bg); border-color: var(--icon-ring-action-bd); color: var(--icon-ring-action-fg); transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease); }
+/* hover = disc from the centre (--icon-ring-action-bg-hover), see the DISC block at the end of components/buttons.css */
+.icon-ring--action.icon-ring--on-accent { background: var(--accent-contrast); border-color: var(--accent-contrast); color: var(--accent); }
 .icon-ring .icon-text { color: inherit; }
 
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

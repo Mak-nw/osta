@@ -20,46 +20,65 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
 
 /* Underlined text CTA: no fill, no arrow */
 .link-cta { color: var(--accent); font-size: var(--type-body-size); line-height: var(--type-body-lh); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .25em; transition: color var(--dur-base) var(--ease-out); }
-.link-cta:hover { color: var(--accent-hover); } /* underline stays 1px in every state (lines <= 1px) */
+.link-cta:hover { color: var(--accent-active); } /* underline stays 1px in every state (lines <= 1px) */
 .link-cta:focus-visible { outline: var(--focus-outline); outline-offset: var(--focus-offset); border-radius: var(--radius-sm); }
-.link-cta--on-accent, .link-cta--on-accent:hover { color: var(--text-on-accent); }
+.link-cta--on-accent { color: var(--text-on-accent); }
+.link-cta--on-accent:hover { color: var(--text-on-accent-muted); } /* text link on blue: visible hover = label dims (dE >= 10, gate) */
 .link-cta--on-accent:focus-visible { outline-color: var(--text-on-accent); }
 
-/* Hero, Home variant (.hero--home): the entry point of the site, its own composition (not the centred About/Services hero). Two layers (container width):
-   TOP = text layer `.hero__layer` (opaque --surface, square corners with a straight bottom edge, z-index 1, height by content, no min-height): H1 t-display cols 1-12 (3 lines), the one primary button under it (--space-7 gap), then the four short facts (.hero__points: icon ring B 40 + t-body, cols 1-3 / 4-6 / 7-9 / 10-12 under a 1px --border line).
-   BOTTOM = media panel `.hero__scene` (--surface-raised, --radius-lg, overflow hidden, aspect 3/1 + min-height): drone photo of a warehouse (`.hero__photo`, object-fit cover). The panel is pulled up by --hero-overlap (negative margin-top), so its top part and the top of the photo slide UNDER the bottom edge of the text layer; the layer's straight bottom edge is a hard line over the panel (the panel's own rounded corners stay as they are). */
-.hero--home { --hero-overlap: var(--space-9); text-align: left; padding-bottom: 0; }
-.hero__layer { position: relative; z-index: 1; background: var(--surface); border-radius: 0; padding-bottom: var(--space-7); }
-.hero--home .hero__grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); align-items: end; }
-.hero--home .hero__title { grid-column: 1 / -1; grid-row: 1; }
-.hero__aside { grid-column: 1 / span 6; grid-row: 2; margin-top: var(--space-7); display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-6); }
-.hero__points { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); margin: var(--space-7) 0 0; padding: var(--space-5) 0 0; list-style: none; border-top: 1px solid var(--border); }
-.hero__point { grid-column: span 3; display: flex; align-items: center; gap: var(--space-4); min-width: 0; color: var(--text); }
-.hero__scene { position: relative; z-index: 0; box-sizing: border-box; margin-top: calc(-1 * var(--hero-overlap)); aspect-ratio: 3 / 1; min-height: calc(var(--space-9) * 3); overflow: hidden; background: var(--surface-raised); border-radius: var(--radius-lg); } /* media panel under the text layer; photo fills the whole panel */
-.hero__photo { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
-/* Home hero scroll-grow (desktop 1200+, motion allowed). JS (src/utils/hero-grow.js) only writes --hero-grow (0..1) on .hero--home; all geometry is CSS.
-   p=0 equals the static state above (width of the container, 3/1 height >= 288, radius-lg, overlap under the text layer). p=1: panel is edge to edge (100cqw = hero width, no scrollbar overflow),
-   height = viewport minus sticky header, radius 0, overlap 0 (so the panel never covers the text layer; About shifts with it, nothing overlaps).
-   Effect length (JS, measured): scroll until the panel top reaches the header panel bottom (≈ 0.55-0.65 of the viewport height). */
-.hero--home { --hero-grow: 0; }
-@media (min-width: 1200px) and (prefers-reduced-motion: no-preference) {
-  .hero--home { container-type: inline-size; overflow-anchor: none;
-    --hero-w0: calc(min(100cqw, var(--container) + 2 * var(--gutter)) - 2 * var(--gutter)); /* panel width at p=0 (container content box) */
-    --hero-h0: max(calc(var(--space-9) * 3), calc(var(--hero-w0) / 3)); /* panel height at p=0 */
-    --hero-h1: max(var(--hero-h0), calc(100svh - var(--header-h))); /* panel height at p=1 */ }
-  .hero--home .hero__scene { aspect-ratio: auto; min-height: 0; box-sizing: border-box;
-    width: calc(100% + var(--hero-grow) * (100cqw - 100%));
-    margin-inline: calc(var(--hero-grow) * (100% - 100cqw) / 2);
-    margin-top: calc(-1 * var(--hero-overlap) * (1 - var(--hero-grow)));
-    height: calc(var(--hero-h0) + var(--hero-grow) * (var(--hero-h1) - var(--hero-h0)));
-    border-radius: calc(var(--radius-lg) * (1 - var(--hero-grow)));
-    clip-path: inset(calc(var(--hero-overlap) * (1 - var(--hero-grow))) 0 0 0); } /* hides the part of the wider panel that lies beside the text layer (the overlap zone), so no 'ears' appear next to the layer's bottom edge */
+/* Hero, Home variant (.hero--home), V4 "centre composition" (customer decision 2026-11-13): full-bleed blue screen (min-height 100svh, vertical gradient --surface-accent-deep (top) > --surface-accent (bottom): the ONLY gradient on the site, customer exception 2026-11-12; no shadows).
+   >=1200: `.hero__content` = 12-col grid, 2 rows: row 1 (1fr) = H1 (`.hero__title`, subgrid: `--l` cols 1-4 left-aligned, `--r` cols 9-12 right-aligned, first baselines shared) vertically centred in the free zone; row 2 = `.hero__find` (label > ONE white control 56 > category row), centred, cols 4-9 (chips cols 3-10), pressed to the bottom of the hero (padding-bottom --space-8 = 64 ~ 60).
+   The decorative 3D scene (`.hero__scene3d`, home-hero-scene.js) is absolute over the whole hero: its x-centre = the page centre and its y-centre = the centre of the H1 block (same axis; fit() only shrinks the unit so the scene touches no text line, search or chips). <=1199: stack (scene > H1 > search group), text left. */
+.hero--home { position: relative; box-sizing: border-box; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding: calc(var(--header-h) + var(--space-7)) 0 var(--space-7); background: var(--surface-accent); background-image: linear-gradient(to bottom, var(--surface-accent-deep) 0%, var(--surface-accent) 100%); color: var(--text-on-accent); text-align: left; overflow: hidden; }
+.hero__content { position: relative; display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); align-items: center; container-type: inline-size; }
+.hero--home .hero__title { color: var(--text-on-accent); position: relative; z-index: 1; }
+.hero__title-part { display: block; }
+.hero__find { position: relative; z-index: 1; }
+.hero__scene3d { position: relative; z-index: 0; pointer-events: none; }
+.hero__scene3d canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity var(--dur-slow) var(--ease-out); }
+.hero__scene3d canvas.is-ready { opacity: 1; }
+/* search width (tablet/mobile) = 5 grid columns from the left edge; cqw = .hero__content width; tablet --grid-cols 8 gives 5 of 8; mobile full width; >=1200 the group is centred (see the media block below) */
+.hero-search { margin-top: var(--space-7); width: calc((100cqw - (var(--grid-cols) - 1) * var(--grid-gap)) / var(--grid-cols) * 5 + 4 * var(--grid-gap)); max-width: 100%; } /* .field gives the column + white on-accent label */
+.hero-search__bar { display: flex; align-items: center; height: var(--control-lg); background: var(--field-glass-bg); border: 1px solid var(--field-glass-border); border-radius: var(--radius-md); transition: border-color var(--dur-base) var(--ease-out); } /* glass field (no backdrop-filter): white fill --field-glass-alpha (20%); border sits exactly on the panel edge */
+.hero-search__bar:focus-within { border-color: var(--field-glass-border-focus); } /* focus = the SAME border brighter: no outline, no offset, size unchanged */
+.hero-search .search .icon { color: var(--accent-contrast); }
+.hero-search .search .input { color: var(--text-on-accent); caret-color: var(--text-on-accent); }
+.hero-search .search .input::placeholder { color: transparent; } /* the visible placeholder is the typing overlay; the attribute stays as accessible text */
+.hero-search .search .input:focus, .hero-search .search .input:focus-visible { outline: none; }
+.hero-type { position: absolute; left: calc(var(--search-inset) + var(--icon-sm) + var(--space-3)); right: 0; top: 50%; translate: 0 -50%; overflow: hidden; white-space: nowrap; text-overflow: clip; color: var(--field-glass-placeholder); pointer-events: none; font-size: var(--type-body-size); line-height: var(--type-body-lh); }
+.hero-type__caret { display: inline-block; width: 1px; height: 1.1em; margin-left: 1px; vertical-align: text-bottom; background: var(--accent-contrast); animation: hero-caret 1s steps(1) infinite; }
+.hero-search .search .input:focus ~ .hero-type, .hero-search .search .input:not(:placeholder-shown) ~ .hero-type { display: none; }
+@keyframes hero-caret { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .hero-type__caret { animation: none; } }
+.hero-search .search { flex: 1 1 auto; min-width: 0; align-self: stretch; --search-h: calc(var(--control-lg) - 2px); } /* field height minus the bar's 1px border top + bottom; the icon inset rule is the shared one in forms.css */
+.hero-search .search .icon { left: var(--search-inset); }
+.hero-search .search .input { height: 100%; padding-left: calc(var(--search-inset) + var(--icon-sm) + var(--space-3)); background: transparent; border: 0; border-radius: var(--radius-md) 0 0 var(--radius-md); outline: none; } /* one object: no inner fill/border; focus is drawn by the bar */
+.hero-search .btn { flex: none; margin-right: calc((var(--control-lg) - var(--control-md)) / 2 - 1px); } /* 44 inside 56: 6px inset on all sides (minus the 1px bar border) */
+.hero-cats { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-top: var(--space-5); }
+.hero-cats__label { color: var(--text-on-accent-muted); margin-right: var(--space-2); }
+@media (min-width: 1200px) {
+  .hero--home { justify-content: stretch; padding-bottom: var(--space-8); }
+  .hero--home .hero__content { position: static; flex: 1 1 auto; grid-template-rows: 1fr auto; align-items: stretch; }
+  .hero--home .hero__title { grid-column: 1 / -1; grid-row: 1; align-self: center; display: grid; grid-template-columns: subgrid; align-items: baseline; }
+  .hero__title-part { white-space: nowrap; } /* line breaks come from <br> in i18n */
+  .hero__title-part--l { grid-column: 1 / span 4; }
+  .hero__title-part--r { grid-column: 9 / span 4; text-align: right; justify-self: end; }
+  .hero__find { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: subgrid; }
+  .hero__find > * { grid-column: 5 / span 4; } /* search panel = 4 central columns (customer 2026-11-13) */
+  .hero__find > .hero-cats { grid-column: 3 / span 8; justify-content: center; } /* chips on one line also in DE at 1200 */
+  .hero__find .hero-search { margin-top: 0; width: auto; }
+  .hero__find .field__label { text-align: center; }
+  .hero--home .hero__scene3d { position: absolute; inset: 0; }
 }
+/* HERO TITLE RULE (customer 2026-11-13): each phrase is at most TWO lines at every width, EN and DE. Sizes are picked per breakpoint from the scale (table in design-system.md) via --hero-fs/--hero-lh/--hero-ls. Exception to "one role = one token". */
+.hero--home .hero__title { --hero-fs: var(--type-h1-size); --hero-lh: var(--type-h1-lh); --hero-ls: var(--type-h1-ls); font-size: var(--hero-fs); line-height: var(--hero-lh); letter-spacing: var(--hero-ls); }
+@media (min-width: 1200px) and (max-width: 1439px) { .hero--home .hero__title { --hero-fs: var(--type-h2-size); --hero-lh: var(--type-h2-lh); --hero-ls: var(--type-h2-ls); } }
+@media (prefers-reduced-motion: reduce) { .hero__scene3d canvas { transition: none; } }
 
 /* ==========================================================================
    Responsive heroes. Tablet (<= 1199) / mobile (<= 767).
    About / Services hero: facts and CTA stack centred; media keeps full bleed, taller aspect.
-   Home hero (two layers): text layer = H1, button, four facts (2 x 2 on tablet, 1 column on mobile); the photo panel follows and slides under the layer by --hero-overlap (tablet 48, mobile 32); no scroll-grow below 1200 (CSS gate + hero-grow.js).
+   Home hero: <=1199 the scene sits above the text (flex column); the search control stays one row on all widths; mobile: category caption on its own line, chips wrap.
    ========================================================================== */
 @media (max-width: 1199px) {
   .hero { padding-top: calc(var(--header-h) + var(--space-7)); }
@@ -69,12 +88,12 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
   .hero__fact--l, .hero__fact--r { text-align: center; }
   .hero__media { margin-top: var(--space-6); aspect-ratio: 16 / 9; }
 
-  .hero--home { --hero-overlap: var(--space-7); }
-  .hero--home .hero__grid { row-gap: var(--space-6); align-items: start; }
-  .hero--home .hero__aside { grid-column: 1 / -1; grid-row: 2; margin-top: 0; }
-  .hero__scene { aspect-ratio: 16 / 9; }
-  .hero__points { margin-top: var(--space-6); padding-top: var(--space-5); row-gap: var(--space-4); }
-  .hero__point { grid-column: span 4; }
+  .hero--home { justify-content: flex-start; padding-top: calc(var(--header-h) + var(--space-6)); }
+  .hero__content { display: flex; flex-direction: column; align-items: stretch; flex: 1 1 auto; }
+  .hero__title-part { display: block; } /* each phrase is its own block (<= 2 lines each, see the HERO TITLE RULE) */
+  .hero--home .hero__title { --hero-fs: var(--type-display-size); --hero-lh: var(--type-display-lh); --hero-ls: var(--type-display-ls); }
+  .hero__title-part br { display: none; } /* stack: each phrase wraps by width */
+  .hero__scene3d { order: -1; flex: 1 1 auto; min-height: 0; margin: 0 0 var(--space-6); }
 }
 @media (max-width: 767px) {
   .hero { padding-top: calc(var(--header-h) + var(--space-6)); }
@@ -82,10 +101,9 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
   .hero__media { aspect-ratio: 4 / 3; max-height: none; }
   .link-cta { display: inline-flex; align-items: center; min-height: var(--control-md); }
 
-  .hero--home { --hero-overlap: var(--space-6); }
-  .hero--home .hero__grid { row-gap: var(--space-5); }
-  .hero--home .hero__aside .btn { width: 100%; }
-  .hero__points { margin-top: var(--space-5); }
-  .hero__scene { aspect-ratio: auto; height: calc(var(--space-9) * 3); min-height: 0; } /* a fixed height: aspect-ratio + min-height would widen the panel past the container */
-  .hero__point { grid-column: 1 / -1; }
+  .hero--home { padding-bottom: var(--space-6); }
+  .hero--home .hero__title { --hero-fs: var(--type-h1-size); --hero-lh: var(--type-h1-lh); --hero-ls: var(--type-h1-ls); }
+  .hero-cats__label { flex-basis: 100%; }
+  .hero-search { width: 100%; }
 }
+@media (max-width: 414px) { .hero--home .hero__title { --hero-fs: var(--type-h2-size); --hero-lh: var(--type-h2-lh); --hero-ls: var(--type-h2-ls); } }

@@ -1,0 +1,41 @@
+#!/usr/bin/env node
+/* "What the crawler sees" demo. Reads dist/ (run `npm run build` first) as a no-JS bot would: raw HTML only.
+   Writes ../content/seo/demo.html (self-contained, light/dark) and demo.json. Usage: npm run seo:demo */
+const fs = require('node:fs'); const path = require('node:path');
+const ROOT = path.resolve(__dirname, '..'); const DIST = path.join(ROOT, 'dist'); const OUT = path.resolve(ROOT, '../content/seo');
+const cfg = JSON.parse(fs.readFileSync(path.join(ROOT, 'site.config.json'), 'utf8')); const SITE = cfg.siteUrl.replace(/\/+$/, '');
+const dec = (s) => s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&nbsp;/g, ' ');
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const read = (f) => fs.readFileSync(path.join(DIST, f), 'utf8');
+function bot(f) {
+  const h = read(f); const body = h.replace(/<!--[\s\S]*?-->|<script\b[\s\S]*?<\/script>|<style\b[\s\S]*?<\/style>/g, (m) => m);
+  const noScript = body.replace(/<script\b(?![^>]*ld\+json)[\s\S]*?<\/script>|<style\b[\s\S]*?<\/style>|<!--[\s\S]*?-->/g, '');
+  const metaTag = (re) => (h.match(re) || [])[1];
+  const heads = [...noScript.matchAll(/<h([1-3])\b[^>]*>([\s\S]*?)<\/h\1>/g)].map((m) => ({ l: +m[1], t: dec(m[2].replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ').trim() }));
+  const text = dec(noScript.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, '').replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ').trim();
+  const main = (noScript.match(/<main[\s\S]*<\/main>/) || [noScript])[0];
+  const mainText = dec(main.replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ').trim();
+  const ld = [...h.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].flatMap((m) => (JSON.parse(m[1])['@graph'] || []).map((n) => n['@type']));
+  return { file: f, title: dec(metaTag(/<title>([\s\S]*?)<\/title>/) || ''), description: dec(metaTag(/<meta name="description" content="([^"]*)"/) || ''), canonical: metaTag(/<link rel="canonical" href="([^"]*)"/), robots: metaTag(/<meta name="robots" content="([^"]*)"/), lang: metaTag(/<html[^>]*lang="([^"]+)"/),
+    hreflang: [...h.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map((m) => `${m[1]} -> ${m[2]}`), headings: heads, first300: mainText.slice(0, 300), jsonld: ld, textLength: mainText.length };
+}
+const samples = ['index.html', 'catalog.html', 'products/ibuprofen/index.html', 'products/category/api/index.html', 'de/index.html'].map(bot);
+const clip = (s, n) => (s.length > n ? s.slice(0, n - 1).trimEnd() + '…' : s);
+const queries = [['ibuprofen', 'products/ibuprofen/index.html'], ['metformin', 'products/metformin-hydrochloride/index.html'], ['azithromycin', 'products/azithromycin/index.html'], ['anastrozole', 'products/anastrozole/index.html'], ['crospovidone', 'products/crospovidone-type-a/index.html'], ['glycine', 'products/glycine/index.html'], ['API distributor Hamburg', 'index.html'], ['excipients supplier Germany', 'products/category/excipients/index.html'], ['Wirkstoffe Großhandel Hamburg', 'de/index.html']];
+const serp = queries.map(([q, f]) => { const b = bot(f); return { query: q, page: f, title: clip(b.title, 60), url: b.canonical.replace(/\/$/, '').replace('https://', '').replace(/\//g, ' › '), description: clip(b.description, 155), titleCut: b.title.length > 60, descCut: b.description.length > 155 }; });
+const smap = new Set(); for (const f of fs.readdirSync(DIST).filter((x) => /^sitemap-.*\.xml$/.test(x))) for (const m of read(f).matchAll(/<loc>([^<]+)<\/loc>/g)) smap.add(m[1]);
+const pages = []; const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).forEach((e) => (e.isDirectory() ? walk(path.join(d, e.name)) : e.name.endsWith('.html') && pages.push(path.relative(DIST, path.join(d, e.name)))));
+walk(DIST);
+const products = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/data/products.json'), 'utf8'));
+const index = pages.sort().map((f) => { const b = bot(f); const u = SITE + '/' + f.replace(/index\.html$/, ''); const inMap = smap.has(u); const why = /noindex/.test(b.robots) ? (f.startsWith('products/') || f === 'product.html' ? (f === 'product.html' ? 'redirect shim' : 'seo_ready=false') : /design-system/.test(f) ? 'dev page' : /404/.test(f) ? '404 page' : 'placeholder content (lorem / legal template)') : ''; return { page: u, lang: b.lang, sitemap: inMap, robots: b.robots.split(',')[0], reason: why }; });
+const prodTable = products.map((p) => ({ slug: p.slug, availability: p.availability, seo_ready: p.seo_ready, indexed: index.some((i) => i.page === `${SITE}/products/${p.slug}/` && i.sitemap) }));
+fs.writeFileSync(path.join(OUT, 'demo.json'), JSON.stringify({ generated: new Date().toISOString(), crawlerView: samples, serp, sitemapIndex: index, products: prodTable }, null, 2));
+const css = ':root{--bg:#f4f6f8;--fg:#10213f;--card:#fff;--mut:#5b6b86;--ac:#0a3782;--ok:#0a7a3f;--no:#a33}@media(prefers-color-scheme:dark){:root{--bg:#0e1522;--fg:#e6ecf7;--card:#16203a;--mut:#98a7c4;--ac:#8fb4ff;--ok:#5fd08f;--no:#ff8f8f}}body{font:15px/1.5 system-ui,sans-serif;background:var(--bg);color:var(--fg);margin:0;padding:24px;max-width:1100px;margin-inline:auto}h1,h2{color:var(--ac)}section,.card{background:var(--card);border-radius:12px;padding:16px 20px;margin:0 0 16px}table{border-collapse:collapse;width:100%;font-size:13px}td,th{text-align:left;padding:4px 8px;border-top:1px solid #8884}code{font-size:12px;word-break:break-all}.serp .t{color:var(--ac);font-size:18px}.serp .u{color:var(--ok);font-size:13px}.mut{color:var(--mut)}.y{color:var(--ok)}.n{color:var(--no)}';
+const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SEO demo: what the crawler sees</title><style>${css}</style></head><body><h1>SEO demo: what a crawler sees</h1><p class="mut">Generated ${new Date().toISOString().slice(0, 10)} from dist/ (raw HTML, no JavaScript). Site URL: ${esc(SITE)}</p>
+<h2>A. Crawler view (5 pages)</h2>${samples.map((s) => `<section><b>${esc(s.file)}</b> <span class="mut">lang=${s.lang}, robots=${esc(s.robots)}, main text ${s.textLength} chars</span><table><tr><th>title</th><td>${esc(s.title)}</td></tr><tr><th>description</th><td>${esc(s.description)}</td></tr><tr><th>canonical</th><td><code>${esc(s.canonical)}</code></td></tr><tr><th>hreflang</th><td><code>${esc(s.hreflang.join(' | ') || 'none (single-language page)')}</code></td></tr><tr><th>JSON-LD types</th><td>${esc(s.jsonld.join(', '))}</td></tr><tr><th>h1-h3</th><td>${s.headings.slice(0, 14).map((h) => `h${h.l} ${esc(h.t.slice(0, 80))}`).join('<br>')}${s.headings.length > 14 ? `<br>… +${s.headings.length - 14}` : ''}</td></tr><tr><th>first 300 chars</th><td>${esc(s.first300)}</td></tr></table></section>`).join('')}
+<h2>B. SERP previews (Google-style truncation ~60 / 155)</h2>${serp.map((s) => `<section class="serp"><div class="mut">Query: ${esc(s.query)}</div><div class="u">${esc(s.url)}</div><div class="t">${esc(s.title)}${s.titleCut ? ' <small class="n">(cut)</small>' : ''}</div><div>${esc(s.description)}${s.descCut ? ' <small class="n">(cut)</small>' : ''}</div></section>`).join('')}
+<h2>C. Which pages are in the sitemap, which are noindex</h2><section><table><tr><th>page</th><th>lang</th><th>robots</th><th>in sitemap</th><th>why not</th></tr>${index.map((i) => `<tr><td><code>${esc(i.page.replace(SITE, ''))}</code></td><td>${i.lang}</td><td>${i.robots}</td><td class="${i.sitemap ? 'y' : 'n'}">${i.sitemap ? 'yes' : 'no'}</td><td>${esc(i.reason)}</td></tr>`).join('')}</table></section>
+<h2>D. Products: availability / seo_ready gate</h2><section><table><tr><th>slug</th><th>availability</th><th>seo_ready</th><th>indexed (sitemap)</th></tr>${prodTable.map((p) => `<tr><td>${p.slug}</td><td>${p.availability}</td><td>${p.seo_ready}</td><td class="${p.indexed ? 'y' : 'n'}">${p.indexed ? 'yes' : 'no'}</td></tr>`).join('')}</table></section></body></html>`;
+fs.writeFileSync(path.join(OUT, 'demo.html'), html);
+console.log(`demo written: ${path.join(OUT, 'demo.html')} (SERP previews ${serp.length}, pages ${index.length})`);
+serp.forEach((s) => console.log(`  [${s.query}] ${s.title} | ${s.description.slice(0, 70)}…`));

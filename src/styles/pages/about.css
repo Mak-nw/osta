@@ -2,8 +2,8 @@
 
 /* intro (editorial): title, label + lead, meta | 2-col text with photo below the text */
 .about-intro { background: var(--surface); }
-.about-intro__grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--space-4); align-items: start; }
-.about-intro__head { grid-column: 1 / 7; grid-row: 1; margin: 0 0 var(--space-6); } /* tag above the title (.section-head) */
+.about-intro__grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--section-head-gap); align-items: start; }
+.about-intro__head { grid-column: 1 / 7; grid-row: 1; margin: 0; } /* tag above the title (.section-head) */
 .about-intro__lead { grid-column: 6 / -1; grid-row: 2; margin: 0; }
 .about-intro__aside { grid-column: 1 / span 3; grid-row: 2 / span 2; } /* starts in the lead row (top of meta-list = top of lead) but spans the text row too, so its height does not inflate the lead row */
 .about-intro__photo { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--radius-lg); }
@@ -11,14 +11,14 @@
 .about-intro__text > p { margin: 0; }
 .about-intro__text > p:first-child { grid-column: 1 / span 3; } /* grid cols 6–8 */
 .about-intro__text > p + p { grid-column: 4 / span 3; } /* grid cols 9–11; col 12 empty */
-.about-intro__figure { grid-column: 1 / span 3; grid-row: 2; margin: var(--space-6) 0 0; }
+.about-intro__figure { grid-column: 1 / span 3; grid-row: 2; margin: var(--space-6) 0 0; border-radius: var(--radius-lg); overflow: hidden; isolation: isolate; } /* zoom mask */
 .about-intro__figure .about-intro__photo { aspect-ratio: 4 / 3; height: auto; }
 
 /* blue services block */
 .about-services { padding-top: var(--section-lg); background: var(--surface-accent); color: var(--text-on-accent); }
 .about-services__top { padding-bottom: var(--space-9); } /* texts to the first divider; title-to-texts gap = About grid logic (row-gap 32 + title margin 16 = 48) */
-.about-services__texts { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--space-6); align-items: start; }
-.about-services__head { grid-column: 1 / span 6; grid-row: 1; margin: 0 0 var(--space-4); } /* tag above the title (.section-head), white on the blue block */
+.about-services__texts { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--section-head-gap); align-items: start; }
+.about-services__head { grid-column: 1 / span 6; grid-row: 1; margin: 0; } /* tag above the title (.section-head), white on the blue block */
 .about-services__head .section-label { color: var(--text-on-accent); }
 .about-services__texts > p:first-of-type { grid-column: 6 / span 3; grid-row: 2; }
 .about-services__texts > p:last-of-type { grid-column: 9 / span 3; grid-row: 2; }
@@ -26,7 +26,6 @@
 .about-services__list { padding-bottom: var(--section-lg); }
 
 /* block tags (People, Quality): .section-head (tag above the h2, gap --space-3), see components/editorial.css */
-.about-quality__head > h2 { text-wrap: pretty; } /* same as .feature-grid__intro > h2 (not balance) */
 .feature-grid__intro > .about-quality__cta { margin-top: auto; } /* CTA pinned to the bottom edge of the intro column */
 
 /* slides: two full-bleed slides (image + split), touching; layout and look come from components/slides.css */
@@ -45,8 +44,8 @@
    Intro: title, lead, meta list, two text paragraphs (2 columns on tablet), photo. Blue services block: texts in 2 columns (tablet) / stacked (mobile).
    ========================================================================== */
 @media (max-width: 1199px) {
-  .about-intro__grid { row-gap: var(--space-5); }
-  .about-intro__head { grid-column: 1 / -1; grid-row: 1; margin-bottom: var(--space-3); }
+  .about-intro__grid { row-gap: var(--section-head-gap); }
+  .about-intro__head { grid-column: 1 / -1; grid-row: 1; }
   .about-intro__lead { grid-column: 1 / -1; grid-row: 2; }
   .about-intro__aside { grid-column: 1 / -1; grid-row: 3; }
   .about-intro__text { grid-column: 1 / -1; grid-row: 4; }
@@ -55,7 +54,7 @@
   .about-intro__figure { grid-column: 1 / -1; grid-row: 2; margin-top: var(--space-5); }
   .about-intro__figure .about-intro__photo { aspect-ratio: 16 / 9; }
   .about-services__top { padding-bottom: var(--space-8); }
-  .about-services__texts { row-gap: var(--space-5); }
+  .about-services__texts { row-gap: var(--section-head-gap); }
   .about-services__head { grid-column: 1 / -1; }
   .about-services__texts > p:first-of-type { grid-column: 1 / span 4; grid-row: 2; }
   .about-services__texts > p:last-of-type { grid-column: 5 / span 4; grid-row: 2; }

@@ -1,5 +1,5 @@
 /* service-card (Home, Services): .service-list > .service-card (article) > h3.service-card__title.t-h2 + p.service-card__text.t-body + .service-card__media > .service-card__fallback.
-   Stack of transparent cards on the blue section (no fill, no radius; 1px --divider-on-accent border-top on every card, white text --text-on-accent, padding --space-6 0), always open (no accordion logic). Numbering: CSS counter on .service-list/.service-card, decorative ::before "01…04" top-left on the top line (cols 1-2, title size 40/40, --c-blue-400, muted).
+   Stack of transparent cards on the blue section (no fill, no radius; 1px --divider-on-accent border-top on every card, white text --text-on-accent, padding --space-6 0), always open (no accordion logic). Numbering: CSS counter on .service-list/.service-card, decorative ::before "01…04" top-left on the top line (cols 1-2, title size 36/40, --c-blue-400, muted).
    Card = inner 12-col grid, one row: .service-card__body (cols 6-8, top) = title + description stacked on one vertical line in col 6 (same x as the first paragraph of the Services top block), --space-4 between them, description text-wrap pretty; cols 1-5 and 9-10 empty (air); media cols 11-12 (top, right-aligned to the end of col 12, fixed height 208px = space-9 + space-8 + space-7).
    Media slot = no plate, models stand directly on the blue; ONE shared WebGL canvas (.service-list__canvas, transparent) lies over the whole list and renders a model into each slot.
    .is-3d (set by JS) = canvas visible, fallback ring hidden. */
@@ -7,7 +7,7 @@
 .service-card { counter-increment: service-num; display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--space-4); align-items: start; align-content: start; box-sizing: border-box; padding: var(--space-6) 0; border-top: 1px solid var(--divider-on-accent); background: none; color: var(--text-on-accent); }
 .service-card__body { grid-column: 6 / span 3; grid-row: 1; display: grid; row-gap: var(--space-4); align-content: start; min-width: 0; }
 /* Number 01–04: top-left of the card, on the top line (cols 1-2, same top as the title in col 6).
-   Type = card title size (t-h2 40/40, Asta Sans Medium, --type-h2-ls), muted --c-blue-400 (below the white title).
+   Type = card title size (t-h2 36/40, Asta Sans Medium, --type-h2-ls), muted --c-blue-400 (below the white title).
    margin-inline-start -0.0475em cancels the digit side bearing (measured at 80px, scaled) so the ink starts at the container edge (x 32).
    Decorative: pointer-events none. */
 .service-card::before { content: counter(service-num, decimal-leading-zero); grid-column: 1 / span 2; grid-row: 1; justify-self: start; align-self: start; margin-inline-start: -0.0475em; font-family: var(--font-sans); font-size: var(--type-h2-size); line-height: var(--type-h2-lh); letter-spacing: var(--type-h2-ls); font-weight: var(--font-weight-medium); color: var(--c-blue-400); pointer-events: none; user-select: none; }

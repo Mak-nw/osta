@@ -34,7 +34,7 @@ export function baseLinks() {
       order: 'post',
       handler(html) {
         if (!build || base === '/') return html;
-        return html.replace(/(\s(?:href|src|poster|data-src|content)=")\/(?!\/|@vite)([^"]*")/g, (m, a, rest) =>
+        return html.replace(/(\s(?:href|src|poster|data-src|content|action)=")\/(?!\/|@vite)([^"]*")/g, (m, a, rest) =>
           ('/' + rest).startsWith(base) ? m : `${a}${base}${rest}`);
       },
     },

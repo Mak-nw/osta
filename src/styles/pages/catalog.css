@@ -29,9 +29,8 @@
   .catalog__filters-toggle {
     display: flex; align-items: center; justify-content: space-between; width: 100%; height: var(--control-md); padding-inline: var(--space-4);
     border: 1px solid var(--border-strong); border-radius: var(--radius-md); color: var(--text-accent); font-size: var(--type-body-size); text-align: left;
-    transition: background-color var(--dur) var(--ease);
   }
-  @media (hover: hover) { .catalog__filters-toggle:hover { background: var(--surface-white); } }
+  /* hover = DISC (buttons.css) */
   .catalog__filters-chevron { transition: transform var(--dur-fast) var(--ease-out); }
   .catalog__filters-toggle[aria-expanded="true"] .catalog__filters-chevron { transform: rotate(180deg); }
   .catalog__filters:not(.is-open) .filter-list { display: none; }

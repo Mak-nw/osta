@@ -23,11 +23,7 @@
 .filter-item {
   display: flex; align-items: center; gap: var(--space-3); height: var(--control-md); padding-inline: var(--space-2);
   border-radius: var(--radius-md); font-size: var(--type-body-size); color: var(--text); width: 100%; text-align: left;
-  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
 }
-.filter-item:hover,
-.filter-item.is-hover { background: color-mix(in srgb, var(--surface-white) 60%, transparent); color: var(--accent); }
-.filter-item:active,
-.filter-item.is-pressed { background: var(--surface-muted); }
+/* hover / pressed = DISC (end of buttons.css, role "ghost on light") */
 .filter-item.is-active { background: var(--surface-raised); }
 .filter-item.is-disabled { color: var(--disabled-text); pointer-events: none; }

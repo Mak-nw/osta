@@ -41,6 +41,7 @@
   --surface-muted:    var(--c-mist-200);   /* people card, disabled fills */
   --surface-white:    var(--c-white);      /* nav-pills, raised-on-raised */
   --surface-accent:   var(--c-blue-700);
+  --surface-accent-deep: var(--c-blue-950);   /* ONLY the top stop of the Home hero vertical gradient (customer exception 2026-11-12); darker step of the same blue, not black */
   --surface-dark:     var(--c-blue-950);
   --text:             var(--c-ink-900);
   --text-muted:       var(--c-grey-600);   /* ≥4.7:1 on #E8EEEE, #F4F9F9, white and the darkest shader pixel rgb(216,224,231) */
@@ -58,26 +59,42 @@
   --divider-on-accent: color-mix(in srgb, var(--c-white) 14%, transparent); /* decorative hairlines between service cards */
   --border-on-accent: color-mix(in srgb, var(--c-white) 40%, transparent);
   --icon-teal:        var(--c-teal-600);
+  --icon-ring-action-bg: var(--accent);          /* clickable icon ring (.icon-ring--action): filled primary blue */
+  --icon-ring-action-fg: var(--accent-contrast);
+  --icon-ring-action-bd: var(--accent);
+  --icon-ring-action-bg-hover: var(--accent-hover);
   --disabled-bg:      var(--c-mist-200);
   --disabled-text:    var(--c-grey-500);
   --c-error:          var(--c-red-700);   /* validation error: one shade for text, border, icon */
   --text-error:       var(--c-error);
   --border-error:     var(--c-error);
+  --field-label-gap: var(--space-4);   /* label -> field: ONE gap on every form (.field), 16px (was 4 on forms / 8 in the hero search) */
+  --field-glass-alpha: 7%;             /* glass field on blue (Home hero search): white fill alpha (customer: 40% > 20% > 10% > 7%) */
+  --field-glass-border-alpha: 10%;     /* rest: 1px border exactly on the panel edge */
+  --field-glass-border-alpha-focus: 70%; /* focus: the SAME border brighter (no outline, no offset); >=3:1 vs the blue */
+  --field-glass-bg: color-mix(in srgb, var(--accent-contrast) var(--field-glass-alpha), transparent);
+  --field-glass-border: color-mix(in srgb, var(--accent-contrast) var(--field-glass-border-alpha), transparent);
+  --field-glass-border-focus: color-mix(in srgb, var(--accent-contrast) var(--field-glass-border-alpha-focus), transparent);
+  --field-glass-placeholder: color-mix(in srgb, var(--accent-contrast) 70%, transparent);
   --overlay-field:    color-mix(in srgb, var(--c-white) 14%, transparent); /* inputs on accent */
 
   /* ---------- 3a. Spacing (4/8 step) ---------- */
   --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
   --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
   --space-9: 96px; --space-10: 128px;
+  --section-head-gap: var(--space-5);  /* EVERY vertical gap of a heading group (.section-head): tag -> heading -> description -> CTA = 24 (customer 2026-11-13) */
+  --text-card-gap: 30px;               /* EXPLICIT EXCEPTION (customer 2026-11-13): eyebrow -> h2 -> paragraph inside .text-card (Products, Documentation) */
+  /* footer rhythm in responsive (<= 1199), customer exception, off the 4/8/12 scale: gap between link items 5, group label -> first item 7 (same for menu, contacts, technical links) */
+  --footer-gap-items: 5px; --footer-gap-label: 7px;
 
   /* ---------- 3b. Typography ---------- */
   --font-sans: 'Asta Sans', system-ui, sans-serif;
   --font-weight-light: 300; --font-weight-regular: 400; --font-weight-medium: 500;
   /* role: size / line-height / weight / letter-spacing */
-  /* Scale: 14 / 16 / 24 / 40 / 48 / 80 (one token per size; role -> token table in design-system.md) */
-  --type-display-size: 80px; --type-display-lh: 80px; --type-display-ls: -0.04em;   /* hero H1, section sentence heading */
-  --type-h1-size: 48px;      --type-h1-lh: 56px;      --type-h1-ls: -0.02em;        /* H1 of inner pages */
-  --type-h2-size: 40px;      --type-h2-lh: 40px;      --type-h2-ls: -0.04em;        /* card / block / step heading, closing heading (the only 40px token) */
+  /* Scale: 14 / 16 / 24 / 36 / 44 / 60 (one token per size; role -> token table in design-system.md) */
+  --type-display-size: 60px; --type-display-lh: 60px; --type-display-ls: -0.04em;   /* hero H1, section sentence heading */
+  --type-h1-size: 44px;      --type-h1-lh: 52px;      --type-h1-ls: -0.02em;        /* H1 of inner pages */
+  --type-h2-size: 36px;      --type-h2-lh: 40px;      --type-h2-ls: -0.04em;        /* card / block / step heading, closing heading (the only 36px token) */
   --type-h3-size: 24px;      --type-h3-lh: 32px;      --type-h3-ls: -0.01em;        /* item title in dense lists; lead (same values, lead is Regular) */
   --type-lead-size: var(--type-h3-size); --type-lead-lh: var(--type-h3-lh); --type-lead-ls: var(--type-h3-ls); /* alias of h3 values: one token per size */
   --type-body-size: 16px;    --type-body-lh: 24px;    --type-body-ls: 0;
@@ -95,8 +112,8 @@
   --chip-sm: 24px; --chip-md: 32px; --chip-lg: 40px;   /* decorative icon chips */
   --btn-split-w: 176px;        /* Contact Us style button (label left, icon right) */
   --btn-pad-trim: 5px;         /* .btn right padding = left padding − this (icon sits 5px closer to the right edge); symmetric when no icon */
-  --wordmark-k: 0.15137; /* footer wordmark "OSTA TRADING": font-size = container width x k (cqw); ink width = 6.606 em */
-  --logo-footer-w: 320px; --logo-header-h: 44px;
+  --logo-header-h: 44px;
+  --logo-footer-h: 132px;      /* big centred mark in the footer */
   --card-min-h: 240px; --card-tall-min-h: 252px; --card-cta-min-h: 176px;
   --avatar-sm: 48px; --avatar-md: 64px; --avatar-lg: 96px;
 
@@ -107,14 +124,16 @@
 
   /* ---------- 3f. Layout ---------- */
   --container: 1680px;          /* main content box */
-  --gutter: 32px;               /* side padding of container */
+  --gutter: 64px;               /* side padding of container (1728: content x=64..1664, width 1600) */
   --grid-cols: 12;
   --grid-gap: 16px;
   --sidebar-w: 240px;
   --header-top: var(--space-3);                                   /* gap above the floating panel */
   --header-bar-pad: 10px;        /* vertical gap between panel edge and its md controls / logo */
   --header-bar-h: calc(var(--control-md) + 2 * var(--header-bar-pad)); /* 64: floating panel height (md control 44 + 10 above/below) */
-  --header-w: 760px;                                             /* floating panel max width (centered) */
+  --cols-6: calc((100% - var(--grid-gap)) / 2);                   /* width of 6 of 12 grid columns (6*col + 5*gap) as a share of the container content box; use only as width of a block inside .container */
+  --header-w: var(--cols-6);                                     /* floating panel = the 6 central columns (4-9 of 12), centered; desktop >=1200 */
+  --header-min-w: 640px;                                         /* content floor of the bar (EN/DE: nav 266 + logo 60 + actions 232 + gaps/padding): 6 columns are narrower below ~1424px, so the bar never goes under this (see design-system.md) */
   --header-h: calc(var(--header-top) + var(--header-bar-h));      /* space taken by sticky header = top gap + panel (76) */
   --z-header: 100;               /* sticky header; no z-index scale existed before */
   --section-sm: var(--space-8);   /* 64 */
@@ -125,22 +144,24 @@
   /* ---------- 3g. Motion ---------- */
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   --dur-fast: 150ms; --dur: 200ms;
-  --dur-base: 250ms; --dur-slow: 600ms;
+  --dur-base: 250ms; --dur-hover-disc: 800ms; /* H1a/primary hover disc + synchronous label colour (customer 2026-11-13: "8" read as 0.8 s). Reverse uses the same token. */ --dur-slow: 600ms;
   --ease-out: cubic-bezier(.22,.61,.36,1); --ease-in-out: cubic-bezier(.65,0,.35,1);
   --reveal-distance: 16px; --stagger: 60ms;
+  --dur-zoom: 5000ms; --photo-zoom-from: 1.12; /* photo zoom-out inside its clip mask (motion.js: .photo-zoom) */
 }
 
 /* ==========================================================================
    Responsive overrides (decision 2026-10-27): tablet 768-1199 = 8 columns, mobile 375-767 = 4 columns.
    Desktop (>=1200) values above are NOT touched; only the tokens listed here change.
-   Same roles, new values: display 80 -> 56 -> 40, h1 48 -> 40 -> 32, h2 40 -> 32 -> 28; h3 / lead 24, body 16, label 14 stay.
+   Same roles, new values: display 60 -> 48 -> 36, h1 44 -> 36 -> 30, h2 36 -> 30 -> 26; h3 / lead 24, body 16, label 14 stay.
    ========================================================================== */
 @media (max-width: 1199px) {
   :root {
-    --gutter: 24px; --grid-cols: 8; --grid-gap: 16px;
-    --type-display-size: 56px; --type-display-lh: 56px;
-    --type-h1-size: 40px;      --type-h1-lh: 48px;
-    --type-h2-size: 32px;      --type-h2-lh: 40px;
+    --gutter: 40px; --grid-cols: 8; --grid-gap: 16px;
+    --logo-footer-h: 96px;
+    --type-display-size: 48px; --type-display-lh: 48px;
+    --type-h1-size: 36px;      --type-h1-lh: 44px;
+    --type-h2-size: 30px;      --type-h2-lh: 36px;
     --section-sm: var(--space-7);   /* 48 */
     --section-md: var(--space-8);   /* 64 */
     --section-lg: var(--space-9);   /* 96 */
@@ -148,10 +169,11 @@
 }
 @media (max-width: 767px) {
   :root {
-    --gutter: 16px; --grid-cols: 4; --grid-gap: 16px;
-    --type-display-size: 40px; --type-display-lh: 40px;
-    --type-h1-size: 32px;      --type-h1-lh: 40px;
-    --type-h2-size: 28px;      --type-h2-lh: 32px;
+    --gutter: 24px; --grid-cols: 4; --grid-gap: 16px;
+    --logo-footer-h: 72px;
+    --type-display-size: 36px; --type-display-lh: 36px;
+    --type-h1-size: 30px;      --type-h1-lh: 36px;
+    --type-h2-size: 26px;      --type-h2-lh: 32px;
     --section-sm: var(--space-6);   /* 32 */
     --section-md: var(--space-7);   /* 48 */
     --section-lg: var(--space-8);   /* 64 */

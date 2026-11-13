@@ -50,6 +50,7 @@
 .ds-sw--sem-surface-muted { background: var(--surface-muted); }
 .ds-sw--sem-surface-white { background: var(--surface-white); }
 .ds-sw--sem-surface-accent { background: var(--surface-accent); }
+.ds-sw--sem-surface-accent-deep { background: var(--surface-accent-deep); }
 .ds-sw--sem-surface-dark { background: var(--surface-dark); }
 .ds-sw--sem-accent { background: var(--accent); }
 .ds-sw--sem-accent-hover { background: var(--accent-hover); }

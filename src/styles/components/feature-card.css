@@ -1,8 +1,8 @@
 /* Feature card: large two-up card. Variants --accent (filled) / --light (raised surface). Parts: __head (__title), __foot (__text).
    Layout: .feature-grid = 12-col grid: __intro (cols 1-3: heading + text, left-aligned, fills the 3 columns), col 4 empty (air), two cards (5-8, 9-12), cards stretch to row height. */
 .feature-grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); gap: var(--grid-gap); }
-/* one gap (--space-4, 16 px) between tag, h2 and text; the CTA is pushed to the bottom edge (.about-quality__cta, about.css). Stretches to the row height so its bottom = the cards' bottom. */
-.feature-grid > .feature-grid__intro { grid-column: span 3; display: flex; flex-direction: column; gap: var(--space-4); align-self: stretch; }
+/* the intro IS a .section-head (one gap --section-head-gap, 24, tag > h2 > text > CTA); the CTA is pushed to the bottom edge (.about-quality__cta, about.css). Stretches to the row height so its bottom = the cards' bottom. */
+.feature-grid > .feature-grid__intro { grid-column: span 3; align-self: stretch; }
 .feature-grid__intro > * { margin: 0; }
 .feature-grid__intro > h2 { text-wrap: pretty; } /* not balance: balance shortened lines to ~70% of the column */
 .feature-grid__intro > .btn { align-self: flex-start; }

@@ -16,28 +16,14 @@
 .btn--block { display: flex; width: 100%; justify-content: space-between; }
 
 .btn--primary { background: var(--accent); color: var(--accent-contrast); }
-.btn--primary:hover,
-.btn--primary.is-hover { background: var(--accent-hover); }
-.btn--primary:active,
-.btn--primary.is-pressed { background: var(--accent-active); transform: translateY(1px); }
+.btn--primary { --_hole: var(--accent-hover); position: relative; isolation: isolate; overflow: hidden; } /* hover = disc from the centre (H1a block at the end of the file); the fill itself never changes */
 
 .btn--secondary { background: transparent; color: var(--accent); border-color: var(--accent); }
-.btn--secondary:hover,
-.btn--secondary.is-hover { background: var(--surface-sunken); }
-.btn--secondary:active,
-.btn--secondary.is-pressed { background: var(--surface-muted); transform: translateY(1px); }
+/* hover = accent disc from the centre (DISC block at the end of the file); pressed = darker disc */
 
 .btn--ghost { background: transparent; color: var(--accent); border-color: var(--border-strong); }
-.btn--ghost:hover,
-.btn--ghost.is-hover { background: var(--surface-white); }
-.btn--ghost:active,
-.btn--ghost.is-pressed { background: var(--surface-muted); transform: translateY(1px); }
 
-.btn--light { background: var(--surface-white); color: var(--accent); }
-.btn--light:hover,
-.btn--light.is-hover { background: var(--surface-white); border-color: var(--accent); }
-.btn--light:active,
-.btn--light.is-pressed { background: var(--surface-muted); border-color: var(--accent); transform: translateY(1px); }
+.btn--light { background: var(--surface-white); color: var(--accent); border-color: var(--accent-contrast); }
 
 .btn:disabled, .btn.is-disabled { background: var(--disabled-bg); color: var(--disabled-text); border-color: transparent; cursor: not-allowed; pointer-events: none; transform: none; }
 
@@ -49,17 +35,116 @@
   transition: background var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
 .round-btn--md { --_s: var(--control-md); } .round-btn--lg { --_s: var(--control-lg); }
-.round-btn:hover,
-a:hover > .round-btn--outline,
-.product-card:hover .round-btn--outline,
-.round-btn.is-hover,
-a.is-hover > .round-btn--outline,
-.product-card.is-hover .round-btn--outline { background: var(--accent); color: var(--accent-contrast); }
-.round-btn:active,
-.round-btn.is-pressed { background: var(--accent-active); border-color: var(--accent-active); color: var(--accent-contrast); }
-.round-btn--light { background: var(--surface-white); border-color: var(--surface-white); color: var(--accent); }
-.round-btn--light:hover,
-.round-btn--light.is-hover { background: var(--surface-white); color: var(--accent-hover); border-color: var(--accent); }
-.round-btn--light:active,
-.round-btn--light.is-pressed { background: var(--surface-muted); color: var(--accent-active); border-color: var(--accent); }
+/* outline round button: hover/pressed = disc (DISC block at the end of the file) */
+.round-btn--light { background: var(--surface-white); border-color: var(--accent-contrast); color: var(--accent); }
 .round-btn:disabled, .round-btn.is-disabled { background: var(--disabled-bg); border-color: transparent; color: var(--disabled-text); cursor: not-allowed; pointer-events: none; }
+/* Outline button on blue surfaces (Home hero chips, closing CTA): outline (white 1px border, transparent fill, white text); hover = H1a mirror (see the block below) */
+.btn--outline-on-accent { background: transparent; color: var(--text-on-accent); border-color: var(--accent-contrast); }
+
+
+/* Controls on solid blue (.btn--light, .round-btn--light, .btn--outline-on-accent): hover = "H1a" disc animation (customer 2026-11-12, Opus review content/audit/hover-review1.md).
+   ::before is a disc (transform scale only, 0 > 1 from the centre, --dur-base, ease-out). Light controls: white fill + white 1px border at rest (size never changes), a disc in the section fill (--surface-accent) grows over the white; end state = "empty" button with white border and white label/arrow. Outline control: the mirror, a white disc grows, label turns blue. The disc colour is --_hole; reverse on mouse-out. Not for buttons on a photo (.svc-supply__cta, see pages/services.css) and not for light surfaces (.btn--primary darkens). */
+.btn--light, .round-btn--light, .btn--outline-on-accent { --_hole: var(--surface-accent); position: relative; isolation: isolate; overflow: hidden; }
+.btn--outline-on-accent { --_hole: var(--surface-white); }
+.btn--light::before, .round-btn--light::before, .btn--outline-on-accent::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none; border-radius: var(--radius-full); background: var(--_hole);
+  scale: 0; transition: scale var(--dur-hover-disc) var(--ease-out);
+}
+.round-btn--light::before { inset: 0; }
+.btn--light::before, .btn--outline-on-accent::before { left: 50%; top: 50%; width: calc(100% + var(--control-lg)); aspect-ratio: 1; translate: -50% -50%; }
+.btn.btn--light, .btn.btn--outline-on-accent, .round-btn.round-btn--light { transition-property: color, border-color, transform; transition-duration: var(--dur-hover-disc), var(--dur-hover-disc), var(--dur-fast); transition-timing-function: var(--ease-out); }
+.btn--light.is-hover, .round-btn--light.is-hover, .btn--light.is-pressed, .round-btn--light.is-pressed { color: var(--accent-contrast); border-color: var(--accent-contrast); }
+.btn--light.is-hover::before, .round-btn--light.is-hover::before, .btn--light.is-pressed::before, .round-btn--light.is-pressed::before,
+.btn--outline-on-accent.is-hover::before, .btn--outline-on-accent.is-pressed::before { scale: 1; }
+.btn--outline-on-accent.is-hover, .btn--outline-on-accent.is-pressed { color: var(--accent); }
+.btn--light:active, .round-btn--light:active, .btn--outline-on-accent:active, .btn--light.is-pressed, .round-btn--light.is-pressed, .btn--outline-on-accent.is-pressed { transform: translateY(1px); }
+.btn--light:active, .round-btn--light:active { color: var(--accent-contrast); border-color: var(--accent-contrast); }
+.btn--light:active::before, .round-btn--light:active::before, .btn--outline-on-accent:active::before { scale: 1; }
+.btn--outline-on-accent:active { color: var(--accent); }
+@media (hover: hover) {
+  .btn--light:hover, .round-btn--light:hover, .link-card:hover .round-btn--light, a.card:hover .round-btn--light { color: var(--accent-contrast); border-color: var(--accent-contrast); }
+  .btn--light:hover::before, .round-btn--light:hover::before, .link-card:hover .round-btn--light::before, a.card:hover .round-btn--light::before, .btn--outline-on-accent:hover::before { scale: 1; }
+  .btn--outline-on-accent:hover { color: var(--accent); }
+  .round-btn--light:hover, .link-card:hover .round-btn--light, a.card:hover .round-btn--light { background: var(--surface-white); }
+}
+.btn--light:focus-visible, .btn--light.is-focus, .round-btn--light:focus-visible, .round-btn--light.is-focus, .btn--outline-on-accent:focus-visible, .btn--outline-on-accent.is-focus { outline-color: var(--accent-contrast); }
+
+
+/* Filled dark button (.btn--primary), customer 2026-11-13: the same H1a disc from the centre as on light/outline buttons. Disc = --accent-hover (--_hole), label/icon stay white above it (z-index -1 of ::before inside isolation). Active: disc --accent-active + translateY(1px). Reduced motion: instant (see below). Focus ring unchanged. */
+.btn--primary::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none; border-radius: var(--radius-full); background: var(--_hole);
+  left: 50%; top: 50%; width: calc(100% + var(--control-lg)); aspect-ratio: 1; translate: -50% -50%;
+  scale: 0; transition: scale var(--dur-hover-disc) var(--ease-out);
+}
+.btn.btn--primary { transition-property: color, border-color, transform; transition-duration: var(--dur-hover-disc), var(--dur-hover-disc), var(--dur-fast); transition-timing-function: var(--ease-out); }
+.btn--primary.is-hover::before { scale: 1; }
+.btn--primary:active, .btn--primary.is-pressed { --_hole: var(--accent-active); transform: translateY(1px); }
+.btn--primary:active::before, .btn--primary.is-pressed::before { scale: 1; }
+@media (hover: hover) { .btn--primary:hover::before { scale: 1; } }
+.btn--primary:disabled::before, .btn--primary.is-disabled::before { display: none; }
+@media (prefers-reduced-motion: reduce) { .btn--primary::before, .btn--light::before, .round-btn--light::before, .btn--outline-on-accent::before { transition: none; } .btn.btn--primary, .btn.btn--light, .btn.btn--outline-on-accent, .round-btn.round-btn--light { transition-duration: 0s; } }
+
+
+/* ==========================================================================
+   DISC: the ONE hover mechanic for EVERY button-like element (customer 2026-11-13, categorical; checked by `npm run audit:hover`, tools/hover-gate.cjs).
+   ::before disc, `scale 0 > 1` from the centre, --dur-hover-disc, --ease-out, only under (hover: hover); reduced motion = instant; isolation + overflow hidden + inherited radius.
+   Per-role variables: --_hole (disc colour) and --_fg (label/icon colour at the end of hover). Roles:
+     light fill on blue   (.btn--light, .round-btn--light)      disc = section blue, label blue > white          (block H1a above)
+     outline on blue      (.btn--outline-on-accent)             disc = white, label white > blue                 (block H1a above)
+     dark fill on light   (.btn--primary, .icon-ring--action)   disc = --accent-hover, label stays white        (block above / this block)
+     ghost/outline on light (this block: .btn--secondary/.btn--ghost, .round-btn, header nav-pills, language switch/options in the burger, burger, filters, catalog filter toggle)
+                                                                disc = --accent, label/icon > --accent-contrast (white), 1px outline stays
+   New button-like element = add its selector to the role list below (do not write a new hover). Exceptions only in tools/hover-gate.allowlist.json with a reason.
+   ========================================================================== */
+:is(.btn--secondary, .btn--ghost, .round-btn:not(.round-btn--light), .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option) {
+  --_hole: var(--accent); --_fg: var(--accent-contrast); position: relative; isolation: isolate; overflow: hidden;
+}
+:is(.btn--secondary, .btn--ghost, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option)::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none; border-radius: var(--radius-full); background: var(--_hole);
+  left: 50%; top: 50%; width: calc(100% + var(--control-lg)); aspect-ratio: 1; translate: -50% -50%; scale: 0; transition: scale var(--dur-hover-disc) var(--ease-out);
+}
+.round-btn:not(.round-btn--light)::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: var(--radius-full); background: var(--_hole); scale: 0; transition: scale var(--dur-hover-disc) var(--ease-out); }
+html :is(.btn--secondary, .btn--ghost, .round-btn:not(.round-btn--light), .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option) {
+  transition-property: color, border-color, transform; transition-duration: var(--dur-hover-disc), var(--dur-hover-disc), var(--dur-fast); transition-timing-function: var(--ease-out);
+}
+html :is(.btn--secondary, .btn--ghost, .round-btn:not(.round-btn--light), .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option) .icon { color: inherit; transition: color var(--dur-hover-disc) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
+/* keyboard focus and forced states show the same end state; pressed = darker disc */
+:is(.btn--secondary, .btn--ghost, .round-btn:not(.round-btn--light), .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option):is(.is-hover, .is-focus, .is-pressed, :focus-visible, :active),
+.product-card.is-hover .round-btn--outline, a.is-hover > .round-btn--outline { color: var(--_fg); }
+:is(.btn--secondary, .btn--ghost, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option):is(.is-hover, .is-focus, .is-pressed, :focus-visible, :active)::before,
+.round-btn:not(.round-btn--light):is(.is-hover, .is-focus, .is-pressed, :focus-visible, :active)::before, a.is-hover > .round-btn--outline::before, .product-card.is-hover .round-btn--outline::before { scale: 1; }
+:is(.btn--secondary, .btn--ghost, .round-btn:not(.round-btn--light), .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option):is(:active, .is-pressed) { --_hole: var(--accent-active); border-color: var(--accent-active); }
+@media (hover: hover) {
+  :is(.btn--secondary, .btn--ghost, .round-btn:not(.round-btn--light), .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option):hover,
+  a:hover > .round-btn--outline, .product-card:hover .round-btn--outline { color: var(--_fg); }
+  :is(.btn--secondary, .btn--ghost, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option):hover::before,
+  .round-btn:not(.round-btn--light):hover::before, a:hover > .round-btn--outline::before, .product-card:hover .round-btn--outline::before { scale: 1; }
+}
+.btn--secondary:disabled::before, .btn--secondary.is-disabled::before, .round-btn:disabled::before, .round-btn.is-disabled::before { display: none; }
+/* the language switch trigger (open state) keeps its outline; the disc still works */
+
+/* Clickable icon ring (.icon-ring--action: mail/phone rows, header phone on tablet/mobile): same disc, --accent-hover, white glyph stays */
+.icon-ring--action { position: relative; isolation: isolate; overflow: hidden; --_hole: var(--accent-hover); }
+.icon-ring--action::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: var(--radius-full); background: var(--_hole); scale: 0; transition: scale var(--dur-hover-disc) var(--ease-out); }
+.icon-ring--action.icon-ring--on-accent { --_hole: var(--surface-accent); } /* light ring on blue: the mirror of .round-btn--light */
+.icon-ring--action.is-hover::before { scale: 1; }
+.icon-ring--action.icon-ring--on-accent.is-hover { color: var(--accent-contrast); }
+@media (hover: hover) {
+  a:hover > .icon-ring--action::before, a:focus-visible > .icon-ring--action::before, button:hover > .icon-ring--action::before { scale: 1; }
+  a:hover > .icon-ring--action.icon-ring--on-accent, button:hover > .icon-ring--action.icon-ring--on-accent { color: var(--accent-contrast); }
+}
+.icon-ring--action.icon-ring--on-accent { transition: color var(--dur-hover-disc) var(--ease-out); }
+
+/* Card with a single action button (customer 2026-11-13): hovering the WHOLE card puts its button into the hover state (same disc, same colours; the card itself is not a link, no pointer). Same pattern as .link-card:hover .round-btn--light.
+   Instances: .text-card (Products, Documentation), .help-card (catalog help), .catalog__empty (empty state), .cta-block (product "Ready to order?"). New card with one button: add its selector to the :is() list below (and to tools/hover-gate.cjs CARDS). */
+@media (hover: hover) {
+  :is(.text-card, .help-card, .catalog__empty, .cta-block):hover :is(.btn, .round-btn)::before { scale: 1; }
+  :is(.text-card, .help-card, .catalog__empty, .cta-block):hover :is(.btn--light, .round-btn--light) { color: var(--accent-contrast); border-color: var(--accent-contrast); }
+  :is(.text-card, .help-card, .catalog__empty, .cta-block):hover .btn--outline-on-accent { color: var(--accent); }
+  :is(.text-card, .help-card, .catalog__empty, .cta-block):hover :is(.btn--secondary, .btn--ghost) { color: var(--accent-contrast); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(.btn--secondary, .btn--ghost, .round-btn, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option, .icon-ring--action)::before { transition: none; }
+  :is(.btn--secondary, .btn--ghost, .round-btn, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option, .icon-ring--action) { transition-duration: 0s; }
+}

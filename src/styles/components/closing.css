@@ -1,43 +1,36 @@
 /* Closing CTA (.home-closing*): Home, About, Services (shared).
-   Full-width light section (--surface) holding a BLUE panel (--surface-accent) inset by --gutter (the .container edge, same ruler as every block), corners --radius-lg (card radius).
-   Inside: centred AIDA text on top (white), three.js converge-lines scene edge to edge below, clipped by the panel corners */
-.home-closing { background: var(--surface); padding-top: var(--section-sm); padding-bottom: var(--space-8); }
-.home-closing__panel { background: var(--surface-accent); color: var(--text-on-accent); border-radius: var(--radius-lg); overflow: hidden; padding-top: var(--section-lg); }
-.home-closing__body { display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-4); max-width: calc((100% - 11 * var(--grid-gap)) * 10 / 12 + 9 * var(--grid-gap)); margin-inline: auto; } /* exactly 10 of 12 grid cols (2-11), centred: width = 10 cols + 9 gaps; the t-display 80px heading needs the width */
+   Full-width BLUE band (--surface-accent), edge to edge, radius 0 (customer decision 2026-11-12, variant B: sections are bands, only cards/controls are rounded); same on every page.
+   Two columns: AIDA text on the LEFT (white; title cols 1-8, buttons under it, content ruler = --gutter), three.js converge-lines scene on the RIGHT (vertical funnel, full band height) */
+.home-closing { background: var(--surface-accent); color: var(--text-on-accent); padding: 0; }
+.home-closing > .container { max-width: none; padding-inline: 0; }
+.home-closing__panel { --_c: min(calc(100% - 2 * var(--gutter)), var(--container)); --_col: calc((var(--_c) - (var(--grid-cols) - 1) * var(--grid-gap)) / var(--grid-cols)); position: relative; background: var(--surface-accent); color: var(--text-on-accent); border-radius: 0; overflow: hidden; padding-block: var(--section-lg); min-height: calc(6 * var(--space-10) + var(--space-6)); display: flex; align-items: center; } /* band height 800 = 6 x 128 + 32 (>= 1200), text block centred vertically */
+.home-closing__body { text-align: left; max-width: calc(8 * var(--_col) + 7 * var(--grid-gap)); margin-inline: calc((100% - var(--_c)) / 2) auto; position: relative; } /* LEFT block: cols 1-8 of the page grid (--_c = container content box), left edge on the content ruler (x = --gutter on <= 1744, centred container above) */
 .home-closing__body h2, .home-closing__body p { margin: 0; }
 .home-closing__body h2, .home-closing__body p { color: var(--text-on-accent); }
-.home-closing__body .home-closing__sub { margin-bottom: calc(-1 * var(--space-1)); } /* sub-head above the headline: tighter gap (--space-3 total) */
-.home-closing__actions { display: flex; flex-wrap: wrap; justify-content: center; column-gap: var(--space-4); row-gap: var(--space-3); margin-top: var(--space-4); }
-/* Scene (closing-lines.js, three.js converge lines): transparent canvas on the blue panel, strokes --accent-contrast; edge to edge below the buttons, clipped by the panel corners.
-   No WebGL -> the script hides it ([hidden]) and the panel ends after the buttons with the bottom padding --space-8 */
-.home-closing__scene { position: relative; aspect-ratio: 4 / 1; width: 100%; margin-top: var(--space-5); }
+.home-closing__actions { display: flex; flex-wrap: wrap; justify-content: flex-start; column-gap: var(--space-4); row-gap: var(--space-3); }
+/* Scene (closing-lines.js, three.js converge lines + particles, VERTICAL funnel): transparent canvas on the blue band, strokes and dots --accent-contrast; RIGHT block, cols 7-12 of the grid, right edge = the band edge,
+   full band height (800: lines run past the top / bottom edge and are clipped by overflow); the core sits at the middle of the band height.
+   No WebGL -> the script hides it ([hidden]) and the band ends after the buttons */
+.home-closing__scene { position: absolute; top: 0; bottom: 0; right: 0; left: calc((100% - var(--_c)) / 2 + 6 * (var(--_col) + var(--grid-gap))); }
 .home-closing__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity var(--dur-slow) var(--ease-out); }
 .home-closing__canvas.is-ready { opacity: 1; }
 .home-closing__scene[hidden] { display: none; }
-.home-closing__panel:has(.home-closing__scene[hidden]) { padding-bottom: var(--space-8); }
 @media (prefers-reduced-motion: reduce) { .home-closing__canvas { transition: none; } }
-/* Secondary button on the blue panel: outline (white 1px border, transparent fill, white text); hover = the primary light look (white fill, blue text) */
-.home-closing__actions .btn--outline-on-accent { background: transparent; color: var(--text-on-accent); border-color: var(--accent-contrast); }
-.home-closing__actions .btn--outline-on-accent:hover,
-.home-closing__actions .btn--outline-on-accent.is-hover { background: var(--surface-white); color: var(--accent); }
-.home-closing__actions .btn--outline-on-accent:active,
-.home-closing__actions .btn--outline-on-accent.is-pressed { background: var(--surface-muted); color: var(--accent); transform: translateY(1px); }
-
 /* ==========================================================================
-   Responsive closing panel. Tablet: heading across the whole panel (the 10-of-12-columns cap does not apply). Mobile: two buttons in one row (14px labels, arrow icons dropped at <= 560), taller scene.
+   Responsive closing band. Tablet: band 640 (5 x 128), text block across the band, scene on the right (cols 5-8 of 8) full band height. Mobile: scene below the text, full width, height 256 (4 x 64), funnel HORIZONTAL (lines left <-> right through the core); two buttons in one row (14px labels, arrow icons dropped at <= 560).
    ========================================================================== */
 @media (max-width: 1199px) {
-  .home-closing { padding-bottom: var(--space-7); }
-  .home-closing__panel { padding-top: var(--section-lg); }
-  .home-closing__body { max-width: none; padding-inline: var(--space-5); }
-  .home-closing__scene { aspect-ratio: 3 / 1; }
+  .home-closing__panel { min-height: calc(5 * var(--space-10)); }
+  .home-closing__body { max-width: calc(5 * var(--_col) + 4 * var(--grid-gap)); }
+  .home-closing__scene { left: calc((100% - var(--_c)) / 2 + 4 * (var(--_col) + var(--grid-gap))); }
 }
 @media (max-width: 767px) {
-  .home-closing { padding-bottom: var(--space-6); }
-  .home-closing__body { padding-inline: var(--space-4); }
+  .home-closing__panel { padding-bottom: 0; min-height: 0; display: block; }
+  .home-closing__body { max-width: none; margin-inline: var(--gutter); }
+  .home-closing__scene { position: relative; left: auto; right: auto; top: auto; bottom: auto; height: calc(4 * var(--space-8)); margin-top: var(--space-4); } /* full-width strip 256, funnel lies HORIZONTALLY (closing-lines.js, matchMedia <= 767) */
   /* two buttons in ONE row, equal width, one text line; the row wraps to a column only when two labels physically cannot fit side by side (min-width: auto) */
-  .home-closing__actions { flex-direction: row; flex-wrap: wrap; align-items: stretch; column-gap: var(--space-3); width: 100%; margin-top: var(--space-3); }
+  .home-closing__actions { flex-direction: row; flex-wrap: wrap; align-items: stretch; column-gap: var(--space-3); width: 100%; }
   .home-closing__actions .btn { flex: 1 1 0; width: auto; min-width: auto; height: var(--control-md); --_px: var(--space-2); font-size: var(--type-label-size); justify-content: center; }
-  .home-closing__scene { aspect-ratio: 3 / 2; margin-top: var(--space-4); }
+  .home-closing__panel:has(.home-closing__scene[hidden]) { padding-bottom: var(--section-lg); }
 }
 @media (max-width: 560px) { .home-closing__actions .btn .icon { display: none; } }

@@ -1,5 +1,6 @@
 // Motion: smooth scroll (Lenis), scroll-reveal, anchor scrolling. Everything is off under prefers-reduced-motion.
 import Lenis from 'lenis';
+import { initScrollFill } from './utils/scroll-fill.js';
 
 const root = document.documentElement;
 root.classList.add('js');
@@ -118,7 +119,7 @@ function initHashLanding() {
 }
 
 // ---------- Word-by-word reveal of big headings (.t-display with data-reveal / data-reveal-load) ----------
-const HEADINGS = 'h1.t-display, h2.t-display, h3.t-display';
+const HEADINGS = 'h1.t-display:not([data-scroll-fill]), h2.t-display:not([data-scroll-fill]), h3.t-display:not([data-scroll-fill])'; // [data-scroll-fill] (Home About) has its own scroll-scrubbed fill instead of the word reveal
 const WORD_SEL = `${HEADINGS}`; // every big heading; those without data-reveal get one (own IntersectionObserver trigger)
 let wordsReady = false; // true after i18n has written the final text (or after a fallback timeout)
 const deferredWords = [];
@@ -223,8 +224,39 @@ function refresh() {
   });
 }
 
+// ---------- Photo zoom-out: every photo sits in a clip mask; the img inside zooms scale(--photo-zoom-from) -> 1 once, on entering the viewport ----------
+// No opacity or translate reveal for photos. Pre-state (.photo-zoom) is added here, so without JS / under reduced motion the photo is plain scale 1.
+const PHOTO_MASKS = '.photo-panel, .svc-supply, .about-intro__figure, .slide--image, .slide__photo, .people-card__media, .contact-split__media, .hero__media';
+function initPhotoZoom() {
+  if (reduced.matches) return;
+  const masks = [...document.querySelectorAll(PHOTO_MASKS)].filter((m) => m.querySelector('img'));
+  if (!masks.length) return;
+  const play = (m) => {
+    m.classList.add('is-zoomed');
+    const img = m.querySelector('img');
+    const done = () => m.classList.add('is-zoom-done');
+    img?.addEventListener('transitionend', done, { once: true });
+    setTimeout(done, parseFloat(getComputedStyle(root).getPropertyValue('--dur-zoom')) + 500 || 5500);
+  };
+  const zio = 'IntersectionObserver' in window ? new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      const passed = e.boundingClientRect.top < 0 && !e.isIntersecting;
+      if (!passed && !(e.isIntersecting && (e.intersectionRatio >= 0.2 || e.intersectionRect.height >= innerHeight * 0.4))) return;
+      zio.unobserve(e.target);
+      play(e.target);
+    });
+  }, { threshold: [0, 0.2] }) : null;
+  masks.forEach((m) => {
+    m.classList.add('photo-zoom');
+    if (!zio) { m.classList.add('is-zoomed'); return; }
+    zio.observe(m);
+  });
+}
+
+const scrollFills = [];
 function initReveal() {
   if (reduced.matches) return;
+  document.querySelectorAll('[data-scroll-fill]').forEach((el) => scrollFills.push(initScrollFill(el, reduced)));
   if ('IntersectionObserver' in window) {
     io = new IntersectionObserver(onIntersect, { threshold: [0, 0.15], rootMargin: '0px 0px -10% 0px' });
   }
@@ -239,7 +271,7 @@ function initReveal() {
     });
   }, { passive: true });
   window.__revealRefresh = refresh;
-  window.__titleWords = flushWords; // called by i18n.js after every translation pass
+  window.__titleWords = () => { flushWords(); scrollFills.forEach((f) => f.build()); }; // called by i18n.js after every translation pass
   document.querySelectorAll(HEADINGS).forEach((h) => {
     if (!h.hasAttribute('data-reveal') && !h.hasAttribute('data-reveal-load')) h.setAttribute('data-reveal', '');
   });
@@ -251,4 +283,5 @@ function initReveal() {
 initScroll();
 initHashLanding();
 initReveal();
+initPhotoZoom();
 if (reduced.matches) window.__revealRefresh = () => {};

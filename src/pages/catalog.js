@@ -1,7 +1,9 @@
 import { url } from '../utils/url.js';
-import products from '../data/products.json';
+import allProducts from '../data/products.json';
 import { applyLang } from '../i18n.js';
 
+// the catalogue lists only products in stock; on-request items live in the A-Z / category hubs
+const products = allProducts.filter((p) => p.availability === 'in_stock');
 const ICONS = { api: 'molecule', excipients: 'puzzle', 'food-grade': 'leaf' };
 const LABELS = { api: 'catalog.cat_api', excipients: 'catalog.cat_excipients', 'food-grade': 'catalog.cat_food' };
 const FALLBACK = { api: 'API', excipients: 'Excipients', 'food-grade': 'Food Grade' };
@@ -18,17 +20,22 @@ const params = new URLSearchParams(location.search);
 const valid = (c) => c === 'all' || filters.some((f) => f.dataset.category === c);
 const state = { category: valid(params.get('category')) ? params.get('category') : 'all', query: params.get('q') || '', shown: PAGE };
 const nodes = new Map(); // slug -> card element currently in the grid
+// Progressive enhancement: the server-rendered cards (all in-stock products, plain links for crawlers) are adopted as the node pool; the grid is then paged/filtered by JS.
+const pool = new Map([...grid.querySelectorAll('a[data-slug]')].map((a) => [a.dataset.slug, a]));
+grid.replaceChildren();
 
 const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 const card = (p, isNew) => `
-  <a ${isNew ? 'data-reveal' : ''} class="card card--link product-card" href="${url('/product.html')}?slug=${encodeURIComponent(p.slug)}">
+  <a ${isNew ? 'data-reveal' : ''} class="card card--link product-card" href="${url('/products/')}${encodeURIComponent(p.slug)}/" data-slug="${p.slug}">
     <div class="product-card__tags">${p.categories.map((c) => `<span class="chip chip--tag"><svg class="icon icon-text" aria-hidden="true"><use href="${url('/assets/icons/sprite.svg')}#${ICONS[c]}"/></svg><span data-i18n="${LABELS[c]}">${FALLBACK[c]}</span></span>`).join('')}</div>
     <h2 class="product-card__title">${esc(p.name)}</h2>
     <div class="product-card__footer"><span data-i18n="common.know_more">Know more</span><span class="round-btn round-btn--outline"><svg class="icon" aria-hidden="true"><use href="${url('/assets/icons/sprite.svg')}#arrow-up-right"/></svg></span></div>
   </a>`;
 
 function makeCard(p) {
+  const adopted = pool.get(p.slug);
+  if (adopted) { pool.delete(p.slug); adopted.setAttribute('data-reveal', ''); return adopted; }
   const t = document.createElement('template');
   t.innerHTML = card(p, true).trim();
   return t.content.firstElementChild;
@@ -37,7 +44,7 @@ function makeCard(p) {
 // fresh = category switch: whole grid is a new appearance. Otherwise cards already shown keep their DOM nodes,
 // only cards that were not on screen before get data-reveal, and cards no longer matching are removed.
 function render(fresh = false) {
-  const q = state.query.trim().toLowerCase();
+  const q = state.query.trim().toLowerCase().replace(/\s+/g, ' ');
   const list = products.filter((p) => (state.category === 'all' || p.categories.includes(state.category)) && p.name.toLowerCase().includes(q));
   const shown = list.slice(0, state.shown);
   if (fresh) { grid.replaceChildren(); nodes.clear(); }
@@ -66,6 +73,8 @@ function render(fresh = false) {
 function sync() {
   const u = new URL(location.href);
   state.category === 'all' ? u.searchParams.delete('category') : u.searchParams.set('category', state.category);
+  const q = state.query.trim().replace(/\s+/g, ' ');
+  q ? u.searchParams.set('q', q) : u.searchParams.delete('q');
   history.replaceState(null, '', u);
 }
 
@@ -73,9 +82,11 @@ filters.forEach((f) => f.addEventListener('click', () => {
   const changed = f.dataset.category !== state.category;
   state.category = f.dataset.category; state.shown = PAGE; sync(); render(changed);
 }));
-search.addEventListener('input', () => { state.query = search.value; state.shown = PAGE; render(); });
+search.addEventListener('input', () => { state.query = search.value; state.shown = PAGE; sync(); render(); });
 more.addEventListener('click', () => { state.shown += PAGE; render(); });
 search.value = state.query;
+// filtered / searched views are not separate pages: keep them out of the index (canonical already points to the clean URL)
+if (params.get('q') || (params.get('category') && params.get('category') !== 'all')) document.head.insertAdjacentHTML('beforeend', '<meta name="robots" content="noindex,follow">');
 render();
 
 // Tablet / mobile: the category list is a collapsed "Filters" block above the results (the toggle is hidden by CSS on desktop).

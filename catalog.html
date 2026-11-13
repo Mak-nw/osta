@@ -36,13 +36,14 @@
           </div>
         </aside>
         <section class="catalog__results" aria-live="polite">
-          <div class="grid-3" id="catalog-grid"></div>
+          <div class="grid-3" id="catalog-grid"><!--@slot:catalog-list--></div>
           <button class="btn btn--primary btn--md catalog__more" type="button" id="catalog-more" hidden><span data-i18n="catalog.show_more">Show more</span></button>
           <div class="card card--pad-lg catalog__empty" id="catalog-empty" hidden>
             <h2 class="t-h2 t-accent" data-i18n="catalog.empty">No products found</h2>
             <p class="t-body t-muted" data-i18n="catalog.empty_text">Try another name or category, or ask our manager.</p>
             <a class="btn btn--primary btn--md" href="/contact.html"><span data-i18n="common.chat_with_manager">Chat with manager</span> <svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
           </div>
+        <!--@slot:catalog-browse-->
         </section>
       </div>
     </div>

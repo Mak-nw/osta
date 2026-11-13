@@ -1,7 +1,7 @@
 /* Fields: .field > .field__label + (.input|.select|.textarea) [+ .field__error].
    DEFAULT = line field (transparent, bottom border only). Pill variant (.field--pill / .input--pill / .search .input)
    is the old filled control: use it only for compact search/filter inputs and for forms on an accent card (.field--on-accent). */
-.field { display: flex; flex-direction: column; gap: var(--space-1); }
+.field { display: flex; flex-direction: column; gap: var(--field-label-gap); } /* label -> field = one token site-wide */
 .field__label { font-size: var(--type-label-size); line-height: var(--type-label-lh); letter-spacing: var(--type-label-ls); color: var(--text-muted); transition: color var(--dur) var(--ease); }
 .field:focus-within .field__label { color: var(--text-accent); }
 .field--on-accent .field__label, .field--on-accent:focus-within .field__label { color: var(--text-on-accent); }
@@ -96,7 +96,9 @@
 .field--pill .select-wrap__chevron { right: var(--space-3); border: 1px solid currentColor; border-radius: var(--radius-full); }
 .field--on-accent .select-wrap__chevron { color: var(--text-on-accent); }
 
-/* Search (pill): .search > .icon + .input */
-.search { position: relative; }
-.search .icon { position: absolute; left: var(--space-3); top: 50%; translate: 0 -50%; color: var(--accent); pointer-events: none; }
-.search .input { padding-left: calc(var(--space-3) + var(--icon-sm) + var(--space-2)); background: var(--surface-raised); }
+/* Search (pill): .search > .icon + .input. ONE rule for every search field: the icon is centred vertically, so its
+   inset from the left edge = its inset from the top/bottom edge = (--search-h - icon) / 2 (ink to ink, customer 2026-11-13).
+   --search-h = outer height of the field (md 44 default; the hero search overrides it in hero.css). */
+.search { position: relative; --search-h: var(--control-md); --search-inset: calc((var(--search-h) - var(--icon-sm)) / 2); }
+.search .icon { position: absolute; left: var(--search-inset); top: 50%; translate: 0 -50%; color: var(--accent); pointer-events: none; }
+.search .input { padding-left: calc(var(--search-inset) + var(--icon-sm) + var(--space-2)); background: var(--surface-raised); }

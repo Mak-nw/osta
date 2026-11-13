@@ -1,4 +1,4 @@
-/* Photo panel (Home Supply & logistics): a FULL-VIEWPORT-WIDTH photo band (edge to edge, no side padding, no radius, no border; same as Supply on Services)
+/* Photo panel (Home Supply & logistics): a FULL-VIEWPORT-WIDTH photo band (edge to edge, no side padding, no radius, no border; sequential bands, customer decision 2026-11-12; same as Supply on Services)
    with white text DIRECTLY on the photo (customer rule: no overlay, scrim, gradient or tint; the dark sky and the dark forest of the photo carry the white text; contrast measured).
    Content sits in an inner .container.home-grid (.photo-panel__grid): the page grid, so absolute x of the text = page columns.
    Two rows: head (tag + t-display) cols 1-7 at the top (sky; x=32 = container edge); aside (t-body only, no button: customer decision b4317b8a) cols 6-8 pinned to the bottom over the dark forest

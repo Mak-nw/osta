@@ -1,9 +1,9 @@
-// Compact header menu (<= 1199px): burger toggles the dropdown of the floating panel (Services, About Us).
+// Compact header menu (<= 1199px): burger toggles the dropdown of the floating panel (Products, Services, About Us, language).
 // The burger is hidden by CSS from 1200px up, so on desktop this module does nothing visible.
 // Tab order = visual order. Desktop DOM: left{burger, nav{Products, Services, About}}, logo, actions{lang, CTA}.
-// Compact visual order: burger, Products, logo, lang, CTA, then the menu items. No CSS can change Tab order, so while the viewport
-// is <= 1199px the nodes are re-parented: left{burger, Products}, logo, actions{lang, CTA}, nav{Services, About}
-// (grid-areas in nav.css place them; at >= 1200 the desktop order is restored, so desktop is unchanged).
+// Compact: bar = burger, logo, Contact Us; the menu = Products, Services, About Us, then the language switch (EN | DE shown inline, no popover).
+// No CSS can change Tab order, so while the viewport is <= 1199px the language menu is re-parented: left{burger}, logo, actions{CTA},
+// nav{Products, Services, About, lang-menu} (grid-areas in nav.css place them; at >= 1200 the desktop order is restored, so desktop is unchanged).
 import { t } from './i18n.js';
 
 const panel = document.querySelector('[data-header-panel]');
@@ -14,12 +14,13 @@ if (panel && btn) {
   const nav = panel.querySelector('.header__nav');
   const logo = panel.querySelector('.header__logo');
   const actions = panel.querySelector('.header__actions');
-  const primary = panel.querySelector('[data-nav-primary]');
+  const langMenu = panel.querySelector('[data-lang-menu]');
   const compact = matchMedia('(max-width: 1199px)');
 
   const arrange = () => {
-    if (compact.matches) { left.append(btn, primary); panel.append(logo, actions, nav); }
-    else { nav.prepend(primary); left.append(btn, nav); panel.append(logo, actions); }
+    if (compact.matches) { left.append(btn); nav.append(langMenu); panel.append(logo, actions, nav); }
+    else { actions.prepend(langMenu); left.append(btn, nav); panel.append(logo, actions); }
+    langMenu.querySelector('[role="listbox"]').tabIndex = compact.matches ? 0 : -1; // compact: the list is always visible and is the Tab stop
   };
 
   const isOpen = () => btn.getAttribute('aria-expanded') === 'true';

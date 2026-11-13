@@ -1,61 +1,59 @@
-/* Home (index.html): page layout only, every block comes from components (hero--home, link-cards, photo-panel, fact-tile, chips, buttons, closing).
+/* Home (index.html): page layout only, every block comes from components (hero--home, link-cards, photo-panel, quality-cards, chips, buttons, closing).
    One 12-col grid per section (.home-grid), heads above (.section-head: tag over the t-display heading), the "air" = empty columns.
    Compact rhythm: every Home section uses --section-md (96) top/bottom; head -> content row gap --space-7 (48).
-   Light / blue alternation: hero (light) > About (light) > Products (blue) > Services (light) > Supply (photo panel) > Quality (blue) > closing (blue panel). */
+   Rhythm: hero (blue band) > About (blue) > Products (blue) > Services (light) > Supply (photo band) > Quality (light) > closing (blue band); all headings flush left (col 1). */
 .home-section { padding-block: var(--section-md); background: var(--surface); }
 .home-section--accent { background: var(--surface-accent); color: var(--text-on-accent); }
 .home-grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--space-7); align-items: start; }
-.home-aside { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-6); }
-.home-aside > p { margin: 0; }
 
-/* About: only tag + title (two sentences) cols 1-12; no button (customer decision 0de4082e) */
-.home-about__head { grid-column: 1 / -1; grid-row: 1; }
-/* Team photo placeholder (AI-generated, client approval required): top right, 2 cols (11-12), square; its top = top of the head (tag) */
-.home-about__photo { grid-column: 11 / -1; grid-row: 1; width: 100%; aspect-ratio: 1 / 1; height: auto; object-fit: cover; border-radius: var(--radius-lg); display: block; }
+/* About (blue band, white text): tag + title (two sentences) cols 1-8, no photo, no button (customer decisions 0de4082e, 2026-11-12) */
+.home-about__head { grid-column: 1 / span 8; grid-row: 1; }
+.home-about { padding-block: var(--space-8); } /* customer 2026-11-12: text sits higher (96 -> --space-8) */
+.home-about__sentence { display: block; }
+.home-about__sentence + .home-about__sentence { margin-top: var(--space-6); } /* bigger gap between the two sentences */
+.home-about__head h2 { text-wrap: wrap; } /* greedy fill: lines run to the right edge of col 8 (the .t-display balance would narrow them); the hard <br> splits the two sentences, a no-break space keeps the last two words together (no orphan) */
+/* Scroll-scrubbed fill (motion.js + utils/scroll-fill.js): words are muted (--text-on-accent at 40%) and go to full white as --p (0..1, set per word on scroll) grows. Inline spans: line breaks are identical to plain text. Without JS / reduced motion the .is-fill class is never set, so the text is plain white. */
+.home-about__head h2.is-fill { --fill-base: 40%; }
+.home-about__head h2.is-fill-active .fill-word { will-change: color; }
+.home-about__head h2.is-fill .fill-word { color: color-mix(in srgb, var(--text-on-accent) calc(var(--fill-base) + (100% - var(--fill-base)) * var(--p, 0)), transparent); }
 
-/* Products (blue): row 1: title block (tag + h2) cols 6-12 (customer c7b686dd); row 2: 4 portrait cards (4 x 3 cols = full width): 3 category link cards + a white text card (summary + View all, customer df7f1d78) */
-.home-products__head { grid-column: 6 / -1; grid-row: 1; }
-.home-products__cards { grid-column: 1 / -1; grid-row: 2; }
+/* Products (blue): row 1: title block (tag + h2) cols 1-7, left edge (customer 2026-11-12: all headings flush left); row 2: 4 portrait cards (4 x 3 cols = full width): 3 category link cards + a white text card (summary + View all, customer df7f1d78) */
+.home-products { padding-block-start: var(--space-8); padding-block-end: var(--space-10); } /* top 64 unchanged; bottom 2x (64 -> 128 = --space-10), customer 2026-11-12. No tablet/mobile override exists: 128 on all breakpoints. Earlier: no separate head block; like About (96 -> --space-8) */
+.home-products__cards { grid-column: 1 / -1; grid-row: 1; }
+
+/* Sequential bands (customer decision 2026-11-12, variant B): EVERY section is a full-width band (edge to edge, radius 0, no gaps between bands); only cards, tiles and controls inside are rounded.
+   Bands never repeat a colour: hero (blue) > About (blue, customer decision: no photo) > Products (blue) > Services (light) > Supply (photo) > Quality (light) > closing (blue band, components/closing.css, shared) > footer. */
 
 /* Services: the shared How-we-work split (components/how-split.css): sticky tag + title + text + button left, 4 step rows right; the section padding (--section-md) comes from .home-section */
 
-/* Supply & logistics: the photo panel is full viewport width (edge to edge); the section adds no space around it, so it butts directly against the neighbouring sections */
+/* Supply & logistics: the photo band is full viewport width (edge to edge, no radius); the section adds no padding of its own */
 .home-supply { padding-block: 0; background: var(--surface); }
 
-/* Quality (blue): title cols 1-9; row 2: two fact tiles cols 1-4 and 5-8 | summary + button cols 10-12, bottom-aligned with the tiles */
-.home-quality__head { grid-column: 1 / span 9; grid-row: 1; }
-.home-quality__tile { grid-row: 2; grid-column: span 4; align-self: stretch; }
-.home-quality__tile:nth-of-type(1) { grid-column: 1 / span 4; }
-.home-quality__tile:nth-of-type(2) { grid-column: 5 / span 4; }
-.home-quality__aside { grid-column: 10 / span 3; grid-row: 2; align-self: end; }
+/* Quality (LIGHT band, so two blue bands never touch): one row of 3 square cards (4 cols each): text card + EudraGMDP + GDP (components/cards.css .quality-*); no separate head block, padding like Products */
+.home-quality { padding-block: var(--space-8); background: var(--surface); color: var(--text); }
+.home-quality__cards { grid-column: 1 / -1; grid-row: 1; }
 
 /* ==========================================================================
-   Responsive Home. Tablet (8 columns): heads and text full width, cards 2 x 2.
+   Responsive Home. Tablet (8 columns): heads and text full width, cards 2 x 2 (Quality: text card full width, the two fact cards under it).
    Mobile (4 columns): one column; Products cards 1 per row (aspect released, min-height instead), Quality tiles stacked.
    ========================================================================== */
+/* Quality text card = 1:1 (the row of three squares); Products row sets 3:4 in link-list.css */
+:where(.home-quality__cards) .text-card { aspect-ratio: 1 / 1; }
 @media (max-width: 1199px) {
   .home-grid { row-gap: var(--space-6); }
-  /* About: the square team photo sits ABOVE the heading (left edge), smaller than on desktop, so it never touches the h2 */
-  .home-about__photo { grid-column: 1 / span 2; grid-row: 1; width: calc(var(--space-9) * 1.5); }
-  .home-about__head { grid-row: 2; }
-  .home-products__head, .home-quality__head { grid-column: 1 / -1; }
-  .link-cards { row-gap: var(--grid-gap); }
+  .home-about__head { grid-column: 1 / -1; } /* tablet / mobile: headings full width, left */
+  .link-cards, .quality-cards { row-gap: var(--grid-gap); }
   .link-cards > li, .link-cards--3 > li { grid-column: span 4; }
-  .home-quality__tile, .home-quality__tile:nth-of-type(1), .home-quality__tile:nth-of-type(2) { grid-row: 2; }
-  .home-quality__tile:nth-of-type(1) { grid-column: 1 / span 4; }
-  .home-quality__tile:nth-of-type(2) { grid-column: 5 / span 4; }
-  .home-quality__aside { grid-column: 1 / span 6; grid-row: 3; align-self: start; }
+  .home-quality__cards > li { grid-column: span 4; }
+  .home-quality__cards > li:first-child { grid-column: 1 / -1; }  /* text card full width, the two fact cards under it */
+  :where(.home-quality__cards) .text-card { aspect-ratio: auto; flex-direction: row; align-items: flex-end; flex-wrap: wrap; justify-content: space-between; }
+  :where(.home-quality__cards) .text-card__body { flex: 1 1 60%; max-width: 70ch; }
 }
 @media (max-width: 767px) {
   .home-grid { row-gap: var(--space-5); }
-  .home-about__photo { width: var(--space-9); }
-  .home-quality__aside { grid-column: 1 / -1; }
   .link-cards > li, .link-cards--3 > li { grid-column: 1 / -1; }
   .link-cards--3 .link-card { aspect-ratio: auto; min-height: 340px; }
-  .link-card-note { aspect-ratio: auto; min-height: 0; }
-  .home-quality__tile:nth-of-type(1), .home-quality__tile:nth-of-type(2) { grid-column: 1 / -1; }
-  .home-quality__tile:nth-of-type(1) { grid-row: 2; }
-  .home-quality__tile:nth-of-type(2) { grid-row: 3; }
-  .home-quality__aside { grid-row: 4; }
-  .home-aside .btn, .link-card-note .btn { width: 100%; }
+  .home-quality__cards > li, .home-quality__cards > li:first-child { grid-column: 1 / -1; }
+  .home-quality__cards .quality-card { aspect-ratio: auto; min-height: 440px; }
+  .home-quality__cards .quality-card__text { min-height: 2lh; } /* both cards reserve 2 text lines, so the art zones (and the shared floor) have the same height */
 }

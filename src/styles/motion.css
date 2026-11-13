@@ -55,11 +55,18 @@ a:hover > .round-btn .icon { transform: scale(1.1); }
   [data-reveal="scale-in"].is-revealed { animation-name: motion-scale; }
   [data-reveal-load] { animation-duration: var(--dur-slow); }
 
+  /* ---------- Photo zoom-out (all photos): NO opacity/translate reveal; the clip mask (overflow hidden + radius) stays still,
+     the img inside starts at scale(--photo-zoom-from) and settles to 1 over --dur-zoom once the mask enters the viewport.
+     .photo-zoom is added by motion.js (so without JS the photo is simply scale 1); transform sits on the img, never on the mask. */
+  html.js .photo-zoom :is(img, picture, .photo-zoom__fill) { transform: scale(var(--photo-zoom-from)); transform-origin: center; will-change: transform; }
+  html.js .photo-zoom.is-zoomed :is(img, picture, .photo-zoom__fill) { transform: none; transition: transform var(--dur-zoom) var(--ease-out); }
+  html.js .photo-zoom.is-zoom-done :is(img, picture, .photo-zoom__fill) { will-change: auto; }
+
   /* ---------- Big headings: word-by-word reveal (h1/h2/h3.t-display) ----------
      The block itself does not animate (no double motion): hidden until motion.js has split it into words,
      then .is-revealed plays each .word__inner (translateY + opacity) with a per-word stagger. */
   html.js .t-display[data-reveal], html.js .t-display[data-reveal-load] { transform: none; animation: none; }
-  html.js :is(h1, h2, h3).t-display:not(.is-split) { opacity: 0; }
+  html.js :is(h1, h2, h3).t-display:not(.is-split):not([data-scroll-fill]) { opacity: 0; }
   .t-display.is-split { --word-stagger: calc(var(--stagger) * 1.2); }
   .t-display .word {
     display: inline-block; overflow: clip;
