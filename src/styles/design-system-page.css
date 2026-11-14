@@ -79,3 +79,6 @@
 .ds-control--sm { height: var(--control-sm); }
 .ds-control--md { height: var(--control-md); }
 .ds-control--lg { height: var(--control-lg); }
+
+/* Demo grids stack on phones: a 3-column demo of the product card collapsed to ~11 px (the card width followed its content), so the card was taller than the screen. */
+@media (max-width: 767px) { .ds-body .grid-3 { grid-template-columns: minmax(0, 1fr); } }

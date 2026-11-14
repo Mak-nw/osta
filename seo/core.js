@@ -10,7 +10,6 @@ const readJson = (p) => JSON.parse(readFileSync(p, 'utf8'));
 const CATS = ['api', 'excipients', 'food-grade'];
 const CAT_ICON = { api: 'molecule', excipients: 'puzzle', 'food-grade': 'leaf' };
 const CAT_KEY = { api: 'catalog.cat_api', excipients: 'catalog.cat_excipients', 'food-grade': 'catalog.cat_food' };
-const AZ_SPECIAL = '#';
 
 export function readSiteUrl() { return readJson(resolve(ROOT, 'site.config.json')).siteUrl.replace(/\/+$/, ''); }
 export function siteBasePath() { return new URL(readSiteUrl() + '/').pathname; }
@@ -66,7 +65,6 @@ export function loadSite({ base = '/' } = {}) {
 export const langPath = (path, lang) => (lang === 'de' ? (path === '/' ? '/de/' : '/de' + path) : path);
 export const outFile = (urlPath) => (urlPath.endsWith('/') ? urlPath.slice(1) + 'index.html' : urlPath.slice(1));
 const catPath = (c) => `/products/category/${c}/`;
-const AZ_PATH = '/products/a-z/';
 
 function pageLastmod(ctx, e) {
   if (e.reg?.lastmod) return e.reg.lastmod;
@@ -97,7 +95,7 @@ function enumeratePages(ctx) {
 }
 
 export function hubProducts(ctx, hub) {
-  return ctx.products.filter((p) => p.indexable && (hub === 'az' || p.categories.includes(hub)));
+  return ctx.products.filter((p) => p.indexable && (p.categories.includes(hub)));
 }
 const sortName = (a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' });
 
@@ -271,8 +269,8 @@ export function rewriteLinks(html, { lang, base, dePaths }) {
 }
 
 // ------------------------------------------------------------------ slots / pages
-const icon = (id, cls = 'icon icon-text') => `<svg class="${cls}" aria-hidden="true"><use href="/assets/icons/sprite.svg#${id}"/></svg>`;
-const chip = (ctx, cat, lang, cls = 'chip--tag') => `<span class="chip ${cls}">${icon(CAT_ICON[cat])}<span data-i18n="${CAT_KEY[cat]}">${esc(ctx.get(CAT_KEY[cat], lang))}</span></span>`;
+const icon = (id, cls = 'icon icon-text') => `<span class="icon-box${/\bicon-text\b/.test(cls) ? ' icon-box--lg' : ''}"><svg class="${cls}" aria-hidden="true"><use href="/assets/icons/sprite.svg#${id}"/></svg></span>`; // ICON-A: every icon sits in a box (components/icon-box.css)
+const chip = (ctx, cat, lang, cls = 'chip--tag') => `<span class="chip ${cls}">${icon(CAT_ICON[cat]).replace('icon-box--lg', 'icon-box--ink')}<span data-i18n="${CAT_KEY[cat]}">${esc(ctx.get(CAT_KEY[cat], lang))}</span></span>`;
 
 // customer 2026-11-13: a list card shows NO availability mark (the catalogue lists only in-stock items; the mark belongs on non-catalogue pages only)
 export function productCard(ctx, p, lang, { level = 2 } = {}) {
@@ -286,7 +284,7 @@ export function productCard(ctx, p, lang, { level = 2 } = {}) {
 // one definition of the product CTA (customer 2026-11-13): rendered twice on a product page, under the intro (slot cta-top) and under the info tiles (slot cta)
 function productCta(ctx, p, lang) {
   const key = p.availability === 'in_stock' ? 'product.cta_quote' : 'product.cta_sourcing';
-  return `<a class="btn btn--primary btn--lg btn--split" href="/contact.html?product=${encodeURIComponent(p.slug)}"><span data-i18n="${key}">${esc(ctx.get(key, lang))}</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>`;
+  return `<a class="btn btn--primary btn--lg btn--split" href="/contact.html?product=${encodeURIComponent(p.slug)}"><span data-i18n="${key}">${esc(ctx.get(key, lang))}</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a>`;
 }
 
 function specRows(ctx, p, lang) {
@@ -311,7 +309,7 @@ function related(ctx, p, lang) {
   return `<section class="section--sm product-related" aria-labelledby="related-title"><div class="container stack stack--5">
     <div class="section-head"><h2 class="t-h2 t-accent" id="related-title" data-i18n="product.related">${esc(h)}</h2></div>
     <div class="grid-3">${pick.map((q) => productCard(ctx, q, lang, { level: 3 })).join('\n')}</div>
-    <a class="btn btn--secondary btn--md" href="/catalog.html"><span data-i18n="common.all_products">${esc(ctx.get('common.all_products', lang))}</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
+    <a class="btn btn--secondary btn--md" href="/catalog.html"><span data-i18n="common.all_products">${esc(ctx.get('common.all_products', lang))}</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a>
   </div></section>`;
 }
 
@@ -328,23 +326,12 @@ function fill(html, slots) {
 function hubSlots(ctx, e) {
   const lang = e.lang; const list = hubProducts(ctx, e.hub).sort(sortName);
   const t = (k) => ctx.get(k, lang); const reg = e.reg[lang] || e.reg.en;
-  const nav = [['/products/a-z/', t('hub.az_nav')], ...CATS.map((c) => [catPath(c), t(CAT_KEY[c])]), ['/catalog.html', t('hub.in_stock_nav')]]
-    .filter(([href]) => href !== e.reg.path)
-    .map(([href, label]) => `<a class="btn btn--secondary btn--md" href="${href}"><span>${esc(label)}</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>`).join('');
-  let listHtml;
-  if (e.hub === 'az') {
-    const letters = [...new Set(list.map((p) => (/^[A-Z]/i.test(p.name) ? p.name[0].toUpperCase() : AZ_SPECIAL)))].sort();
-    const jump = `<nav class="row row--2 row--wrap" aria-label="${escAttr(t('hub.az_jump'))}">${letters.map((l) => `<a class="btn btn--secondary btn--sm" href="#letter-${l === AZ_SPECIAL ? '0' : l}">${l}</a>`).join('')}</nav>`;
-    const secs = letters.map((l) => {
-      const items = list.filter((p) => (/^[A-Z]/i.test(p.name) ? p.name[0].toUpperCase() : AZ_SPECIAL) === l);
-      return `<section class="stack stack--5" id="letter-${l === AZ_SPECIAL ? '0' : l}" aria-labelledby="letter-title-${l === AZ_SPECIAL ? '0' : l}"><h2 class="t-h2 t-accent" id="letter-title-${l === AZ_SPECIAL ? '0' : l}">${l}</h2><div class="grid-3">${items.map((p) => productCard(ctx, p, lang, { level: 3 })).join('\n')}</div></section>`;
-    }).join('\n');
-    listHtml = `<div class="stack stack--7">${jump}${secs}</div>`;
-  } else {
-    listHtml = `<h2 class="t-h2 t-accent" id="hub-list-title">${esc(ctx.tt(lang, 'hub.list_title', { n: list.length, category: t(CAT_KEY[e.hub]) }))}</h2><div class="grid-3">${list.map((p) => productCard(ctx, p, lang, { level: 3 })).join('\n')}</div>`;
-  }
+  const nav = [...CATS.map((c) => [`/catalog.html?category=${c}`, t(CAT_KEY[c]), c]), ['/catalog.html', t('hub.in_stock_nav')]]
+    .filter(([, , c]) => c !== e.hub)
+    .map(([href, label]) => `<a class="btn btn--secondary btn--md" href="${href}"><span>${esc(label)}</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a>`).join('');
+  const listHtml = `<h2 class="t-h2 t-accent" id="hub-list-title">${esc(ctx.tt(lang, 'hub.list_title', { n: list.length, category: t(CAT_KEY[e.hub]) }))}</h2><div class="grid-3">${list.map((p) => productCard(ctx, p, lang, { level: 3 })).join('\n')}</div>`;
   return {
-    h1: esc(reg.h1 || reg.name || reg.title), intro: esc(reg.intro || reg.description), nav, list: e.hub === 'az' ? listHtml : `<div class="stack stack--5">${listHtml}</div>`,
+    h1: esc(reg.h1 || reg.name || reg.title), intro: esc(reg.intro || reg.description), nav, list: `<div class="stack stack--5">${listHtml}</div>`,
     crumb: esc(reg.name || reg.h1),
   };
 }
@@ -465,7 +452,6 @@ ${['about', 'services', 'catalog', 'faq', 'contact'].map((k) => line(k, reg[k].p
 - [Imprint](${abs('/impressum.html')}): legal details
 
 ## Product hubs
-- [A–Z index](${abs('/products/a-z/')}): all products with availability status
 ${CATS.map((cat) => `- [${get(CAT_KEY[cat])}](${abs(catPath(cat))}): ${reg['hub-' + cat].en.description}`).join('\n')}
 
 ## Products in stock

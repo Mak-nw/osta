@@ -1,0 +1,32 @@
+/* ==========================================================================
+   ICON BOX (customer 2026-11-14, rules ICON-A..D): the ONE definition.
+   A. every vector icon sits in a box (span.icon-box > svg.icon); all boxes of one SET are equal.
+   B. box = tallest icon of the set + --icon-gap (2-4 px), calculated from the icon size token, never typed.
+        set A  .icon-box        icon --icon-sm (16)        box --icon-box-sm
+        set B  .icon-box--lg    icon --icon-lg (24)        box --icon-box-lg
+        set T  .icon-box--ink   icons beside text (contact rows, chips, filters): visible glyph = text ink height (ICON-C), box = glyph + gap; one box per font size and ink kind
+   Layout stays as before the box existed: the negative margin removes the gap from the flow (the box is a larger hit/alignment frame around the glyph).
+   C. in a row with text the box top/bottom = glyph top/bottom of the text (set T; the ring that holds the box is moved by --text-ink-shift so it stays concentric).
+   D. the box may sit in a ring/button (.icon-ring, .round-btn, .select-wrap__chevron): ICON-C applies to the INNER box.
+   Gates: tools/icon-box-gate.cjs (A/B), tools/icon-text-align-gate.cjs (C/D).
+   ========================================================================== */
+.icon-box { --_icon: var(--icon-sm); --_box: var(--icon-box-sm); display: inline-grid; place-items: center; flex: none; box-sizing: border-box; width: var(--_box); height: var(--_box); margin: calc((var(--_icon) - var(--_box)) / 2); color: inherit; line-height: 0; pointer-events: none; } /* decorative: a click/hover on the box reaches the link, button or stretched card CTA below */
+.icon-box--lg { --_icon: var(--icon-lg); --_box: var(--icon-box-lg); }
+.icon-box--ink { --_k: var(--ink-k-d); --_sh: var(--ink-shift-k-d); --_icon: calc(1em * var(--_k)); --_box: calc(var(--_icon) + var(--icon-gap)); } /* visible glyph = the text ink; box = glyph + gap (ICON-B) */
+.icon-box--ink { display: inline-flex; align-items: center; justify-content: center; } /* flex: a glyph larger than the box overflows on both sides (grid would pin it to the start) */
+/* the VISIBLE glyph (ink incl. stroke) must fill the box minus the gap: sprite glyphs fill only 60-75 % of their 24 viewBox, so the glyph is scaled by 1 / --ink-f (ink height / svg height, measured at 100 px)
+   and nudged by --ink-dy (ink centre offset / svg size) so that the ink, not the empty viewBox, sits centred in the box */
+.icon-box--ink > .icon { --ink-f: 1; --ink-dy: 0; width: var(--_icon); height: var(--_icon); overflow: visible; }
+.icon-box--ink > .icon use { transform-box: view-box; transform-origin: 50% 50%; transform: translateY(calc(-24px * var(--ink-dy))) scale(calc(1 / var(--ink-f))); } /* the glyph is scaled INSIDE the svg: the svg and its box keep their layout size (no scrollWidth overflow) */
+.icon-box--ink > .icon:has(use[href$="#phone"]) { --ink-f: .73; }
+.icon-box--ink > .icon:has(use[href$="#mail"]) { --ink-f: .60; }
+.icon-box--ink > .icon:has(use[href$="#molecule"]) { --ink-f: .75; --ink-dy: -.01; }
+.icon-box--ink > .icon:has(use[href$="#leaf"]) { --ink-f: .65; }
+.icon-box--ink > .icon:has(use[href$="#puzzle"]) { --ink-f: .75; --ink-dy: -.052; }
+.icon-box--ink > .icon:has(use[href$="#grid"]) { --ink-f: .69; }
+.icon-box--ink:not(.icon-ring > *) { translate: 0 calc(1em * var(--_sh)); } /* bare in a text row (chip, filter): centred on the ink, not on the line box */
+/* set T: ONE size per font size for every glyph (ICON-A) = ink of the FACE (ascender top ... descender bottom), whatever the string; inside a ring the inner box is shifted onto that ink, the ring itself is not moved */
+.icon-ring > .icon-box--ink { translate: 0 calc(1em * var(--ink-shift-k-d)); } /* the circle stays concentric with its row (card padding, hit area); only the INNER box is moved onto the text ink (ICON-D) */
+/* hiding an icon hides its box (the svg selectors in nav.css / closing.css address the glyph) */
+@media (max-width: 1199px) { .header__cta > .icon-box { display: none; } }
+@media (max-width: 560px) { .home-closing__actions .btn > .icon-box { display: none; } }

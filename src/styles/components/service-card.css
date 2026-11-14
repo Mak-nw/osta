@@ -3,7 +3,7 @@
    with no JS measuring; the art row = the art div aspect ratio (scene scale follows the slot width). Surface: light card (--surface-raised) on a light section; .svc-card--on-accent on the BLUE section
    (--surface-card-on-accent, white text and scene lines, customer 2026-11-13). No outline, no shadow, not clickable. */
 .svc-cards { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); grid-template-rows: auto auto; column-gap: var(--grid-gap); row-gap: var(--grid-gap); align-items: stretch; }
-.svc-card { grid-column: span 3; grid-row: span 2; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: subgrid; row-gap: 0; box-sizing: border-box; min-width: 0; padding: var(--space-5); background: var(--surface-raised); color: var(--text); border: 0; border-radius: var(--radius-lg); }
+.svc-card { grid-column: span 3; grid-row: span 2; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: subgrid; row-gap: 0; box-sizing: border-box; min-width: 0; padding: var(--card-padding); background: var(--surface-raised); color: var(--text); border: 0; border-radius: var(--radius-lg); }
 .svc-card > * { margin: 0; }
 .svc-card__art { position: relative; display: grid; place-items: center; min-width: 0; min-height: 0; aspect-ratio: 8 / 7; overflow: hidden; } /* decorative, aria-hidden */
 .svc-card__text { display: flex; flex-direction: column; gap: var(--space-4); justify-content: flex-end; min-width: 0; min-height: 0; padding-top: var(--card-inner-gap); }

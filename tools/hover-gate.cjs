@@ -113,6 +113,17 @@ const allowFor = async (page, desc, idx, scope, key) => { /* allowlist match by 
 async function testElement(page, d, scope, key) {
   if (d.kind === 'demo') return { status: 'N/A', kind: 'demo', note: 'forced-state demo in design-system (.is-hover/.is-focus/.is-pressed/.is-disabled) or disabled control: not interactive' };
   if (d.state) return { status: 'N/A', kind: d.kind, note: 'forced-state specimen (.is-hover/.is-pressed/.is-focus/.is-disabled, design-system page) or disabled: no real hover to test' };
+  /* LOGO (rule U11, customer 2026-11-14): hover = no plate. Real hover: background, border, outline, box-shadow, text-decoration, opacity, bbox of the link and of the image are unchanged; no ::before/::after box; U12: the logo's own fill (img background-color under the alpha mask) MUST differ rest vs hover; only colour/fill may differ. */
+  if (/(^|\.)(header__logo|footer__logo)(\.|$)/.test(d.sig)) {
+    const LG = (i) => page.evaluate((scope, i) => { const root = scope ? document.querySelector(scope) : document; const el = [...root.querySelectorAll('a,button,[role=button],[role=option],[role=tab],summary,input[type=submit]')][i]; el.scrollIntoView({ block: 'center', behavior: 'instant' }); const s = getComputedStyle(el); const b = el.getBoundingClientRect(), ib = (el.querySelector('img,svg') || el).getBoundingClientRect(); const pe = (p) => { const c = getComputedStyle(el, p); return c.content !== 'none' && c.content !== 'normal' ? c.content + '|' + c.backgroundColor + '|' + c.width : null; };
+      return { bg: s.backgroundColor, bgImg: s.backgroundImage, border: ['Top', 'Right', 'Bottom', 'Left'].map((k) => s['border' + k + 'Width'] + s['border' + k + 'Style'] + s['border' + k + 'Color']).join(), outline: s.outlineStyle + s.outlineWidth + s.outlineColor, shadow: s.boxShadow, td: s.textDecorationLine, op: s.opacity, filter: s.filter, cursor: s.cursor, before: pe('::before'), after: pe('::after'), rect: [b.x, b.y, b.width, b.height].map((v) => +v.toFixed(2)).join(), img: [ib.x, ib.y, ib.width, ib.height].map((v) => +v.toFixed(2)).join(), color: s.color, fill: getComputedStyle(el.querySelector('img,svg') || el).backgroundColor, hit: [b.width, b.height] }; }, scope, i);
+    const a0 = await LG(d.i); await page.mouse.move(a0.rect.split(',')[0] * 1 + a0.hit[0] / 2, a0.rect.split(',')[1] * 1 + a0.hit[1] / 2); await settle(page); await new Promise((r) => setTimeout(r, 900));
+    const a1 = await LG(d.i); const hovered = await page.evaluate((scope, i) => { const root = scope ? document.querySelector(scope) : document; return [...root.querySelectorAll('a,button,[role=button],[role=option],[role=tab],summary,input[type=submit]')][i].matches(':hover'); }, scope, d.i);
+    await page.mouse.move(1, 1); await new Promise((r) => setTimeout(r, 120));
+    const same = (k) => a0[k] === a1[k];
+    const res = { kind: 'logo', checks: { hovered, noBackground: same('bg') && same('bgImg'), noBorder: same('border'), noOutline: same('outline'), noShadow: same('shadow'), noDecoration: same('td'), noFade: same('op') && same('filter'), noPseudoBox: !a1.before && !a1.after, fillChanges: a0.fill !== a1.fill, noShift: same('rect') && same('img'), pointer: a1.cursor === 'pointer', hit44: a1.hit[0] >= 44 && a1.hit[1] >= 44 }, info: { rest: a0, hover: a1 } };
+    res.status = Object.values(res.checks).every(Boolean) ? 'PASS' : 'FAIL'; return res;
+  }
   if (d.kind === 'card') return { status: 'N/A', kind: 'card', note: 'card / media link (whole-block link, not button-like): hover owned by the component, listed in the inventory' };
   const m0 = await page.evaluate(MEASURE(scope, d.i));
   if (!m0.top) return { status: 'SKIP', note: 'occluded' };
@@ -172,7 +183,7 @@ async function testElement(page, d, scope, key) {
   return res;
 }
 
-/* Cards with one action button: hovering the card BODY (not the button) must put the button into the disc hover state. Keep in sync with the :is() list in buttons.css. */
+/* Cards with one action button = WHOLE CARD is the button (customer 2026-11-14, stretched link): a point on the card BODY (not on the button) must (a) resolve to the CTA (its ::after) or, for <a>-cards, to the card link, (b) show cursor:pointer, (c) put the button into the disc hover state. Keep in sync with the :is() lists in buttons.css / cards.css. */
 const CARDS = ['.text-card', '.catalog__empty', '.product-card', '.link-card'];
 async function testCards(page, key) {
   const out = [];
@@ -185,11 +196,11 @@ async function testCards(page, key) {
     await page.mouse.move(1, 1); await new Promise((r) => setTimeout(r, 150));
     const before = await page.evaluate((sel, i) => { const b = document.querySelectorAll(sel)[i].querySelector('.btn,.round-btn'); const s = getComputedStyle(b, '::before'); return s.scale === 'none' ? 1 : parseFloat(s.scale); }, CARDS.join(','), i);
     await page.mouse.move(info.x, info.y); await settle(page);
-    const after = await page.evaluate((fnSrc, sel, i, x, y) => { const F = eval('(' + fnSrc + ')')(); const c = document.querySelectorAll(sel)[i]; const b = c.querySelector('.btn,.round-btn'); const t = document.elementFromPoint(x, y); const s = getComputedStyle(b, '::before'); return { scale: s.scale === 'none' ? 1 : parseFloat(s.scale), onBtn: b.contains(t), cursor: t ? getComputedStyle(c).cursor : '', dur: F.timing(s, 'scale'), own: F.timing(getComputedStyle(b), 'color'), tok: F.token() }; }, fnSrc, CARDS.join(','), i, info.x, info.y);
+    const after = await page.evaluate((fnSrc, sel, i, x, y) => { const F = eval('(' + fnSrc + ')')(); const c = document.querySelectorAll(sel)[i]; const b = c.querySelector('.btn,.round-btn'); const t = document.elementFromPoint(x, y); const s = getComputedStyle(b, '::before'); return { scale: s.scale === 'none' ? 1 : parseFloat(s.scale), onBtn: c.matches('a') ? c.contains(t) : b.contains(t), cursor: t ? getComputedStyle(t).cursor : '', dur: F.timing(s, 'scale'), own: F.timing(getComputedStyle(b), 'color'), tok: F.token() }; }, fnSrc, CARDS.join(','), i, info.x, info.y);
     await page.mouse.move(1, 1);
     const ctk = await page.evaluate(`(${fnSrc})().tokens()`); const colorMoves = !!after.own; const speedOK = !!after.dur && Math.abs(after.dur.dur - after.tok) <= 1 && after.dur.delay === 0 && !!after.own && Math.abs(after.own.dur - ctk.cdur) <= 1 && ctk.cdelays.some((d) => Math.abs(after.own.delay - d) <= 1); /* ONE speed: --dur-hover-disc, delay 0 */
-    const pass = before < 0.05 && after.scale > 0.95 && !after.onBtn && speedOK;
-    out.push({ page: key.page, w: key.w, scene: 'card-hover', el: info.sig + ' > button (hover on card body)', kind: 'card-btn', status: pass ? 'PASS' : 'FAIL', checks: { cardHoverDisc: before < 0.05 && after.scale > 0.95 && !after.onBtn, discDuration: speedOK }, info: { before, after: after.scale, pointOnButton: after.onBtn, disc: { token: after.tok, before: after.dur, color: after.own } } });
+    const pass = before < 0.05 && after.scale > 0.95 && after.onBtn && after.cursor === 'pointer' && speedOK;
+    out.push({ page: key.page, w: key.w, scene: 'card-hover', el: info.sig + ' > button (hover/click on card body = CTA)', kind: 'card-btn', status: pass ? 'PASS' : 'FAIL', checks: { cardHoverDisc: before < 0.05 && after.scale > 0.95, wholeCardIsCta: after.onBtn, cardPointer: after.cursor === 'pointer', discDuration: speedOK }, info: { before, after: after.scale, pointOnButton: after.onBtn, disc: { token: after.tok, before: after.dur, color: after.own } } });
   }
   return out;
 }

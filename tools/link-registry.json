@@ -1,0 +1,112 @@
+{
+  "_readme": "Approval registry of internal link targets (customer rule 2026-11-14: links may lead ONLY to resources created/approved by the customer). Target = path[?category=x] without #hash. approved:true = allowed; approved:false = forbidden (gate FAIL); a target not listed here = FAIL. `pending` = awaiting customer approval: gate reports PENDING (not FAIL). Edited by the orchestrator only; the customer approves the registry.",
+  "approved": [
+    {
+      "target": "/",
+      "approved": true,
+      "note": "home"
+    },
+    {
+      "target": "/about.html",
+      "approved": true,
+      "note": "menu page"
+    },
+    {
+      "target": "/services.html",
+      "approved": true,
+      "note": "menu page"
+    },
+    {
+      "target": "/catalog.html",
+      "approved": true,
+      "note": "catalog (also ?q=)"
+    },
+    {
+      "target": "/faq.html",
+      "approved": true,
+      "note": "menu page"
+    },
+    {
+      "target": "/contact.html",
+      "approved": true,
+      "note": "menu page"
+    },
+    {
+      "target": "/privacy.html",
+      "approved": true,
+      "note": "legal"
+    },
+    {
+      "target": "/terms.html",
+      "approved": true,
+      "note": "legal"
+    },
+    {
+      "target": "/data-processing.html",
+      "approved": true,
+      "note": "legal"
+    },
+    {
+      "target": "/impressum.html",
+      "approved": true,
+      "note": "legal"
+    },
+    {
+      "target": "/404.html",
+      "approved": true,
+      "note": "404 page (language switch on the 404 itself)"
+    },
+    {
+      "target": "/catalog.html?category=api",
+      "approved": true,
+      "note": "catalog filter"
+    },
+    {
+      "target": "/catalog.html?category=excipients",
+      "approved": true,
+      "note": "catalog filter"
+    },
+    {
+      "target": "/catalog.html?category=food-grade",
+      "approved": true,
+      "note": "catalog filter"
+    },
+    {
+      "target": "/products/category/api/",
+      "approved": false,
+      "note": "generated hub: not a link target (customer 2026-11-14)"
+    },
+    {
+      "target": "/products/category/excipients/",
+      "approved": false,
+      "note": "generated hub: not a link target (customer 2026-11-14)"
+    },
+    {
+      "target": "/products/category/food-grade/",
+      "approved": false,
+      "note": "generated hub: not a link target (customer 2026-11-14)"
+    }
+  ],
+  "pending": [
+    {
+      "pattern": "^/products/[a-z0-9-]+/$",
+      "approved": false,
+      "note": "product pages /products/<slug>/ linked from the catalog: pending customer approval"
+    }
+  ],
+  "ignoredHashOnly": "href=\"#id\" in-page anchors are checked against ids in the same page; bare '#' is a FAIL",
+  "approvedPatterns": [
+    {
+      "pattern": "^/contact\\.html\\?product=[a-z0-9-]+$",
+      "approved": true,
+      "note": "contact form prefilled with a product (from product pages)"
+    }
+  ],
+  "excludePages": [
+    {
+      "page": "design-system.html",
+      "note": "internal design-system documentation, not a public page (has demo '#' links)"
+    }
+  ],
+  "selfLinks": "a generated hub page may link to ITS OWN url/DE twin only (language switch); this is not a link to a hub from another page"
+}

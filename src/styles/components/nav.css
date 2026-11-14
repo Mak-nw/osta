@@ -8,13 +8,13 @@
 .header + main.contact-split { padding-top: 0; }
 .header__panel {
   pointer-events: auto; width: min(max(var(--header-w), var(--header-min-w)), 100%); margin: var(--header-top) auto 0; height: var(--header-bar-h);
-  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: var(--space-6);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; column-gap: var(--space-6);
   padding-inline: var(--space-3); background: var(--surface-white);
   border-radius: var(--radius-lg);
 }
 .header__nav { display: flex; align-items: center; justify-content: flex-start; gap: var(--space-2); }
-.header__logo { display: block; }
-.header__logo img { height: var(--logo-header-h); width: auto; display: block; }
+.header__logo { display: block; justify-self: center; flex: none; }
+.header__logo img { height: var(--logo-header-h); width: auto; max-width: none; display: block; }
 .header__actions { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-1); }
 .header__cta-phone { display: none; }
 .header__cta { margin-left: var(--space-2); min-width: 0; --_fs: var(--type-label-size); --_lh: var(--type-label-lh); }

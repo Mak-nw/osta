@@ -31,7 +31,13 @@ const samePage = (a) => {
 
 function initScroll() {
   if (reduced.matches) return;
+  // A textarea keeps the wheel only while it can scroll itself in that direction; at its end (or when its text fits) the page scrolls (Lenis) as everywhere else.
+  let wheelDir = 0;
+  document.addEventListener('wheel', (e) => { wheelDir = Math.sign(e.deltaY); }, { capture: true, passive: true });
+  const textareaCanScroll = (n) => n.tagName === 'TEXTAREA' && n.scrollHeight > n.clientHeight + 1
+    && (wheelDir > 0 ? n.scrollTop + n.clientHeight < n.scrollHeight - 1 : wheelDir < 0 && n.scrollTop > 0);
   lenis = new Lenis({
+    prevent: textareaCanScroll,
     duration: 1.1,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // expo-out
     smoothWheel: true,
@@ -40,7 +46,6 @@ function initScroll() {
     autoRaf: true,
   });
   window.lenis = lenis;
-  document.querySelectorAll('textarea').forEach((t) => t.setAttribute('data-lenis-prevent', ''));
 
   document.addEventListener('click', (e) => {
     if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;

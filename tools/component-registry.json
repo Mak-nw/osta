@@ -116,7 +116,7 @@
     },
     "filter": {
       "kind": "button",
-      "description": "Catalog filter items / toggle / A-Z and pagination controls.",
+      "description": "Catalog filter items / toggle and pagination controls.",
       "file": "src/styles/components/chips.css",
       "classes": {
         "filter-item": {

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* OSTA style CENSUS (independent audit, read-only; content/audit/system-census-1.md).
-   Walks EVERY built HTML page (EN + DE: root, de/, products/*, products/category/*, a-z, 404, legal) at several widths,
+   Walks EVERY built HTML page (EN + DE: root, de/, products/*, products/category/*, 404, legal) at several widths,
    in 3 states: REST (computed styles of every visible element), HOVER (real mouse hover of every interactive element,
    transitions read from document.getAnimations() + frame sampling of the settle time), FOCUS-VISIBLE (real Tab key walk).
    Aggregates "property -> value -> count -> selectors/pages" and classifies each value against src/styles/tokens.css
@@ -26,11 +26,11 @@ const WIDTHS = String(opt('widths', '1728,1440,1200,1024,768,375')).split(',').m
 const HOVER_W = opt('no-hover', false) ? [] : String(opt('hover-widths', WIDTHS.join(','))).split(',').map(Number);
 const FOCUS = !opt('no-focus', false);
 const PROD_HOVER_W = String(opt('product-hover-widths', '1440,375')).split(',').map(Number); /* 43 product pages share one template: hover/focus there only at these widths (rest at all widths) */
-const isProduct = (k) => /^(de\/)?products\/(?!a-z|category)/.test(k);
+const isProduct = (k) => /^(de\/)?products\/(?!category)/.test(k);
 const WORKERS = Math.max(1, Number(opt('workers', 3)) || 3);
 const PORT = Number(opt('port', 5197));
 const OUT = path.resolve(String(opt('out', path.join(os.tmpdir(), 'osta-census'))));
-const FRAMES = String(opt('frames', 'index,about,services,catalog,contact,faq,privacy,404,products/a-z,products/category/api,products/anastrozole,de/index,de/catalog')).split(',');
+const FRAMES = String(opt('frames', 'index,about,services,catalog,contact,faq,privacy,404,products/category/api,products/anastrozole,de/index,de/catalog')).split(',');
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const TOKENS_SRC = fs.readFileSync(path.join(ROOT, 'src/styles/tokens.css'), 'utf8');
 const TOKEN_NAMES = [...new Set([...TOKENS_SRC.matchAll(/(--[a-z0-9-]+)\s*:/gi)].map((m) => m[1]))];
@@ -372,7 +372,7 @@ function report(RES, OUT) {
   const L = []; const out = (s) => L.push(s);
   const esc = (s) => String(s).replace(/\|/g, '\\|').replace(/\n/g, ' ');
   const flag = (cl) => /NO TOKEN|OFF|GREY|BLACK|SHADOW|UNDERLINE OUTSIDE|GRADIENT|CHECK|mixed/.test(cl);
-  const pagesShort = (set) => { const a = [...set]; const prod = a.filter((x) => /^products\/(?!a-z|category)/.test(x)); const rest = a.filter((x) => !prod.includes(x)); return (rest.length > 6 ? rest.slice(0, 6).join(', ') + ' +' + (rest.length - 6) : rest.join(', ')) + (prod.length ? (rest.length ? ', ' : '') + prod.length + ' product pages' : ''); };
+  const pagesShort = (set) => { const a = [...set]; const prod = a.filter((x) => /^products\/(?!category)/.test(x)); const rest = a.filter((x) => !prod.includes(x)); return (rest.length > 6 ? rest.slice(0, 6).join(', ') + ' +' + (rest.length - 6) : rest.join(', ')) + (prod.length ? (rest.length ? ', ' : '') + prod.length + ' product pages' : ''); };
   const summary = {};
   out('# Census tables (generated ' + new Date().toISOString() + ')\n');
   out('Pages: ' + RES.meta.pages.length + ' | widths: ' + W.join(', ') + ' | hover widths: ' + RES.meta.hoverWidths.join(', ') + ' | element visits (rest): ' + RES.elements + ' | hovers: ' + RES.hover.length + ' | focus stops: ' + RES.focus.length + ' | skipped hovers: ' + RES.skips.length + ' | errors: ' + RES.errors.length + ' | WebGL: ' + (RES.meta.webgl ? 'on' : 'off (--disable-3d-apis; posters)') + ' | run ' + RES.meta.seconds + ' s\n');

@@ -58,8 +58,7 @@
     "legal_privacy": "Privacy Policy",
     "legal_terms": "Terms of Use",
     "legal_data": "Data processing",
-    "legal_imprint": "Imprint",
-    "menu_az": "A–Z index"
+    "legal_imprint": "Imprint"
   },
   "closing": {
     "label": "Contacts",
@@ -362,9 +361,7 @@
     }
   },
   "hub": {
-    "az_nav": "A–Z index",
     "in_stock_nav": "Catalogue: in stock",
-    "az_jump": "Jump to letter",
     "nav_label": "Product index",
     "list_title": "{category}: {n} products"
   },
@@ -374,7 +371,7 @@
     "q1": "What does OSTA Trading GmbH do?",
     "a1": "OSTA Trading GmbH is a specialised distributor of active pharmaceutical ingredients (APIs), excipients and specialty ingredients for the pharmaceutical, food and cosmetics industries. Our warehouse is in Reinbek, in the Hamburg metropolitan area, and we supply customers across Europe and worldwide.",
     "q2": "Which product groups do you offer?",
-    "a2": "Our catalogue covers APIs, excipients and food grade ingredients. Browse the <a href=\"/catalog.html\">product catalogue</a> or the <a href=\"/products/a-z/\">A–Z index</a>, or search by name.",
+    "a2": "Our catalogue covers APIs, excipients and food grade ingredients. Browse the <a href=\"/catalog.html\">product catalogue</a> or search by name.",
     "q3": "What does “in stock” or “sourcing on request” mean?",
     "a3": "Products marked in stock are listed in our catalogue as available. Products marked sourcing on request are not kept in stock: we source them for you from suitable manufacturers. You can request either kind by sending an inquiry.",
     "q4": "How do I request a quotation?",

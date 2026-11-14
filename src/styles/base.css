@@ -35,6 +35,15 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .t-display, .t-h1, .t-h2, .t-h3, h1, h2, h3 { text-wrap: balance; }
 .t-lead, .t-body, p { text-wrap: pretty; }
 .card--accent .t-soft, .card--dark .t-soft { color: var(--text-on-accent-muted); }
+/* ---- M1: ONE measuring basis for all spacing = the VISIBLE height of letters (cap-top ... baseline, no line-height leading). The ONE rule below trims every text member of a spacing
+   group (headings, paragraphs, tags, labels, list values, role classes) to its cap box, so box gap = visible gap everywhere (overlay "Style" and gates measure the same).
+   Not trimmed on purpose (documented list: tools/measure-standard-gate.cjs, EXCEPT): text inside fixed-height controls (.btn, links, chips, nav, inputs: the painted box is the unit),
+   dd that holds a contact-line control. Fallback: a browser without text-box keeps the legacy line-box measure (gaps = the same tokens, only the visible number differs). ---- */
+@supports (text-box: trim-both cap alphabetic) {
+  :is(h1, h2, h3, h4, h5, h6, p, dt, dd:not(:has(.contact-line)), li, legend, figcaption, label.field__label,
+      .t-display, .t-h1, .t-h2, .t-h3, .t-lead, .t-body, .t-label, .section-label,
+      .people-card__name, .people-card__role):not(a, button, .btn, .contact-line, [class*="word"]) { text-box: trim-both cap alphabetic; }
+}
 
 /* ---- Icons ---- */
 /* Two icon styles only (the glyph is always the sprite outline: viewBox 24, stroke 1.5, round caps, fill none; never filled, never a filled container).

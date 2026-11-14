@@ -11,23 +11,26 @@
   <main id="main">
     <section class="product-hero section--sm">
       <div class="container stack stack--5 product-hero__inner">
-        <h1 data-reveal-load="0" class="t-h1 t-accent t-center" data-i18n="notfound.title">Page not found</h1>
-        <p data-reveal-load="1" class="t-lead t-center" data-i18n="notfound.text">The page you are looking for does not exist or has moved.</p>
-        <form data-reveal-load="2" class="search" role="search" action="/catalog.html" method="get">
-          <svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#search"/></svg>
-          <input class="input input--md" type="search" name="q" autocomplete="off" placeholder="Search by Name" aria-label="Search the catalogue" data-i18n-attr="placeholder:catalog.search_placeholder;aria-label:notfound.search_label">
-        </form>
-        <nav class="row row--2 row--wrap" aria-label="Sections" data-i18n-attr="aria-label:hub.nav_label">
-          <a class="btn btn--primary btn--md" href="/index.html"><span data-i18n="notfound.home">Home</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
-          <a class="btn btn--secondary btn--md" href="/catalog.html"><span data-i18n="notfound.catalog">Catalogue</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
-          <a class="btn btn--secondary btn--md" href="/products/category/api/"><span data-i18n="catalog.cat_api">API</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
-          <a class="btn btn--secondary btn--md" href="/products/category/excipients/"><span data-i18n="catalog.cat_excipients">Excipients</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
-          <a class="btn btn--secondary btn--md" href="/products/category/food-grade/"><span data-i18n="catalog.cat_food">Food Grade</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
-          <a class="btn btn--secondary btn--md" href="/products/a-z/"><span data-i18n="hub.az_nav">A–Z index</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
-          <a class="btn btn--secondary btn--md" href="/contact.html"><span data-i18n="notfound.contact">Contact</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
-        </nav>
-        <p class="t-body t-center" lang="de"><span data-i18n-lang="de" data-i18n="notfound.de_note">Diese Seite wurde nicht gefunden.</span></p>
-        <a class="btn btn--secondary btn--md btn--split" href="/de/" lang="de"><span>Deutsch</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
+        <div class="section-head section-head--center">
+          <div class="section-head">
+          <h1 data-reveal-load="0" class="t-h1 t-accent t-center" data-i18n="notfound.title">Page not found</h1>
+          <p data-reveal-load="1" class="t-lead t-center" data-i18n="notfound.text">The page you are looking for does not exist or has moved.</p>
+          </div>
+          <form data-reveal-load="2" class="search" role="search" action="/catalog.html" method="get">
+            <span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#search"/></svg></span>
+            <input class="input input--md" type="search" name="q" autocomplete="off" placeholder="Search by Name" aria-label="Search the catalogue" data-i18n-attr="placeholder:catalog.search_placeholder;aria-label:notfound.search_label">
+          </form>
+          <nav class="row row--2 row--wrap" aria-label="Sections" data-i18n-attr="aria-label:hub.nav_label">
+            <a class="btn btn--primary btn--md" href="/index.html"><span data-i18n="notfound.home">Home</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a>
+            <a class="btn btn--secondary btn--md" href="/catalog.html"><span data-i18n="notfound.catalog">Catalogue</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a>
+            <a class="btn btn--secondary btn--md" href="/catalog.html?category=api"><span data-i18n="catalog.cat_api">API</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a>
+            <a class="btn btn--secondary btn--md" href="/catalog.html?category=excipients"><span data-i18n="catalog.cat_excipients">Excipients</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a>
+            <a class="btn btn--secondary btn--md" href="/catalog.html?category=food-grade"><span data-i18n="catalog.cat_food">Food Grade</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a>
+            <a class="btn btn--secondary btn--md" href="/contact.html"><span data-i18n="notfound.contact">Contact</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a>
+          </nav>
+          <p class="t-body t-center" lang="de"><span data-i18n-lang="de" data-i18n="notfound.de_note">Diese Seite wurde nicht gefunden.</span></p>
+          <a class="btn btn--secondary btn--md btn--split" href="/de/" lang="de"><span>Deutsch</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a>
+        </div>
       </div>
     </section>
   </main>

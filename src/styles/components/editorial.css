@@ -3,11 +3,13 @@
 /* small section marker: label, no decorative shapes */
 .section-label { font-size: var(--type-label-size); line-height: var(--type-label-lh); letter-spacing: var(--type-label-ls); font-weight: var(--font-weight-regular); }
 .section-label::before { content: "# "; }
-/* Section head = the heading GROUP: tag (.section-label) > heading > description (p) > CTA (.btn / .home-closing__actions). ONE wrapper, ONE gap --section-head-gap (24) between every neighbouring pair; no margins on the members.
+/* Section head = the heading GROUP: tag (.section-label) > heading > description (p) > CTA (.btn / .home-closing__actions). ONE wrapper, ONE gap --section-head-gap (24) between every neighbouring pair; no margins on the members. A nested .section-head (text group) + CTA keeps the same 24.
    Used by every section after the hero (also closing, how-split left column, About Quality intro). --center = centred heading (Services row). Where the description / CTA sit in other grid columns (About intro / Services, Services Supply) the grid row-gap = --section-head-gap. */
 .section-head { display: flex; flex-direction: column; align-items: flex-start; gap: var(--section-head-gap); }
+.section-head > .section-head { align-self: stretch; } /* the nested text group fills the width of the head (CTA below it keeps its own size) */
 .section-head > * { margin: 0; }
 .section-head--center { align-items: center; text-align: center; }
+.section-head--center > .section-head { align-items: center; } /* nested text group of a centred head (text + CTA) */
 
 /* meta list: 3 columns, tiny caption + value */
 .meta-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--space-3); margin: 0; }

@@ -318,26 +318,5 @@
       "h1": "Lebensmittelzutaten",
       "intro": "Die OSTA Trading GmbH liefert Lebensmittelzutaten aus Reinbek bei Hamburg. Diese Liste zeigt jedes Produkt mit seiner Verfügbarkeit: auf Lager oder auf Anfrage. Auf der Produktseite finden Sie CAS-Nummer, Formel und Aussehen und können ein Angebot anfragen."
     }
-  },
-  "hub-a-z": {
-    "placeholder": true,
-    "priority": 0.8,
-    "hub": "az",
-    "path": "/products/a-z/",
-    "slug": "products/a-z",
-    "en": {
-      "title": "Product Index A–Z: APIs & Excipients | OSTA Trading",
-      "description": "Alphabetical index of all APIs, excipients and food grade ingredients at OSTA Trading, with availability status. Request a quotation for any position.",
-      "name": "A–Z index",
-      "h1": "Product index A–Z",
-      "intro": "This index lists all products of OSTA Trading GmbH alphabetically, with their category and availability: in stock or available on request. Choose a letter to jump to the position, open a product page for CAS number and formula, and send a quotation request."
-    },
-    "de": {
-      "title": "Produktindex A–Z: Wirkstoffe & Hilfsstoffe | OSTA Trading",
-      "description": "Alphabetischer Index aller Wirkstoffe, Hilfsstoffe und Lebensmittelzutaten von OSTA Trading mit Verfügbarkeit. Angebot für jede Position anfragen.",
-      "name": "A–Z-Index",
-      "h1": "Produktindex A–Z",
-      "intro": "Dieser Index listet alle Produkte der OSTA Trading GmbH alphabetisch mit Kategorie und Verfügbarkeit: auf Lager oder auf Anfrage. Wählen Sie einen Buchstaben, öffnen Sie die Produktseite für CAS-Nummer und Formel und senden Sie eine Angebotsanfrage."
-    }
   }
 }

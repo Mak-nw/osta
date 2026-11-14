@@ -214,6 +214,10 @@ function inpage(cfg) {
   for (const b of document.querySelectorAll('.text-card__body')) { if (!vis(b)) continue; const sh = b.querySelector(':scope > .section-head');
     for (const [, n, gap] of gapsOf(b)) if (Math.abs(gap - C.sp.textCardGap) > tol) report('A3.1', 'FAIL', '.text-card__body gap ' + gap.toFixed(1) + 'px != ' + C.sp.textCardGap + ' (before ' + sig0(n) + ')', b, gap); }
   for (const f of document.querySelectorAll('.field, form label')) { const lab = f.matches('label') ? f : f.querySelector('label,.field__label'); const ctl = f.matches('label') ? f.parentElement.querySelector('input:not([type=checkbox]):not([type=radio]):not([type=hidden]),select,textarea,.select-wrap') : f.querySelector('input:not([type=hidden]),select,textarea,.select-wrap'); if (!lab || !ctl || !vis(lab) || !vis(ctl)) continue; const a = rectOf(lab), b = rectOf(ctl); if (b.top < a.bottom - 1 || b.left > a.right) continue; const gap = b.top - a.bottom; if (Math.abs(gap - C.sp.labelToField) > tol) report('A3.1', 'FAIL', 'label -> field gap ' + gap.toFixed(1) + 'px != ' + C.sp.labelToField, f, gap); }
+  /* A3.1 large card: every inner gap <= 0.72 x card padding (customer 2026-11-14: padding 45, max inner gap ~0.7 x padding) */
+  for (const cd of document.querySelectorAll('.card--pad-lg')) { if (!vis(cd)) continue; const lim = px(getComputedStyle(cd).paddingLeft) * 0.72;
+    for (const e of [cd, ...cd.querySelectorAll('*')]) { if (e !== cd && !vis(e)) continue; const cs = getComputedStyle(e); if (!/flex|grid/.test(cs.display)) continue; for (const g of [px(cs.rowGap), px(cs.columnGap)]) if (g > lim + 0.5) report('A3.1', 'FAIL', 'inner gap ' + g + 'px > 0.72 x card padding (' + lim.toFixed(1) + ')', e, g); }
+    const kids = [...cd.children].filter(vis); for (let i = 1; i < kids.length; i++) { const d = kids[i].getBoundingClientRect().top - kids[i - 1].getBoundingClientRect().bottom; if (d > lim + 0.5) report('A3.1', 'FAIL', 'gap between blocks in the card ' + d.toFixed(1) + 'px > 0.72 x padding (' + lim.toFixed(1) + ')', kids[i], d); } }
   if (W <= 1199) { for (const gr of document.querySelectorAll('.footer__group')) { if (!vis(gr)) continue; const cs = getComputedStyle(gr); const rg = px(cs.rowGap); if (Math.abs(rg - C.sp.footerItems) > tol) report('A3.1', 'FAIL', 'footer group row-gap ' + rg + 'px != ' + C.sp.footerItems, gr, rg); const lab = gr.querySelector(':scope > .footer__label'); if (lab) { const tot = rg + px(getComputedStyle(lab).marginBottom); if (Math.abs(tot - C.sp.footerLabel) > tol) report('A3.1', 'FAIL', 'footer label -> first item ' + tot + 'px != ' + C.sp.footerLabel, lab, tot); } } }
 
   /* A3.1 grid/card gaps: ONE token each (customer 2026-11-13: column gap 12 = --grid-gap, art<->text 12 = --card-inner-gap) */
@@ -322,7 +326,7 @@ function discoverPages(dir) {
   pages = pages.filter((p) => !/^(product|design-system)$/.test(p.key));
   const sel = opt('pages', null);
   if (sel === 'all') {} else if (sel && sel !== true) { const ss = String(sel).split(','); pages = pages.filter((p) => ss.some((s) => p.key === s || p.key.includes(s))); }
-  else pages = pages.filter((p) => !/^(de\/)?products\/(?!a-z|category)/.test(p.key) || /products\/(anastrozole|copovidone-va64)$/.test(p.key));
+  else pages = pages.filter((p) => !/^(de\/)?products\/(?!category)/.test(p.key) || /products\/(anastrozole|copovidone-va64)$/.test(p.key));
   if (!pages.length) { console.error('no pages'); stop(); process.exit(2); }
   const C = flattenRegistry();
   const browser = await puppeteer.launch({ executablePath: CHROME, headless: true, args: ['--no-sandbox', '--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--ignore-gpu-blocklist', '--enable-webgl', '--hide-scrollbars'] });

@@ -15,6 +15,7 @@
 .hero__sub { color: var(--text); }
 /* illustration slot: transparent, no fill, no border, no radius, NOT clipped (the scene is centred in it on both axes) */
 .hero .hero__media { grid-column: 5 / span 4; grid-row: 1; position: relative; box-sizing: border-box; width: 100%; aspect-ratio: 4 / 3; --media-a: 0.75; overflow: visible; background: transparent; border: 0; border-radius: 0; }
+@media (min-width: 1200px) { .hero .hero__media { justify-self: center; width: min(100%, max(calc(var(--space-8) * 2), calc((100svh - var(--header-h) - 2 * var(--space-7) - var(--space-8) - 140px) * 4 / 3))); } } /* short screens only (< ~720 high): caps the slot by the height left after header, paddings, gap and the aside (104 + slack); aspect kept */
 .hero__canvas { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; display: block; opacity: 0; }   /* above the poster; shown by `.is-ready` in ONE frame together with hiding the poster (utils/hero-poster.js): no opacity transition, the poster and the canvas have identical geometry */
 .hero__canvas.is-ready { opacity: 1; }
 /* decorative 3D replaces the photo; the image stays as fallback (no JS, no WebGL, init failure) */
@@ -95,14 +96,15 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
    About / Services hero: text then media (stack, left-aligned). Home hero: <=1199 the scene sits above the text (flex column); the search control stays one row on all widths; mobile: category caption on its own line, chips wrap.
    ========================================================================== */
 @media (max-width: 1199px) {
-  .hero:not(.hero--home) { padding-block: calc(var(--header-h) + var(--space-7)) var(--space-7); }
-  .hero__inner { row-gap: var(--space-6); }
+  /* FIT-TO-SCREEN (customer 2026-11-14): the stacked hero (header + media + head + aside) is at most ONE screen (100svh, CTA included) at every tablet / phone size and orientation. Paddings and gaps shrink with the viewport height (svh clamp); the media slot keeps its aspect ratio (poster geometry = live scene geometry, --media-a) and only its WIDTH is capped by the height left after the text blocks: --hero-text = reserved height of head + aside (measured EN: 192-236 tablet, 232-320 phone; the rest is slack; integer px via round() so the slot sits on whole pixels like the poster). Desktop >=1200: the same cap (see the media rule above), which only bites on short screens, the normal look is unchanged. */
+  .hero:not(.hero--home) { --hero-pad: round(down, clamp(var(--space-4), 4svh, var(--space-7)), 1px); --hero-gap: round(down, clamp(var(--space-4), 3svh, var(--space-6)), 1px); --hero-text: 240px; --hero-ratio: 16 / 9; --hero-media-h: calc(100svh - var(--header-h) - 2 * var(--hero-pad) - 2 * var(--hero-gap) - var(--hero-text)); padding-block: calc(var(--header-h) + var(--hero-pad)) var(--hero-pad); }
+  .hero__inner { row-gap: var(--hero-gap); }
   .hero__inner > .hero__title, .hero__aside, .hero .hero__media { grid-column: 1 / -1; }
   .hero__inner > .hero__title { grid-row: auto; display: block; pointer-events: auto; }
   .hero__inner > .hero__title .hero__title-part--r { text-align: left; justify-self: auto; }
   .hero__aside { grid-row: auto; }
   .hero__inner > .hero__title .hero__title-part { white-space: normal; }
-  .hero .hero__media { grid-row: 1; aspect-ratio: 16 / 9; --media-a: 0.5625; } /* stack: illustration on top, then head, then aside */
+  .hero .hero__media { grid-row: 1; aspect-ratio: 16 / 9; --media-a: 0.5625; justify-self: center; width: min(100%, max(calc(var(--space-8) * 2), calc(var(--hero-media-h) * var(--hero-ratio)))); } /* stack: illustration on top, then head, then aside; width capped by the screen height, aspect kept */
 
   .hero--home { justify-content: flex-start; padding-top: calc(var(--header-h) + var(--space-6)); }
   .hero__content { display: flex; flex-direction: column; align-items: stretch; flex: 1 1 auto; }
@@ -110,11 +112,13 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
   .hero--home .hero__title { --hero-fs: var(--type-display-size); --hero-lh: var(--type-display-lh); --hero-ls: var(--type-display-ls); }
   .hero__title-part br { display: none; } /* stack: each phrase wraps by width */
   .hero__scene3d { order: -1; flex: 1 1 auto; min-height: 0; margin: 0 0 var(--space-6); }
+  .hero-search { margin-top: clamp(var(--space-4), calc(100svh - 552px), var(--space-7)); } /* fit-to-screen: the gap above the search shrinks only on screens shorter than 600 (normal look unchanged) */
 }
 @media (max-width: 767px) {
   .hero__aside { text-align: left; align-items: stretch; } /* mobile: description left like the title, button full width (btn--block pattern) */
   .hero__aside .btn { width: 100%; }
-  .hero:not(.hero--home) { padding-block: calc(var(--header-h) + var(--space-6)) var(--space-6); }
+  .hero:not(.hero--home) { --hero-pad: round(down, clamp(var(--space-4), 3svh, var(--space-6)), 1px); --hero-text: 280px; --hero-ratio: 4 / 3; }
+  @media (max-width: 479px) { .hero:not(.hero--home) { --hero-text: 330px; } }
   .hero .hero__media { aspect-ratio: 4 / 3; --media-a: 0.75; }
 
   .hero--home { padding-bottom: var(--space-6); }

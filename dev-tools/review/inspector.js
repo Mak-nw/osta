@@ -167,6 +167,67 @@ export function initInspector({ shadow, root, beforeLayers, bar, beforeButton, s
   const box = (cls, b) => `<i class="${cls}" style="left:${b[0]}px;top:${b[1]}px;width:${b[2]}px;height:${b[3]}px"></i>`;
   const label = (cls, x, y, inner, extra = '') => `<b class="lb ${cls}" style="left:${Math.round(x)}px;top:${Math.round(y)}px;${extra}">${inner}</b>`;
 
+  // M1 (one measuring basis = the VISIBLE height of letters: cap-top ... baseline, no line-height leading).
+  // A text block that is already trimmed (text-box: trim-both cap alphabetic, base.css) has box = ink -> its border box is used.
+  // Any other text block (not trimmed, or text wrapped in inline words/spans) is measured here from the font: cap top = baseline - cap height
+  // of 'H' (canvas actualBoundingBoxAscent), baseline = text-node rect top + fontBoundingBoxAscent; so the number shown = the visible distance.
+  let inkCtx = null;
+  const inlineOnlyText = (el, depth = 0) => {
+    if (depth > 4 || !/\S/.test(el.textContent)) return false;
+    for (const ch of el.children) {
+      if (SKIP.has(ch.tagName)) continue;
+      const d = getComputedStyle(ch).display;
+      if (d !== 'inline' && d !== 'inline-block' && d !== 'contents') return false;
+      if (ch instanceof SVGElement || ['IMG', 'VIDEO', 'CANVAS', 'INPUT', 'BUTTON', 'SELECT', 'TEXTAREA'].includes(ch.tagName)) return false;
+      if (!inlineOnlyText(ch, depth + 1) && /\S/.test(ch.textContent)) return false;
+    }
+    return true;
+  };
+  function textInk(el, cs, r) {
+    if (cs.textBoxTrim === 'trim-both' && /cap/.test(cs.textBoxEdge) && /alphabetic/.test(cs.textBoxEdge)) return r;
+    if (!inkCtx) inkCtx = document.createElement('canvas').getContext('2d');
+    inkCtx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+    const m = inkCtx.measureText('H'), fa = m.fontBoundingBoxAscent, cap = m.actualBoundingBoxAscent;
+    if (!(fa > 0) || !(cap > 0)) return r;
+    let first = Infinity, last = -Infinity;
+    const tw = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    for (let n = tw.nextNode(); n; n = tw.nextNode()) {
+      if (!/\S/.test(n.data)) continue;
+      const rg = document.createRange(); rg.selectNodeContents(n);
+      for (const q of rg.getClientRects()) if (q.width > 0 && q.height > 0) { first = Math.min(first, q.top); last = Math.max(last, q.top); }
+    }
+    if (!Number.isFinite(first)) return r;
+    const top = first + fa - cap, bottom = last + fa;
+    return { left: r.left, right: r.right, width: r.width, top, bottom, height: bottom - top };
+  }
+
+  // visible ("ink") rect of a block: painted boxes use their border box; transparent wrappers use the union of their
+  // painted descendants (so a link with transparent hit padding measures from its visible ring/text, not its hit zone)
+  const REPLACED = new Set(['IMG', 'SVG', 'VIDEO', 'CANVAS', 'INPUT', 'TEXTAREA', 'SELECT', 'BUTTON', 'IFRAME', 'HR', 'PICTURE', 'OBJECT']);
+  function inkRect(el, depth) {
+    if (SKIP.has(el.tagName) || (el instanceof SVGElement && el.localName !== 'svg')) return null;
+    const cs = getComputedStyle(el);
+    if (cs.display === 'none' || cs.display === 'contents' || cs.visibility === 'hidden') return null;
+    if (cs.position === 'absolute' || cs.position === 'fixed') return null;
+    if (depth === 0 && cs.display === 'inline') return null;
+    const r = el.getBoundingClientRect();
+    const bgOn = cs.backgroundColor !== 'transparent' && !/^rgba\((\d+, ){3}0\)$/.test(cs.backgroundColor);
+    const painted = REPLACED.has(el.tagName.toUpperCase()) || bgOn
+      || cs.backgroundImage !== 'none' || cs.boxShadow !== 'none'
+      || ['Top', 'Right', 'Bottom', 'Left'].some((sd) => px(cs[`border${sd}Width`]) > 0 && cs[`border${sd}Style`] !== 'none');
+    if (!painted && r.width > 0 && r.height > 0 && cs.display !== 'inline' && (hasOwnText(el) || inlineOnlyText(el))) return textInk(el, cs, r);
+    if (painted || hasOwnText(el)) return (r.width > 0 && (r.height > 0 || el.tagName === 'HR' || painted)) ? r : null;
+    if (depth > 8) return null;
+    let u = null;
+    for (const ch of el.children) {
+      const q = inkRect(ch, depth + 1);
+      if (!q) continue;
+      u = u ? { left: Math.min(u.left, q.left), top: Math.min(u.top, q.top), right: Math.max(u.right, q.right), bottom: Math.max(u.bottom, q.bottom) } : { left: q.left, top: q.top, right: q.right, bottom: q.bottom };
+    }
+    if (u) { u.width = u.right - u.left; u.height = u.bottom - u.top; }
+    return u;
+  }
+
   // ---------- S: padding + gap ----------
   function drawS(items, vw, vh) {
     let html = '', bands = 0;
@@ -191,46 +252,55 @@ export function initInspector({ shadow, root, beforeLayers, bar, beforeButton, s
           labels.push({ pri: bestB[2] * bestB[3], cls: 'lp', cx: bestB[0] + bestB[2] / 2, cy: bestB[1] + bestB[3] / 2, txt });
         }
       }
-      // gap of flex/grid containers
-      const d = cs.display;
-      if (d === 'flex' || d === 'inline-flex' || d === 'grid' || d === 'inline-grid') {
-        const cg = px(cs.columnGap), rg = px(cs.rowGap);
-        if ((cg > 0 || rg > 0) && el.children.length > 1 && el.children.length <= 80 && visible(el)) {
-          const rects = [];
-          for (const ch of el.children) { const q = ch.getBoundingClientRect(); if (q.width > 0 && q.height > 0) rects.push(q); }
-          const seen = new Set();
-          let lab = 0;
-          for (let i = 0; i < rects.length; i++) {
-            for (let j = 0; j < rects.length; j++) {
-              if (i === j) continue;
-              const a = rects[i], b = rects[j];
-              let band = null, val = 0;
-              if (cg > 0) {
-                const dx = b.left - a.right, y0 = Math.max(a.top, b.top), y1 = Math.min(a.bottom, b.bottom);
-                if (Math.abs(dx - cg) <= 1.5 && y1 - y0 >= 1) { band = [a.right, y0, dx, y1 - y0]; val = cg; }
-              }
-              if (!band && rg > 0) {
-                const dy = b.top - a.bottom, x0 = Math.max(a.left, b.left), x1 = Math.min(a.right, b.right);
-                if (Math.abs(dy - rg) <= 1.5 && x1 - x0 >= 1) { band = [x0, a.bottom, x1 - x0, dy]; val = rg; }
-              }
-              if (!band) continue;
-              const k = band.map(Math.round).join(',');
-              if (seen.has(k)) continue;
-              seen.add(k);
-              const c = clip(band[0], band[1], band[2], band[3], vw, vh);
-              if (!c || Math.min(c[2], c[3]) < MIN_BAND) continue;
-              if (bands++ < MAX_BANDS) html += box('bg', c);
-              if (Math.max(c[2], c[3]) >= MIN_LABEL && lab < 4) {
-                lab++;
-                labels.push({ pri: c[2] * c[3], cls: 'lg', cx: c[0] + c[2] / 2, cy: c[1] + c[3] / 2, txt: num(val) });
-              }
+      // gaps between adjacent sibling blocks (visible ink, any layout: flex/grid gap, margins, dividers)
+      if (el.children.length > 1 && el.children.length <= 80 && visible(el)) {
+        const kids = [];
+        for (const ch of el.children) {
+          if (SKIP.has(ch.tagName)) continue;
+          const q = inkRect(ch, 0);
+          if (q) kids.push(q);
+        }
+        const seen = new Set();
+        for (let i = 0; i < kids.length; i++) {
+          for (let j = 0; j < kids.length; j++) {
+            if (i === j) continue;
+            const a = kids[i], b = kids[j];
+            let band = null, val = 0;
+            const y0 = Math.max(a.top, b.top), y1 = Math.min(a.bottom, b.bottom);
+            const x0 = Math.max(a.left, b.left), x1 = Math.min(a.right, b.right);
+            const dx = b.left - a.right, dy = b.top - a.bottom;
+            if (dy >= 0.5 && x1 - x0 >= 1 && (dx < 0.5 || y1 - y0 < 0)) { band = [x0, a.bottom, x1 - x0, dy]; val = dy; }
+            else if (dx >= 0.5 && (y1 - y0 >= 1 || (y1 - y0 >= 0 && (a.height === 0 || b.height === 0)))) { band = [a.right, y0, dx, Math.max(y1 - y0, 1)]; val = dx; }
+            if (!band) continue;
+            // another sibling inside the band = not adjacent
+            let blocked = false;
+            for (let k = 0; k < kids.length && !blocked; k++) {
+              if (k === i || k === j) continue;
+              const c = kids[k];
+              if (c.right > band[0] + 0.5 && c.left < band[0] + band[2] - 0.5 && c.bottom > band[1] + 0.5 && c.top < band[1] + band[3] - 0.5) blocked = true;
             }
+            if (blocked) continue;
+            const key = band.map(Math.round).join(',');
+            if (seen.has(key)) continue;
+            seen.add(key);
+            const c = clip(band[0], band[1], band[2], band[3], vw, vh);
+            if (!c) continue;
+            if (bands++ < MAX_BANDS) html += box('bg', c);
+            labels.push({ pri: 1e9 + c[2] * c[3], cls: 'lg', cx: c[0] + c[2] / 2, cy: c[1] + c[3] / 2, txt: num(val) });
           }
         }
       }
     }
     labels.sort((a, b) => b.pri - a.pri);
-    const shown = labels.slice(0, MAX_LABELS);
+    const shown = [];
+    const placed = [];
+    for (const l of labels) {
+      if (shown.length >= MAX_LABELS) break;
+      const w = String(l.txt).length * 7 + 12, h = 16;
+      const bx = [l.cx - w / 2, l.cy - h / 2, l.cx + w / 2, l.cy + h / 2];
+      if (placed.some((p) => bx[0] < p[2] && bx[2] > p[0] && bx[1] < p[3] && bx[3] > p[1])) continue;
+      placed.push(bx); shown.push(l);
+    }
     for (const l of shown) html += label(l.cls, l.cx, l.cy, l.txt, 'transform:translate(-50%,-50%)');
     return { html, shown: shown.length, extra: labels.length - shown.length };
   }

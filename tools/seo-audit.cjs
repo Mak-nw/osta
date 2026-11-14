@@ -142,7 +142,7 @@ for (const f of htmlFiles) {
     if (!by('WebSite')) F('JSON-LD: WebSite missing');
     if (!g.some((n) => /Page$/.test(n['@type']))) F('JSON-LD: no WebPage-type node');
     const pr = by('Product');
-    if (/^products\/[^/]+\/index\.html$/.test(f) && f !== 'products/a-z/index.html') {
+    if (/^products\/[^/]+\/index\.html$/.test(f)) {
       if (!pr) F('Product JSON-LD missing'); else { if (!pr.name || !pr.description || !pr.additionalProperty?.length) F('Product: name/description/additionalProperty missing'); if (pr.offers) F('Product must not have offers (no price)'); }
     } else if (pr) F('Product JSON-LD on a non-product page');
     if (by('FAQPage') ? false : g.some((n) => n.mainEntity?.[0]?.['@type'] === 'Question')) F('Question without FAQPage');
@@ -171,7 +171,7 @@ for (const f of htmlFiles) {
     if (sc.text.length < 200) F(`SSR: very little visible text (${sc.text.length})`);
     const todo = [...html.matchAll(/<[a-z0-9]+\b[^>]*\sdata-i18n(?:-html)?="[^"]*"(?![^>]*data-i18n-done)[^>]*>/gi)].length;
     if (todo) F(`SSR: ${todo} data-i18n element(s) not prerendered`);
-    if (/^products\/[^/]+\/index\.html$/.test(f) && f !== 'products/a-z/index.html') { if (!/<table class="spec-table"/.test(html)) F('SSR: product has no parameter table'); }
+    if (/^products\/[^/]+\/index\.html$/.test(f)) { if (!/<table class="spec-table"/.test(html)) F('SSR: product has no parameter table'); }
     if (f.replace(/^de\//, '') === 'catalog.html') { const n = (html.match(/href="[^"]*\/products\/[a-z0-9-]+\/"/g) || []).length; if (n < 10) F(`SSR: catalogue has only ${n} static product links`); info.catalogLinks = n; }
   }
   // links
@@ -199,7 +199,7 @@ for (const [f, i] of pageInfo) {
     const tf = fileOfUrl(href); const t = pageInfo.get(tf);
     if (!t) { F(`hreflang ${l} -> missing page ${href}`); continue; }
     if (!t.hreflangs.some(([ll, hh]) => ll === i.lang && hh === i.url)) F(`hreflang ${l}: target does not link back`);
-    if (l !== i.lang && l === 'de' && t.h1 && t.h1 === i.h1 && !/^faq|a-z/.test(f)) F(`DE h1 equals EN h1 ("${t.h1}"): text not translated`);
+    if (l !== i.lang && l === 'de' && t.h1 && t.h1 === i.h1 && !/^faq/.test(f)) F(`DE h1 equals EN h1 ("${t.h1}"): text not translated`);
   }
 }
 // sitemap hreflang alternates must resolve to existing pages
@@ -239,7 +239,7 @@ async function consoleCheck() {
   const browser = await puppeteer.launch({ executablePath: CHROME, headless: true, args: ['--no-sandbox', '--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
   const errors = [];
   try {
-    const sample = ['', 'about.html', 'catalog.html', 'products/ibuprofen/', 'products/a-z/', 'faq.html', 'de/', 'de/catalog.html', '404.html', 'contact.html'];
+    const sample = ['', 'about.html', 'catalog.html', 'products/ibuprofen/', 'faq.html', 'de/', 'de/catalog.html', '404.html', 'contact.html'];
     for (const s of sample) {
       const page = await browser.newPage();
       page.on('console', (m) => { if (m.type() === 'error') errors.push(`${s || '/'}: ${m.text()}`); });

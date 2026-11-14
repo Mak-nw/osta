@@ -14,7 +14,7 @@
    The category list opens with the "Filters" toggle (aria-expanded).
    ========================================================================== */
 .catalog__filters { display: contents; }
-.layout-catalog__sidebar > .stack > h1 { margin-bottom: var(--space-2); } /* h1 -> search = 24 (16 stack gap + 8): same as the 404 hero (heading group, --section-head-gap) */
+.layout-catalog__sidebar > .stack > h1 { margin-bottom: var(--space-2); } /* h1 -> search = 24 (16 stack gap + 8): heading -> field, not a text group */
 .catalog__filters-toggle { display: none; }
 @media (max-width: 1199px) {
   .layout-catalog { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-5); }
@@ -43,10 +43,8 @@
 .layout-catalog .search .input { color: var(--text-accent); }
 .layout-catalog .search .input::placeholder { color: var(--text-accent); }
 
-/* Product hubs (/products/category/*, /products/a-z/): the product-card grid follows the product-related rule (2 columns tablet, 1 mobile: no 3 narrow columns, no horizontal scroll at 375/320);
-   mobile: the A-Z jump letters (.btn--sm) get a 44x44 hit area (2.5.5). */
+/* Product hubs (/products/category/*): the product-card grid follows the product-related rule (2 columns tablet, 1 mobile: no 3 narrow columns, no horizontal scroll at 375/320); */
 @media (max-width: 1199px) { .grid-3:has(> .product-card) { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 767px) {
   .grid-3:has(> .product-card) { grid-template-columns: minmax(0, 1fr); }
-  .row--wrap > .btn--sm { --_h: var(--control-md); min-width: var(--control-md); }
 }

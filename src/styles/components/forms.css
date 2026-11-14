@@ -21,7 +21,7 @@
 }
 /* error: in the gap under the control, right-aligned (the next field's floated label sits at the left), reserves no height */
 .field:not(.field--pill):not(.field--on-accent) .field__error { position: absolute; top: 100%; left: 0; right: 0; justify-content: flex-end; margin-top: var(--space-1); font-size: var(--type-label-size); line-height: var(--type-label-lh); }
-.field:not(.field--pill):not(.field--on-accent) .field__error .icon { margin-top: 0; }
+.field:not(.field--pill):not(.field--on-accent) .field__error .icon-box { margin-top: calc((var(--_icon) - var(--_box)) / 2); }
 .input, .select, .textarea {
   --_h: var(--control-md);
   width: 100%; height: var(--_h); padding-inline: var(--space-4); padding-block: 0;
@@ -54,7 +54,7 @@
 .textarea.is-focus { border-color: var(--accent); outline-color: transparent; }
 .input:focus-visible, .select:focus-visible, .textarea:focus-visible { transition: none; } /* ONE focus mark for fields (the focus mark appears instantly, hover keeps the site tempo): the 1px border turns --accent; no ring (rule B4) */
 .input:disabled, .select:disabled, .textarea:disabled { background: var(--disabled-bg); color: var(--disabled-text); border-color: var(--border); cursor: not-allowed; }
-.textarea { height: auto; min-height: calc(2 * var(--control-lg)); padding-block: calc((var(--control-md) - var(--type-body-lh)) / 2 - 1px); resize: none; }
+.textarea { height: auto; min-height: calc(2 * var(--control-lg)); padding-block: calc((var(--control-md) - var(--type-body-lh)) / 2 - 1px); resize: none; overscroll-behavior: auto; }
 
 /* Error: red line (1px, colour) + message; set by .is-invalid on .field or aria-invalid on the control */
 .field.is-invalid .input, .field.is-invalid .select, .field.is-invalid .textarea,
@@ -65,7 +65,7 @@
   font-size: var(--type-body-size); line-height: var(--type-body-lh); color: var(--text-error);
 }
 .field__error[hidden] { display: none; }
-.field__error .icon { margin-top: var(--space-1); }
+.field__error .icon-box { margin-top: calc(var(--space-1) + (var(--_icon) - var(--_box)) / 2); }
 
 /* ---- Pill field (old filled control): .field--pill, or .input--pill on a bare input ---- */
 .field--pill .input, .field--pill .select, .field--pill .textarea,
@@ -116,7 +116,8 @@
    inset from the left edge = its inset from the top/bottom edge = (--search-h - icon) / 2 (ink to ink, customer 2026-11-13).
    --search-h = outer height of the field (md 44 default; the hero search overrides it in hero.css). */
 .search { position: relative; --search-h: var(--control-md); --search-inset: calc((var(--search-h) - var(--icon-sm)) / 2); }
-.search .icon { position: absolute; left: var(--search-inset); top: 50%; translate: 0 -50%; color: var(--accent); pointer-events: none; }
+.search > .icon-box { position: absolute; left: calc(var(--search-inset) - var(--icon-gap) / 2); top: 50%; translate: 0 -50%; margin: 0; pointer-events: none; }
+.search .icon { color: var(--accent); }
 .search .input { padding-left: calc(var(--search-inset) + var(--icon-sm) + var(--space-2)); background: var(--surface-raised); }
 
 @media (prefers-reduced-motion: reduce) {

@@ -29,16 +29,17 @@
   :is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a)::before, :where(main) :is(p, li, dd, td) > a:not([class]) { transition: none; }
 }
 
-/* Logo links (header, footer): the same plate mechanic as the text links, no underline (customer 2026-11-13: logos react on hover too). The plate is one step visible against the host surface:
-   footer (sunken) = --surface-white, header panel (white) = --surface-raised. Padding is reserved at rest and cancelled by the negative margin (logo never moves). */
+/* Logo links (header, footer), rules U11 + U12 (customer 2026-11-14): hover recolours the logo ITSELF (--accent > --logo-hover, --dur-hover-color, --ease-hover); no plate, border, outline, shadow or pseudo-element.
+   The logo is a one-colour PNG: its alpha is used as a CSS mask over the img box, whose background-color is the fill (the native pixels are shifted out of the box, alt text stays for AT). One shared block for header + footer, no per-page overrides.
+   Keyboard focus keeps the global :focus-visible ring (base.css). Horizontal padding is cancelled by the negative margin: it only widens the hit area, the logo never moves. */
 :is(.header__logo, .footer__logo) {
-  --_hole: var(--surface-white); --_tl-px: var(--space-2); position: relative; isolation: isolate; border-radius: var(--radius-md);
+  --_tl-px: var(--space-2); border-radius: var(--radius-md); cursor: pointer;
   padding-inline: var(--_tl-px); margin-inline: calc(-1 * var(--_tl-px));
 }
-.header__logo { --_hole: var(--surface-raised); }
-:is(.header__logo, .footer__logo)::before {
-  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: var(--radius-md); background: var(--_hole); scale: 0; transition: scale var(--dur-hover-disc) var(--ease-hover);
+:is(.header__logo, .footer__logo) img {
+  background-color: var(--accent); object-fit: none; object-position: -9999px 0;
+  -webkit-mask: url("/assets/img/logo.png") center / contain no-repeat; mask: url("/assets/img/logo.png") center / contain no-repeat;
+  transition: background-color var(--dur-hover-color) var(--ease-hover);
 }
-:is(.header__logo, .footer__logo):is(.is-hover, .is-focus, :focus-visible, :active)::before { scale: 1; }
-@media (hover: hover) { :is(.header__logo, .footer__logo):hover::before { scale: 1; } }
-@media (prefers-reduced-motion: reduce) { :is(.header__logo, .footer__logo)::before { transition: none; } }
+@media (hover: hover) { :is(.header__logo, .footer__logo):hover img { background-color: var(--logo-hover); } }
+@media (prefers-reduced-motion: reduce) { :is(.header__logo, .footer__logo) img { transition: none; } }

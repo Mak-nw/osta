@@ -58,8 +58,7 @@
     "legal_privacy": "Datenschutzerklärung",
     "legal_terms": "Nutzungsbedingungen",
     "legal_data": "Datenverarbeitung",
-    "legal_imprint": "Impressum",
-    "menu_az": "A–Z-Index"
+    "legal_imprint": "Impressum"
   },
   "closing": {
     "label": "Kontakt",
@@ -362,9 +361,7 @@
     }
   },
   "hub": {
-    "az_nav": "A–Z-Index",
     "in_stock_nav": "Katalog: auf Lager",
-    "az_jump": "Zum Buchstaben springen",
     "nav_label": "Produktindex",
     "list_title": "{category}: {n} Produkte"
   },
@@ -374,7 +371,7 @@
     "q1": "Was macht die OSTA Trading GmbH?",
     "a1": "Die OSTA Trading GmbH ist ein spezialisierter Distributor von pharmazeutischen Wirkstoffen (API), Hilfsstoffen und Spezialzutaten für die Pharma-, Lebensmittel- und Kosmetikindustrie. Unser Lager befindet sich in Reinbek in der Metropolregion Hamburg; wir beliefern Kunden in ganz Europa und weltweit.",
     "q2": "Welche Produktgruppen bieten Sie an?",
-    "a2": "Unser Katalog umfasst Wirkstoffe (API), Hilfsstoffe und Lebensmittelzutaten. Stöbern Sie im <a href=\"/catalog.html\">Produktkatalog</a> oder im <a href=\"/products/a-z/\">A–Z-Index</a> oder suchen Sie nach dem Namen.",
+    "a2": "Unser Katalog umfasst Wirkstoffe (API), Hilfsstoffe und Lebensmittelzutaten. Stöbern Sie im <a href=\"/catalog.html\">Produktkatalog</a> oder suchen Sie nach dem Namen.",
     "q3": "Was bedeutet „auf Lager“ oder „Beschaffung auf Anfrage“?",
     "a3": "Produkte mit dem Status „auf Lager“ sind in unserem Katalog als verfügbar geführt. Produkte mit „Beschaffung auf Anfrage“ halten wir nicht auf Lager: Wir beschaffen sie für Sie bei geeigneten Herstellern. Beides können Sie mit einer Anfrage bestellen.",
     "q4": "Wie frage ich ein Angebot an?",

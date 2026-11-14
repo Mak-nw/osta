@@ -8,7 +8,7 @@
 </head>
 <body data-page="products">
   <!--@include partials/header.html-->
-  <!-- Template of the product hubs (/products/category/<cat>/ and /products/a-z/). Filled by seo/core.js (renderPage); {{...}} and slot markers. Not a public page. -->
+  <!-- Template of the product hubs (/products/category/<cat>/). Filled by seo/core.js (renderPage); {{...}} and slot markers. Not a public page. -->
   <main id="main">
     <section class="product-hero section--sm">
       <div class="container stack stack--5 product-hero__inner">
@@ -17,9 +17,13 @@
           <a href="/catalog.html" data-i18n="product.breadcrumb_products">Products</a><span class="breadcrumbs__sep"></span>
           <span class="breadcrumbs__current" aria-current="page">{{crumb}}</span>
         </nav>
-        <h1 data-reveal-load="1" class="t-h1 t-accent t-center">{{h1}}</h1>
-        <p class="t-lead t-center" data-reveal-load="2"><!--@slot:intro--></p>
-        <nav class="row row--2 row--wrap" aria-label="Product index" data-i18n-attr="aria-label:hub.nav_label"><!--@slot:nav--></nav>
+        <div class="section-head section-head--center">
+          <div class="section-head">
+          <h1 data-reveal-load="1" class="t-h1 t-accent t-center">{{h1}}</h1>
+          <p class="t-lead t-center" data-reveal-load="2"><!--@slot:intro--></p>
+          </div>
+          <nav class="row row--2 row--wrap" aria-label="Product index" data-i18n-attr="aria-label:hub.nav_label"><!--@slot:nav--></nav>
+        </div>
       </div>
     </section>
     <section class="section--sm">

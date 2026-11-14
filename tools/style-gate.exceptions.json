@@ -28,6 +28,16 @@
       "approvedAt": "2026-11-13",
       "quote": "Лишити як є",
       "source": "рішення замовника у формі questions c3827e (also a15aac: «tel: (як зараз, кнопка-коло)»)"
+    },
+    {
+      "selector": ".footer__group:has(> .contact-line + .contact-line)",
+      "rule": "A3.1",
+      "reason": "Footer stack of contact-line rows (phone/fax, mail/phone) = click group: visible circle->circle gap --click-group-gap 8 px, same as .contact-lines on Contact. Customer quote: «якщо ми написали правила для бейджиу контакту, де сказали який гап між контактом кнопкою та поштою, то чому у футері ми це правило не задіюєм, і відступ між телефоном та факсом якийсь інший»",
+      "approvedBy": "customer",
+      "approvedAt": "2026-11-14",
+      "quote": "якщо ми написали правила для бейджиу контакту, де сказали який гап між контактом кнопкою та поштою, то чому у футері ми це правило не задіюєм, і відступ між телефоном та факсом якийсь інший",
+      "source": "chat 2026-11-14 (orchestrator relay)",
+      "value": 8
     }
   ]
 }

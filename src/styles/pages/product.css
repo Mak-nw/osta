@@ -4,6 +4,7 @@
 .product-hero__inner > * { grid-column: 3 / span 8; min-width: 0; }
 .product-hero .breadcrumbs { justify-content: center; }
 .product-hero__head { align-items: center; text-align: center; }
+.product-hero__head > .section-head { align-items: center; }
 .product-hero__head [data-product-tags] { flex-wrap: wrap; justify-content: center; }
 /* Intro paragraph: 4 central columns (5-8 of 12). It sits in .product-hero__head (cols 3-10, width = 8 col + 7 gap), so the 100% base here is that 8-col box: (100% - gap) / 2 = 4 col + 3 gap exactly (the --cols-4 token resolves 100% against .container and would be too narrow in this block). Desktop only; tablet/mobile = full width (rule below). */
 .product-answer { margin: 0; max-width: calc((100% - var(--grid-gap)) / 2); margin-inline: auto; }
