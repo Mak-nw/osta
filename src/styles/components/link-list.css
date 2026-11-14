@@ -3,22 +3,21 @@
    Hover: 1px --accent border, title --accent-hover, no shadows. focus-visible: --focus-outline. */
 .link-cards { display: grid; grid-template-columns: subgrid; align-items: stretch; margin: 0; padding: 0; list-style: none; }
 .link-cards > li { grid-column: span 3; display: flex; min-width: 0; }
-.link-card { flex: 1; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto 1fr; align-items: start; row-gap: var(--space-4); padding: var(--space-5); box-sizing: border-box; background: var(--surface-white); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text); transition: border-color var(--dur-base) var(--ease-out); }
+.link-card { flex: 1; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto 1fr; align-items: start; row-gap: var(--space-4); padding: var(--space-5); box-sizing: border-box; background: var(--surface-raised); border: 0; border-radius: var(--radius-lg); color: var(--text); }
 .link-card > .icon-ring { grid-column: 1; grid-row: 1; justify-self: start; }
-.link-card__title { grid-column: 1; grid-row: 2; margin: 0; min-width: 0; color: var(--text-accent); overflow-wrap: break-word; hyphens: auto; transition: color var(--dur-base) var(--ease-out); }
+.link-card__title { grid-column: 1; grid-row: 2; margin: 0; min-width: 0; color: var(--text-accent); overflow-wrap: break-word; hyphens: auto; transition: color var(--dur-hover-disc) var(--ease-hover); }
 .link-card__text { grid-column: 1; grid-row: 3; margin: 0; min-width: 0; overflow-wrap: break-word; hyphens: auto; }
-.link-card:hover, .link-card.is-hover { border-color: var(--accent); }
 .link-card:hover .link-card__title, .link-card.is-hover .link-card__title { color: var(--accent-hover); }
 .link-card:focus-visible { outline: var(--focus-outline); outline-offset: var(--focus-offset); }
 /* --3: four PORTRAIT (3:4) cards (3 title-only scene cards + 1 text card), each 3 columns = full width of the 12-col grid. Card (aspect-ratio 1/1, padding --space-5): icon ring B top-left, looping three.js line scene (.link-card__art > canvas, src/pages/home-product-scenes.js, white lines: colour read from .link-card__art color = --accent-contrast) in the middle, bottom row: title left, .round-btn--outline arrow right (white outline; fills white on card hover like .btn--outline-on-accent). Whole card sits on the blue section: transparent fill, 1px --accent-contrast border, all content --accent-contrast */
 .link-cards--3 > li { grid-column: span 3; }
-.link-cards--3 .link-card { background: transparent; border-color: var(--accent-contrast); color: var(--accent-contrast); }
+.link-cards--3 .link-card { background: var(--surface-card-on-accent); color: var(--accent-contrast); }
 .link-cards--3 .link-card > .icon-ring { color: var(--accent-contrast); }
 .link-cards--3 .link-card__title, .link-cards--3 .link-card:hover .link-card__title, .link-cards--3 .link-card.is-hover .link-card__title { color: var(--accent-contrast); }
 .link-cards--3 .link-card:focus-visible { outline-color: var(--accent-contrast); }
-.link-cards--3 .link-card { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto minmax(0, 1fr) auto; align-items: center; aspect-ratio: 3 / 4; padding: var(--space-5); }
+.link-cards--3 .link-card { row-gap: var(--card-inner-gap); grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto minmax(0, 1fr) auto; align-items: center; aspect-ratio: 3 / 4; padding: var(--space-5); }
 .link-cards--3 .link-card > .icon-ring { grid-column: 1 / -1; grid-row: 1; align-self: start; }
-.link-cards--3 .link-card__art { --il-fill: var(--c-white); --il-bg: var(--accent); --il-soft: var(--c-white); grid-column: 1 / -1; grid-row: 2; align-self: stretch; justify-self: center; position: relative; min-height: 0; min-width: 0; width: 100%; color: var(--accent-contrast); }
+.link-cards--3 .link-card__art { --il-fill: var(--c-white); --il-bg: var(--surface-card-on-accent); --il-soft: var(--c-white); grid-column: 1 / -1; grid-row: 2; align-self: stretch; justify-self: center; position: relative; min-height: 0; min-width: 0; width: 100%; color: var(--accent-contrast); }
 .link-cards--3 .link-card__canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
 .link-cards--3 .link-card__canvas.is-ready { opacity: 1; }
 .link-cards--3 .link-card__title { grid-column: 1; grid-row: 3; align-self: end; }

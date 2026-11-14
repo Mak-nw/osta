@@ -6,12 +6,11 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
 const easeOut = (t) => 1 - (1 - t) ** 3;
 
-// 1) hero 3D trajectories strip (three.js, lazy after first paint; no WebGL / failure = the empty strip is hidden)
+// 1) hero 3D trajectories strip (three.js, lazy after first paint; no WebGL / failure = the static poster stays)
 const sceneHost = () => document.querySelector('[data-hero-scene]');
 const startScene = () => import('./services-hero-trajectories.js')
   .then((m) => m.initHeroTrajectories(sceneHost()))
-  .then((r) => { if (!r) sceneHost()?.classList.add('hero--no3d'); })
-  .catch(() => sceneHost()?.classList.add('hero--no3d'));
+  .catch(() => {});   // no WebGL / failure: the static poster (img[data-hero-poster], utils/hero-poster.js) stays as the hero art
 const idle = (fn) => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 800 }) : setTimeout(fn, 0));
 if (sceneHost()) { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => idle(startScene)); else idle(startScene); }
 
@@ -71,3 +70,6 @@ reduced.addEventListener('change', request);
 noPin.addEventListener('change', request);
 document.fonts?.ready.then(request);
 update();
+
+// 3) service cards: 3D scenes are started by services-cards.js (shared with About)
+import './services-cards.js';

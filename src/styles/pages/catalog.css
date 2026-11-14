@@ -1,13 +1,11 @@
 /* Catalog page-only layout; values from tokens only. */
 .catalog__results { display: flex; flex-direction: column; gap: var(--grid-gap); min-width: 0; }
-.catalog__empty { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); background: var(--surface-raised); }
 .catalog__empty[hidden], .catalog__results [hidden] { display: none; }
 .catalog__more { align-self: stretch; width: 100%; justify-content: center; }
 .catalog__more[hidden] { display: none; }
 
 /* Sidebar CTA "Chat with manager" (2 cols wide, 121-209 px): button fills the card, label wraps, arrow icon stays inside on the right. */
-.catalog__help { padding: var(--space-4); }
-.catalog__help .btn { width: 100%; height: auto; min-height: var(--control-md); white-space: normal; justify-content: space-between; text-align: left; line-height: 1.25; padding-block: var(--space-3); }
+.catalog__help .btn { width: 100%; height: auto; min-height: var(--control-md); white-space: normal; justify-content: space-between; text-align: left; padding-block: var(--space-2); }
 .catalog__help .btn span { min-width: 0; }
 .catalog__help .btn .icon { flex-shrink: 0; }
 
@@ -26,12 +24,9 @@
   #catalog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .catalog__filters { display: flex; flex-direction: column; gap: var(--space-2); }
   .catalog__filters > .t-label { display: none; }
-  .catalog__filters-toggle {
-    display: flex; align-items: center; justify-content: space-between; width: 100%; height: var(--control-md); padding-inline: var(--space-4);
-    border: 1px solid var(--border-strong); border-radius: var(--radius-md); color: var(--text-accent); font-size: var(--type-body-size); text-align: left;
-  }
+  .catalog__filters-toggle { display: flex; justify-content: space-between; width: 100%; border-color: var(--border-strong); color: var(--text-accent); text-align: left; }
   /* hover = DISC (buttons.css) */
-  .catalog__filters-chevron { transition: transform var(--dur-fast) var(--ease-out); }
+  .catalog__filters-chevron { transition: transform var(--dur-hover-disc) var(--ease-hover); }
   .catalog__filters-toggle[aria-expanded="true"] .catalog__filters-chevron { transform: rotate(180deg); }
   .catalog__filters:not(.is-open) .filter-list { display: none; }
   .catalog__filters .filter-item.is-active { background: var(--surface-white); } /* list sits on the page surface (as on desktop); the active item is white so it stays clearly distinct */
@@ -41,4 +36,16 @@
 @media (max-width: 767px) {
   #catalog-grid { grid-template-columns: minmax(0, 1fr); }
   .catalog__help .btn { width: 100%; }
+}
+
+/* Customer 2026-11-13: sidebar text/icons are ACCENT blue, never black or grey: search value + placeholder (the icon is already --accent), category list, counter. */
+.layout-catalog .search .input { color: var(--text-accent); }
+.layout-catalog .search .input::placeholder { color: var(--text-accent); }
+
+/* Product hubs (/products/category/*, /products/a-z/): the product-card grid follows the product-related rule (2 columns tablet, 1 mobile: no 3 narrow columns, no horizontal scroll at 375/320);
+   mobile: the A-Z jump letters (.btn--sm) get a 44x44 hit area (2.5.5). */
+@media (max-width: 1199px) { .grid-3:has(> .product-card) { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 767px) {
+  .grid-3:has(> .product-card) { grid-template-columns: minmax(0, 1fr); }
+  .row--wrap > .btn--sm { --_h: var(--control-md); min-width: var(--control-md); }
 }

@@ -5,20 +5,18 @@
 // Dots are pure white (token --text-on-accent), alpha up to 1.0 (back dots 0.6-0.75), lines white alpha <= 0.5 (quieter than the dots). Flat, hard-edged dots (no halos, no gradient sprites, no fills); the canvas is transparent: the blue of the hero (--surface-accent) shows through. No cursor reaction, no hover, no parallax.
 // Time -> state is a pure function of (t mod 20); the shell/nodes/dust are built in pairs that are 180 deg images of each other around the long axis and the slow spin is pi per loop, so frame 20 == frame 0.
 // The scene is centred on the page (x = centre of the hero) and on the H1 block (y) over the whole hero (>=1200) / centred in the area above the text (<=1199); fit() only shrinks its unit so it touches no title line, search or chips.
-// Renders only while the hero is on screen and the tab is visible; prefers-reduced-motion = one static frame (t = 13.5, the pill turned ~26 deg towards the viewer). DPR <= 2 (<= 1.5 on tablet/mobile). No WebGL -> returns null.
+// Renders only while the hero is on screen and the tab is visible; prefers-reduced-motion = one static frame (frame 0 = the poster, clock never starts). Poster -> live hand-over: utils/hero-poster.js (frame 0 first, clock starts at 0 after window load + fonts). DPR <= 2 (<= 1.5 on tablet/mobile). No WebGL -> returns null.
 import {
   WebGLRenderer, Scene, OrthographicCamera, Group, BufferGeometry, BufferAttribute, ShaderMaterial, Points, LineSegments, Vector3, Color, SRGBColorSpace,
 } from 'three';
 import { capDpr } from '../utils/dpr.js';
 import { tokenToRgb } from '../utils/css-color.js';
+import { whenPageLoaded, revealLive } from '../utils/hero-poster.js';
+import { computeHeroFit, placePoster, TILT, SPH } from './home-hero-fit.js';
 
-const LOOP = 20, STATIC_T = 13.5, MAX_DPR = 2;
+const LOOP = 20, MAX_DPR = 2;
 const RC = 0.58, H = 0.82;            // capsule (sphere radius = 1 unit), long axis = x; same mapping as scenes/fiber-pill.html
-const TILT = 0.42;                    // fixed tilt of the group (rad)
 const SPIN = Math.PI / LOOP;          // rad/s around the long axis: pi per loop (40 s per turn)
-const SPH = 0.82;                     // sphere radius vs the pill (pill half-length 1.4): the sphere phase is smaller, so the longer pill can be the biggest thing in the free zone
-const R_SPHERE = 1.3 * SPH, R_PILL = RC * 1.18, AX_PILL = H * 1.18; // fit shapes (units): sphere radius incl. nodes; capsule radius + half axis (nodes sit up to 1.17x outside the capsule surface)
-const MAX_UNIT = 280, MIN_UNIT = 40;
 const A_CAP = RC / (2 * (RC + H));    // cap share of the sphere-map parameter t (t in 0..1 along the long axis; area-uniform: sphere dx = 2t - 1)
 const pillAt = (t) => { t = ((t % LOOP) + LOOP) % LOOP; return t < 5 ? 0 : t < 8 ? (t - 5) / 3 : t < 15 ? 1 : t < 18 ? 1 - (t - 15) / 3 : 0; };
 const smooth = (p) => p * p * (3 - 2 * p);
@@ -99,7 +97,6 @@ void main(){ vec2 d = gl_PointCoord - 0.5; float l = length(d); if (l > 0.5) dis
 const LINE_FRAG = 'uniform vec3 uInk; varying float vA; void main(){ gl_FragColor = vec4(uInk, vA); }';
 
 // distance from point to axis-aligned rect {l,t,r,b} (0 inside)
-const dRect = (x, y, q) => Math.hypot(Math.max(q.l - x, 0, x - q.r), Math.max(q.t - y, 0, y - q.b));
 
 export function initHomeHeroScene(host) {
   if (!host) return null;
@@ -119,7 +116,7 @@ export function initHomeHeroScene(host) {
   host.prepend(canvas);
   let renderer;
   try { renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true }); } catch { canvas.remove(); return null; }
-  renderer.setClearColor(0x000000, 0);
+  renderer.setClearColor(0x061f52, 0);
 
   /* ---------- geometry: shell + nodes + dust (each particle has a 180-degree twin around x) ---------- */
   const R = rng(7);
@@ -189,84 +186,47 @@ export function initHomeHeroScene(host) {
   /* ---------- fit: the scene sits at a FIXED centre (x = host centre = page centre; y = centre of the H1 block on desktop, host centre in the stacked layout) and only its unit is searched: the biggest unit (sphere circle + tilted capsule) that touches no content rect (binary search: the check is monotonic in u) ---------- */
   let W = 0, Hh = 0, started = false;
   const fit = () => {
-    const hr = host.getBoundingClientRect();
-    const rel = (r, m) => ({ l: r.left - hr.left - m, t: r.top - hr.top - m, r: r.right - hr.left + m, b: r.bottom - hr.top + m });
-    const blocks = [];
-    const hero = host.closest('.hero') || host.parentElement;
-    const panel = hero.ownerDocument.querySelector('.header__panel');
-    if (panel) blocks.push(rel(panel.getBoundingClientRect(), 12));
-    let title = null;                                  // union of the H1 text lines (both phrases): the vertical axis of the composition
-    const h1 = hero.querySelector('.hero__title');
-    if (h1) {
-      const parts = [...h1.querySelectorAll('.hero__title-part')];
-      (parts.length ? parts : [h1]).forEach((part) => {   // each phrase separately: left and right phrases never merge into one block across the centre
-        const g = document.createRange(); g.selectNodeContents(part);
-        const lns = [];
-        [...g.getClientRects()].filter((r) => r.width > 1 && r.height > 1).forEach((r) => {
-          const ln = lns.find((l) => Math.abs(l.top - r.top) < r.height * 0.5);
-          if (ln) { ln.left = Math.min(ln.left, r.left); ln.right = Math.max(ln.right, r.right); ln.bottom = Math.max(ln.bottom, r.bottom); } else lns.push({ left: r.left, right: r.right, top: r.top, bottom: r.bottom });
-        });
-        lns.forEach((l) => blocks.push(rel(l, 12)));
-        const pr = part.getBoundingClientRect();     // the box of the phrase (not the word glyphs: they move during the reveal animation) gives the axis
-        title = title ? { top: Math.min(title.top, pr.top), bottom: Math.max(title.bottom, pr.bottom) } : { top: pr.top, bottom: pr.bottom };
-      });
-    }
-    const search = hero.querySelector('.hero-search');
-    if (search) blocks.push(rel(search.getBoundingClientRect(), 32));
-    const cats = hero.querySelector('.hero-cats');     // the row container is wider than its chips: use the chips' union
-    if (cats) { const rs = [...cats.children].map((c) => c.getBoundingClientRect()).filter((r) => r.width > 1); if (rs.length) blocks.push(rel({ left: Math.min(...rs.map((r) => r.left)), top: Math.min(...rs.map((r) => r.top)), right: Math.max(...rs.map((r) => r.right)), bottom: Math.max(...rs.map((r) => r.bottom)) }, 32)); }
-    const ca = Math.cos(TILT), sa = Math.sin(TILT);
-    const overlay = getComputedStyle(host).position === 'absolute';   // desktop: scene over the whole hero, centred on the H1 block; stacked layout: centred in its own box
-    const x = W / 2, y = overlay && title ? (title.top + title.bottom) / 2 - hr.top : Hh / 2;
-    const ok = (u) => {
-      const rs = R_SPHERE * u, rp = R_PILL * u, ax = AX_PILL * u;
-      const ex = Math.max(rs, ax * ca + rp), ey = Math.max(rs, ax * sa + rp);
-      if (x - ex < 8 || x + ex > W - 8 || y - ey < 8 || y + ey > Hh - 8) return false;
-      for (const q of blocks) {
-        if (dRect(x, y, q) < rs) return false;
-        for (let i = -4; i <= 4; i++) if (dRect(x + ax * ca * i / 4, y - ax * sa * i / 4, q) < rp) return false;
-      }
-      return true;
-    };
-    let u = MAX_UNIT;
-    if (!ok(u)) { let lo = MIN_UNIT, hi = MAX_UNIT; while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (ok(mid)) lo = mid; else hi = mid; } u = lo; }
+    const f = computeHeroFit(host, W, Hh), { x, y, u, hr } = f;
+    placePoster(host, f);   // the poster follows every live fit: identical centre and scale at the hand-over
     camera.left = -x / u; camera.right = (W - x) / u; camera.top = y / u; camera.bottom = -(Hh - y) / u;
     camera.updateProjectionMatrix();
     host.__heroScene && (host.__heroScene.fit = { unit: u, cx: Math.round(x + hr.left), cy: Math.round(y + hr.top) });
   };
+  let sizedW = 0, sizedH = 0, sizedDpr = 0;
   const resize = () => {
     W = host.clientWidth; Hh = host.clientHeight;
     if (!W || !Hh) return false;
     const dpr = capDpr(MAX_DPR);
-    renderer.setPixelRatio(dpr); U.uPx.value = dpr;
-    renderer.setSize(W, Hh, false);
+    if (W !== sizedW || Hh !== sizedH || dpr !== sizedDpr) {   // the drawing buffer is reallocated only on a REAL size / DPR change (re-allocation blanks the canvas = a visible blink)
+      renderer.setPixelRatio(dpr); U.uPx.value = dpr;
+      renderer.setSize(W, Hh, false);
+      sizedW = W; sizedH = Hh; sizedDpr = dpr;
+    }
     fit();
     return true;
   };
 
   /* ---------- timeline: sphere + rays 0-5 | to pill 5-8 | pill 8-15 (static frame t = 13.5) | back to sphere 15-18 | sphere 18-20 ---------- */
   const state = (t) => { t = ((t % LOOP) + LOOP) % LOOP; return { t, pill: pillAt(t) }; };
-  let lost = false, fixedT = null, raf = 0, onScreen = false, t0 = 0, elapsed = 0;
-  const draw = (T, still) => {
+  let lost = false, fixedT = null, raf = 0, onScreen = false, released = false, t0 = 0, elapsed = 0;   // released = page fully loaded, poster handed over: the clock starts at 0 here
+  const draw = (T) => {
     if (lost || !W) return;
     const s = state(T);
     U.uT.value = s.t; U.uPill.value = s.pill;
     U.uSpin.value = SPIN * (((T % (2 * LOOP)) + 2 * LOOP) % (2 * LOOP));
-    if (still) grp.rotation.set(0.12, 0.46, TILT);                                  // reduced motion: the pill turned ~26 deg towards the viewer
-    else grp.rotation.set(0, 2 * Math.PI * easeIO((s.t - TURN_A) / (TURN_B - TURN_A)), TILT);   // rigid body: dots and lines turn together with the capsule
+    grp.rotation.set(0, 2 * Math.PI * easeIO((s.t - TURN_A) / (TURN_B - TURN_A)), TILT);   // rigid body: dots and lines turn together with the capsule
     renderer.render(scene, camera);
-    canvas.classList.add('is-ready');
   };
-  const frame = () => { raf = requestAnimationFrame(frame); draw(elapsed + (performance.now() - t0) / 1000, reducedMq.matches); };
+  const frame = () => { raf = requestAnimationFrame(frame); draw(elapsed + (performance.now() - t0) / 1000); };
   const sync = () => {
-    const run = onScreen && !document.hidden && !reducedMq.matches && !lost && fixedT === null;
+    const run = released && onScreen && !document.hidden && !reducedMq.matches && !lost && fixedT === null;
     if (run && !raf) { t0 = performance.now(); raf = requestAnimationFrame(frame); }
     if (!run && raf) { cancelAnimationFrame(raf); raf = 0; elapsed += (performance.now() - t0) / 1000; }
-    if (!run && onScreen && W) draw(fixedT !== null ? fixedT : reducedMq.matches ? STATIC_T : elapsed, fixedT === null && reducedMq.matches);
+    if (!run && onScreen && W) draw(fixedT !== null ? fixedT : elapsed);
   };
   let refitRaf = 0;
   const refit = () => { cancelAnimationFrame(refitRaf); refitRaf = requestAnimationFrame(() => { if (resize() && !raf) sync(); }); };
-  const ro = new ResizeObserver(() => { if (resize()) { started = true; sync(); if (!onScreen) draw(reducedMq.matches ? STATIC_T : elapsed, reducedMq.matches); } });
+  const ro = new ResizeObserver(() => { if (resize()) { started = true; sync(); if (!onScreen) draw(elapsed); } });
   ro.observe(host);
   const io = new IntersectionObserver((en) => { onScreen = en[en.length - 1].isIntersecting; sync(); });
   io.observe(host);
@@ -300,6 +260,12 @@ export function initHomeHeroScene(host) {
     get running() { return !!raf; },
     started: () => started, fit: null, counts: { shell: N_SHELL, rays: N_RAYS, dust: N_DUST },
   };
-  resize();
+  if (resize()) draw(0);   // frame 0 on the still invisible canvas (shader warm-up); revealed with the clock reset to 0 once the page is fully loaded
+  whenPageLoaded().then(() => {
+    if (lost) return;
+    released = true; elapsed = 0; resize(); draw(0);
+    revealLive(host, canvas);
+    sync();
+  });
   return { destroy };
 }

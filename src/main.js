@@ -39,6 +39,7 @@ if (qualityScenes.length) {
 // Home hero scene (particles -> rays -> pill): lazy, after the first frame; any failure / no WebGL leaves the plain blue hero.
 const heroScene = document.querySelector('.hero--home [data-hero-scene]');
 if (heroScene) {
+  import('./pages/home-hero-poster.js').then((m) => m.initHomeHeroPoster(heroScene)).catch(() => {});   // size the poster with the live scene's fit, at once (not idle)
   const start = () => import('./pages/home-hero-scene.js').then((m) => { m.initHomeHeroScene(heroScene); }).catch(() => {});
   if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 800 }); else setTimeout(start, 0);
 }

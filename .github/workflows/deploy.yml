@@ -19,6 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # sitemap lastmod = git date of the last commit touching each source file (seo/core.js fileDate)
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -27,6 +29,9 @@ jobs:
       - run: npm run build
         env:
           VITE_BASE: /osta/
+      # Static gate (no browser): one h1, heading hierarchy, title/description/canonical/hreflang/lang, duplicate ids, dashed lines in built CSS/JS. Fails the deploy on error.
+      # The browser gates (npm run audit = hover + style) need Chrome/WebGL and run locally before merge (tools/README.md).
+      - run: npm run audit:static
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

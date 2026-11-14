@@ -1,43 +1,44 @@
-/* Product page background: fullscreen fragment shader with drifting topographic isolines.
-   Ported 1:1 from the customer's corner-outline-shader. Decorative only (aria-hidden).
-   Colours come from tokens (--surface, --shader-line); if WebGL is unavailable or the
-   shader fails, the canvas is removed and the solid --surface background stays. */
+/* Product page background: fullscreen fragment shader with slowly drifting topographic isolines.
+   Customer 2026-11-13: sharp vector lines, no pixelation / blur, no dirty colours. Rendered at NATIVE resolution
+   (canvas = CSS size x devicePixelRatio, DPR capped at 2, no upscale), pattern scale in CSS px (so DPR does not change the look),
+   every line is 1 device px with analytic anti-aliasing (fwidth), ONE line colour (--accent at low alpha) on --surface:
+   no fill bands, no blotch mask, no colour mixing. Colours come from tokens. Decorative only (aria-hidden).
+   Very slow drift; reduced-motion = one static frame; paused when the tab is hidden. If WebGL is unavailable or
+   the shader fails, the canvas is removed and the solid --surface background stays. */
 
 import { tokenToRgb } from '../utils/css-color.js';
-import { capDpr } from '../utils/dpr.js';
 
 const CONFIG = {
-  lineStrength: 0.7,    // 0..1: line strength
+  lineAlpha:    0.13,   // line opacity over --surface (0.10..0.16)
   lineFreq:     6.0,    // isoline frequency
-  driftSpeed:   0.12,   // flow speed
-  patternScale: 0.0022, // noise field scale
-  lineWidth:    1.3,    // line width multiplier
-  fillBands:    1,      // 1 = tint bands between lines
-  fillStrength: 0.05,   // band tint strength
-  visVariation: 0.55,   // 0..1: how strongly blotches dim the pattern
-  visScale:     0.0009, // blotch scale
+  driftSpeed:   0.025,  // very slow flow
+  patternScale: 0.0022, // noise field scale per CSS px
+  maskMin:      0.30,   // line alpha multiplier in the centre behind the text (0.25..0.35)
+  maskInner:    0.55,   // normalised radius where the full dimming ends and the fade to 1.0 begins
+  maskRx:       0.9,    // X radius = content column width x this
+  maskRy:       0.9,    // Y radius = hero content height x this
 };
 
-const MAX_DPR = 1.5;
-const FRAME_MS = 1000 / 30;      // ~30 fps cap
+const MAX_DPR = 2;
+const FRAME_MS = 1000 / 24;      // frame cap
 const STATIC_TIME = 12.0;        // fixed time for the reduced-motion still frame
 
 /* Shared shader body (GLSL ES 1.00 / 3.00 differences are handled by the prelude). */
 const FRAG_BODY = `
 precision highp float;
 uniform vec2  uResolution;
+uniform float uDpr;
 uniform float uTime;
 uniform vec3  uBgColor;
 uniform vec3  uLineColor;
-uniform float uStrength;
+uniform float uAlpha;
 uniform float uFreq;
 uniform float uDrift;
 uniform float uScale;
-uniform float uLineWidth;
-uniform float uFillBands;
-uniform float uFillStrength;
-uniform float uVisVariation;
-uniform float uVisScale;
+uniform vec2  uMaskC;    // centre of the content in CSS px (origin top-left of the viewport)
+uniform vec2  uMaskR;    // ellipse radii in CSS px (0 = mask off)
+uniform float uMaskMin;
+uniform float uMaskInner;
 
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -52,11 +53,6 @@ float noise(vec2 x) {
     mix(hash(i + vec2(0.0,1.0)), hash(i + vec2(1.0,1.0)), f.x),
     f.y);
 }
-float fbm(vec2 p) {
-  float s = 0.0, a = 0.5;
-  for (int i = 0; i < 5; i++) { s += a * noise(p); p *= 2.02; a *= 0.5; }
-  return s;
-}
 float fbmFlow(vec2 p, float time) {
   float s = 0.0, a = 0.5;
   for (int i = 0; i < 5; i++) {
@@ -70,27 +66,23 @@ float fbmFlow(vec2 p, float time) {
 }
 
 void main() {
-  vec2 uv = gl_FragCoord.xy;
-  vec3 col = uBgColor;
-
-  float visN = fbm(uv * uVisScale + vec2(500.0, 200.0) + uTime * 0.01);
-  float visMask = mix(1.0 - uVisVariation, 1.0, visN);
-
-  vec2 p = uv * uScale;
-  float h  = fbmFlow(p, uTime * uDrift) * 0.65 + fbmFlow(p * 1.7 + 5.0, uTime * uDrift * 1.3) * 0.55;
+  vec2 p = (gl_FragCoord.xy / uDpr) * uScale;   // pattern in CSS px
+  float h = fbmFlow(p, uTime * uDrift) * 0.65 + fbmFlow(p * 1.7 + 5.0, uTime * uDrift * 1.3) * 0.55;
 
   float t = h * uFreq;
-  float lw = (fwidth(t) + 0.001) * uLineWidth;
-  float lines = 1.0 - clamp(abs(fract(t - 0.5) - 0.5) / lw, 0.0, 1.0);
+  float gw = max(fwidth(t), 1e-5);                       // t change per DEVICE px
+  float d = abs(fract(t - 0.5) - 0.5) / gw;              // distance to the isoline in device px
+  float line = clamp(1.0 - (d - 0.5), 0.0, 1.0);         // 1 device px wide, analytic AA
 
-  if (uFillBands > 0.5) {
-    float band = floor(t);
-    float tint = hash(vec2(band, band * 1.37)) * uFillStrength;
-    col += tint * visMask;
+  /* radial dimming of the lines behind the text, done in the shader (no CSS gradient / mask-image) */
+  float k = 1.0;
+  if (uMaskR.x > 0.0 && uMaskR.y > 0.0) {
+    vec2 c = vec2(gl_FragCoord.x, uResolution.y - gl_FragCoord.y) / uDpr;
+    float dn = length((c - uMaskC) / uMaskR);
+    k = mix(uMaskMin, 1.0, smoothstep(uMaskInner, 1.0, dn));
   }
 
-  col = mix(col, uLineColor, lines * uStrength * visMask);
-  FRAG_OUT = vec4(col, 1.0);
+  FRAG_OUT = vec4(mix(uBgColor, uLineColor, line * uAlpha * k), 1.0);
 }
 `;
 
@@ -114,6 +106,14 @@ function tokenToUnit(name) {
   return rgb && rgb.map((v) => v / 255);
 }
 
+/* 1 device pixel in CSS px, for the 1-device-px strokes of the CTA illustration (IL1). */
+function setDevicePx() {
+  const set = () => document.documentElement.style.setProperty('--device-px', (1 / (window.devicePixelRatio || 1)).toFixed(4) + 'px');
+  set();
+  window.addEventListener('resize', set);
+}
+setDevicePx();
+
 function init() {
   const canvas = document.createElement('canvas');
   canvas.className = 'page-bg';
@@ -124,7 +124,7 @@ function init() {
 
   try {
     const bg = tokenToUnit('--surface');
-    const line = tokenToUnit('--shader-line');
+    const line = tokenToUnit('--accent');
     if (!bg || !line) return bail();
 
     const opts = { alpha: false, antialias: false, depth: false, stencil: false, powerPreference: 'low-power' };
@@ -164,15 +164,15 @@ function init() {
     const uTime = u('uTime');
     gl.uniform3f(u('uBgColor'), bg[0], bg[1], bg[2]);
     gl.uniform3f(u('uLineColor'), line[0], line[1], line[2]);
-    gl.uniform1f(u('uStrength'), CONFIG.lineStrength);
+    gl.uniform1f(u('uAlpha'), CONFIG.lineAlpha);
     gl.uniform1f(u('uFreq'), CONFIG.lineFreq);
     gl.uniform1f(u('uDrift'), CONFIG.driftSpeed);
     gl.uniform1f(u('uScale'), CONFIG.patternScale);
-    gl.uniform1f(u('uLineWidth'), CONFIG.lineWidth);
-    gl.uniform1f(u('uFillBands'), CONFIG.fillBands);
-    gl.uniform1f(u('uFillStrength'), CONFIG.fillStrength);
-    gl.uniform1f(u('uVisVariation'), CONFIG.visVariation);
-    gl.uniform1f(u('uVisScale'), CONFIG.visScale);
+    gl.uniform1f(u('uMaskMin'), CONFIG.maskMin);
+    gl.uniform1f(u('uMaskInner'), CONFIG.maskInner);
+    const uMaskC = u('uMaskC');
+    const uMaskR = u('uMaskR');
+    const uDpr = u('uDpr');
     const uRes = u('uResolution');
 
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -186,9 +186,32 @@ function init() {
     };
     const drawNow = () => draw(motionQuery.matches ? STATIC_TIME : (performance.now() - t0) / 1000);
 
+    /* mask = ellipse around the hero content (breadcrumbs..lead); viewport coords, so it follows the scroll.
+       X radius ~ content column width, Y radius ~ hero content height; on phones it spans the full width. */
+    const updateMask = () => {
+      const head = document.querySelector('.product-hero__head');
+      const crumbs = document.querySelector('.product-hero .breadcrumbs');
+      if (!head) { gl.uniform2f(uMaskR, 0, 0); return; }
+      const a = (crumbs || head).getBoundingClientRect();
+      const b = head.getBoundingClientRect();
+      const cw = document.documentElement.clientWidth;
+      const top = Math.min(a.top, b.top);
+      const bottom = Math.max(a.bottom, b.bottom);
+      const narrow = cw < 768;
+      const colW = narrow ? cw : b.width;
+      gl.uniform2f(uMaskC, narrow ? cw / 2 : b.left + b.width / 2, (top + bottom) / 2);
+      gl.uniform2f(uMaskR, colW * (narrow ? 0.8 : CONFIG.maskRx), Math.max(1, (bottom - top)) * CONFIG.maskRy);
+    };
+    let maskRaf = 0;
+    const onScroll = () => {
+      if (maskRaf) return;
+      maskRaf = requestAnimationFrame(() => { maskRaf = 0; updateMask(); if (motionQuery.matches) drawNow(); });
+    };
+
     const resize = () => {
-      const dpr = capDpr(MAX_DPR);
-      const w = Math.max(1, Math.round(window.innerWidth * dpr));
+      updateMask();
+      const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+      const w = Math.max(1, Math.round(document.documentElement.clientWidth * dpr));
       const h = Math.max(1, Math.round(window.innerHeight * dpr));
       if (canvas.width !== w || canvas.height !== h) {
         canvas.width = w;
@@ -196,6 +219,7 @@ function init() {
       }
       gl.viewport(0, 0, w, h);
       gl.uniform2f(uRes, w, h);
+      gl.uniform1f(uDpr, w / document.documentElement.clientWidth);
       drawNow(); // canvas is cleared on resize; repaint immediately
     };
 
@@ -216,6 +240,11 @@ function init() {
 
     canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); bail(); });
     window.addEventListener('resize', resize);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('load', onScroll);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(onScroll);
+    const headEl = document.querySelector('.product-hero__head');
+    if (headEl && window.ResizeObserver) new ResizeObserver(onScroll).observe(headEl);
     document.addEventListener('visibilitychange', sync);
     if (motionQuery.addEventListener) motionQuery.addEventListener('change', sync);
 

@@ -1,59 +1,53 @@
-/* Product page: only token-based page layout. */
-/* content in the 8 central columns (3-10) of the 12-col page grid */
-.product-hero__inner { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--space-5); }
+/* Product page: only token-based page layout. Customer 2026-11-13: Home style on every page; on the PRODUCT page (this file) hero, Similar heading and links are CENTRED (replaces the earlier LEFT rule); text inside the white info tiles stays left. */
+/* NARROW grid (customer 2026-11-13, as before the SEO template): hero, info cards, the action button and Similar sit in the 8 CENTRAL columns (3-10) of the 12-col grid (1104 / 912 px on 1728 / 1440); text LEFT-aligned inside that column. hero: breadcrumbs, then ONE .section-head (h1 > tags > answer, gap --section-head-gap), then the info cards */
+.product-hero__inner { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--section-head-gap); }
 .product-hero__inner > * { grid-column: 3 / span 8; min-width: 0; }
-.product-hero__inner > .breadcrumbs, .product-hero__inner > [data-product-tags] { justify-content: center; flex-wrap: wrap; }
-/* info tiles: 2 per row (4 of the 8 central columns each), equal height in a row, CTA tile full width below */
-.product-info { width: 100%; justify-self: stretch; margin-top: var(--space-6); display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: var(--grid-gap); align-items: stretch; }
+.product-hero .breadcrumbs { justify-content: center; }
+.product-hero__head { align-items: center; text-align: center; }
+.product-hero__head [data-product-tags] { flex-wrap: wrap; justify-content: center; }
+/* Intro paragraph: 4 central columns (5-8 of 12). It sits in .product-hero__head (cols 3-10, width = 8 col + 7 gap), so the 100% base here is that 8-col box: (100% - gap) / 2 = 4 col + 3 gap exactly (the --cols-4 token resolves 100% against .container and would be too narrow in this block). Desktop only; tablet/mobile = full width (rule below). */
+.product-answer { margin: 0; max-width: calc((100% - var(--grid-gap)) / 2); margin-inline: auto; }
+/* info cards: 2 per row (4 of the 8 columns each), equal height in a row; Specs / FAQ full width. White fill / outline come from .card / .info-card (cards.css), no override here; text and icons --accent */
+.product-info { width: 100%; margin-top: var(--space-6); display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: var(--grid-gap); align-items: stretch; }
 .product-info > .info-card { grid-column: span 4; }
+.product-info .info-card :is(.icon-ring, .info-card__label, .spec-table td, .info-card__value) { color: var(--accent); }
+.product-info .info-card .info-card__value--body:not(:has(.spec-table)) { color: var(--text-ink-deep); } /* Description / Usage text: deep navy (customer 2026-11-13); Specifications table keeps --accent */
 .product-info [hidden] { display: none; }
 .product-info .info-card > div { min-width: 0; }
 .product-info .info-card__value { overflow-wrap: anywhere; }
-/* CTA tile: text left, illustration centred, round button right */
-.product-info > .cta-block { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-areas: "title art btn" "text art btn"; align-items: start; color: var(--text-on-accent); }
-.cta-block__title { grid-area: title; }
-.cta-block__foot { display: contents; }
-.cta-block__text { grid-area: text; align-self: end; }
-.cta-block__foot .round-btn { grid-area: btn; justify-self: end; align-self: end; }
-.cta-block__art { grid-area: art; position: relative; align-self: stretch; min-height: 0; }
-.cta-block__art-svg { --il-bg: var(--surface-accent); --il-fill: var(--c-white); --il-ink: var(--surface-accent); --il-soft: var(--c-blue-200); --il-canvas: var(--c-blue-400); --il-grid: var(--c-blue-500);
-  position: absolute; inset: 0; width: 100%; height: 100%; stroke-width: 1px; }
-.cta-block__art-svg .il-occ { fill: var(--il-bg); stroke: none; }
-.cta-block__art-svg .il-fill { fill: var(--il-fill); stroke: none; }
-.cta-block__art-svg .il-ink { stroke: var(--il-ink); }
-.cta-block__art-svg .il-bold { stroke-width: 1.25px; }
-.cta-block__art-svg .il-canvas { stroke: var(--il-canvas); }
-.cta-block__art-svg .il-grid { stroke: var(--il-grid); stroke-width: 0.75px; stroke-dasharray: 2 3; }
-.cta-block__art-svg .il-dash { stroke-dasharray: 2 3; stroke-width: 0.75px; }
-.cta-block__art-svg .il-edge, .cta-block__art-svg .il-sheet, .cta-block__art-svg .il-line { stroke: var(--il-soft); }
+
+/* Similar products: .section-head (h2 only) over the 3-card grid, one secondary button below */
+.product-related .container { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); }
+.product-related .container > * { grid-column: 3 / span 8; min-width: 0; }
+.product-related .stack > .section-head { margin: 0; align-items: center; text-align: center; }
+.product-related .stack > .btn { justify-self: center; }
+
+/* Action button under the info tiles (.product-hero__inner child after .product-info, 24 px = row gap of the hero): centred on the page axis (cols 3-10 are symmetric) */
+.product-hero__inner > .btn { justify-self: center; }
 
 /* ==========================================================================
-   Responsive product. One column: tablet = full 8 columns, info cards 2 per row; mobile = info cards stacked, the CTA block stacks (title + round button, text, illustration).
+   Responsive product. Tablet: hero full 8 columns, info cards 2 per row; mobile: info cards stacked.
    ========================================================================== */
 @media (max-width: 1199px) {
-  .product-hero__inner > * { grid-column: 1 / -1; }
+  .product-related .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .product-hero__inner > *, .product-related .container > * { grid-column: 1 / -1; }
   .product-info { margin-top: var(--space-5); }
-  .product-info > .info-card { grid-column: span 4; }
-  .product-info > .cta-block { padding: var(--space-5); }
+  .product-answer { max-width: none; } /* tablet: full width of the hero, as the rest of the hero (design-system.md) */
 }
 @media (max-width: 767px) {
+  .product-related .grid-3 { grid-template-columns: minmax(0, 1fr); }
   .product-info { grid-template-columns: minmax(0, 1fr); }
-  .product-info > .info-card, .product-info > .cta-block { grid-column: 1 / -1; }
-  .product-info > .cta-block { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "title btn" "text text" "art art"; row-gap: var(--space-4); }
-  .cta-block__text { max-width: none; align-self: start; }
-  .cta-block__art { height: 160px; }
-  .cta-block__foot .round-btn { align-self: start; }
+  .product-info > .info-card { grid-column: 1 / -1; }
   .breadcrumbs { flex-wrap: wrap; row-gap: var(--space-1); }
   .breadcrumbs a { display: inline-flex; align-items: center; justify-content: center; min-height: var(--control-md); min-width: var(--control-md); }
 }
 
 /* SEO pages (static product page + hubs): hub/answer rows, wide info tile with the parameter table */
-.product-hero__inner > .row { justify-content: center; flex-wrap: wrap; }
 .product-info > .info-card--wide { grid-column: 1 / -1; }
 .spec-table { width: 100%; border-collapse: collapse; }
 .spec-table th, .spec-table td { padding-block: var(--space-2); text-align: left; vertical-align: top; border-top: 1px solid var(--border); }
 .spec-table tr:first-child th, .spec-table tr:first-child td { border-top: 0; }
-.spec-table th { width: 40%; padding-right: var(--space-4); color: var(--text-muted); font-weight: 400; }
+.spec-table th { width: 40%; padding-right: var(--space-4); color: var(--text); font-weight: 400; }
 @media (max-width: 767px) {
   .spec-table th { width: 45%; }
 }

@@ -1,5 +1,5 @@
 /* chip: icon (B, bare) + label (category badge). .chip + size (--sm|--md) ; --pill adds a white capsule */
-.chip { --_h: var(--control-sm); display: inline-flex; align-items: center; gap: var(--space-2); height: var(--_h); font-size: var(--type-body-size); color: var(--text-muted); }
+.chip { --_h: var(--control-sm); display: inline-flex; align-items: center; gap: var(--space-2); height: var(--_h); font-size: var(--type-body-size); color: var(--text-accent); }
 .chip--sm { --_h: var(--control-sm); }
 .chip--md { --_h: var(--control-md); }
 /* chip--tag: compact product-card tag: 24 px high (--chip-sm), label 12/16 */
@@ -7,23 +7,21 @@
 .chip--pill { background: var(--surface-white); border-radius: var(--radius-md); padding-inline: var(--space-3) var(--space-3); color: var(--text-accent); }
 .chip.is-disabled { opacity: .5; pointer-events: none; }
 
-/* meta-tag: "Cas No. 120511-73-1" */
-.meta-tag { display: inline-flex; align-items: center; gap: var(--space-2); height: var(--control-sm); padding-inline: var(--space-3); border-radius: var(--radius-md); background: var(--surface-raised); font-size: var(--type-body-size); }
-.meta-tag__key { color: var(--text-muted); }
+/* chip key (CAS chip): label "Cas No." in --text-accent, value inherits --text-accent from .chip--pill; same chip as the category chips */
+/* chip row (one gap for every group of chips / tags): product-card tags, product / hub hero tags */
+.product-card__tags, .row[data-product-tags] { gap: var(--gap-small); }
+.meta-tag__key { color: var(--text); }
 
 /* breadcrumbs: Home — Products — Anastrozole */
-.breadcrumbs { display: flex; align-items: center; gap: var(--space-3); font-size: var(--type-body-size); color: var(--text-accent); }
-.breadcrumbs a:hover,
-.breadcrumbs a.is-hover { color: var(--accent); text-decoration: underline; }
+.breadcrumbs { display: flex; align-items: center; gap: var(--space-3); font-size: var(--type-label-size); line-height: var(--type-label-lh); color: var(--text-accent); }
+.breadcrumbs a { display: inline-flex; align-items: center; min-height: var(--hit-min); } /* click target >= 24 px, text stays 14/20 */
+/* breadcrumb link hover: text-link component (components/text-link.css) */
 .breadcrumbs__sep { width: var(--space-5); height: 1px; background: var(--border-strong); opacity: .5; }
-.breadcrumbs__current { color: var(--text-muted); }
+.breadcrumbs__current { color: var(--text); }
 
 /* filter list (sidebar) */
 .filter-list { display: flex; flex-direction: column; gap: var(--space-1); }
-.filter-item {
-  display: flex; align-items: center; gap: var(--space-3); height: var(--control-md); padding-inline: var(--space-2);
-  border-radius: var(--radius-md); font-size: var(--type-body-size); color: var(--text); width: 100%; text-align: left;
-}
+.filter-item { display: flex; justify-content: flex-start; width: 100%; color: var(--text-accent); text-align: left; }
 /* hover / pressed = DISC (end of buttons.css, role "ghost on light") */
 .filter-item.is-active { background: var(--surface-raised); }
 .filter-item.is-disabled { color: var(--disabled-text); pointer-events: none; }

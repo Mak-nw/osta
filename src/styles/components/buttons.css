@@ -1,17 +1,22 @@
 /* Button: .btn + variant (--primary|--secondary|--ghost|--light) + size (--sm|--md|--lg) */
-.btn {
-  --_h: var(--control-md); --_px: var(--space-4);
-  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-3);
-  height: var(--_h); padding-inline: var(--_px) calc(var(--_px) - var(--btn-pad-trim)); border: 1px solid transparent;
-  border-radius: var(--radius-md); font-size: var(--type-body-size); line-height: 1;
-  font-weight: var(--font-weight-regular); white-space: nowrap; cursor: pointer;
-  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease), color var(--dur) var(--ease), transform var(--dur-fast);
+/* ==========================================================================
+   BUTTON BASE: the ONE definition of every rectangular button form (customer 2026-11-13, "єдиний компонент Button").
+   Forms (same base, only variables / layout deltas differ): .btn (+ --primary|--secondary|--ghost|--light|--outline-on-accent, sizes --sm|--md|--lg, --split, --block),
+   .nav-pill, .lang-switch, .lang-menu__option, .filter-item, .catalog__filters-toggle, .header__burger, .contact-line. Round form: .round-btn (below, same tokens).
+   Base: height --_h (control 32|44|56), padding-inline --_px (16, lg 24), gap 12, radius --radius-md, label = body 16/24 (sm = label 14/20), Regular, 1px reserved border.
+   Hover = DISC block at the end of the file (one tempo --dur-hover-disc / --ease-hover for disc, colour, frame, icon); focus = ONE style (base.css :focus-visible, --focus-outline).
+   ========================================================================== */
+:is(.btn, .nav-pill, .lang-switch, .lang-menu__option, .filter-item, .catalog__filters-toggle, .header__burger, .contact-line) {
+  --_h: var(--control-md); --_px: var(--space-4); --_fs: var(--type-body-size); --_lh: var(--type-body-lh);
+  box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; gap: var(--space-3);
+  height: var(--_h); padding-block: 0; padding-inline: var(--_px); border: 1px solid transparent; border-radius: var(--radius-md);
+  font-size: var(--_fs); line-height: var(--_lh); font-weight: var(--font-weight-regular); letter-spacing: var(--type-body-ls); text-decoration: none; text-transform: none;
+  white-space: nowrap; cursor: pointer;
+  transition: color var(--dur-hover-disc) var(--ease-hover), background-color var(--dur-hover-disc) var(--ease-hover), border-color var(--dur-hover-disc) var(--ease-hover), transform var(--dur-hover-disc) var(--ease-hover);
 }
-/* Without an icon there is no right-edge icon to pull in: keep the padding symmetric */
-.btn:not(:has(.icon)) { padding-inline: var(--_px); }
-.btn--sm { --_h: var(--control-sm); --_px: var(--space-3); font-size: var(--type-label-size); }
-.btn--md { --_h: var(--control-md); }
-.btn--lg { --_h: var(--control-lg); --_px: var(--space-5); font-size: var(--type-body-size); }
+.btn--sm, .nav-pill--sm { --_h: var(--control-sm); --_fs: var(--type-label-size); --_lh: var(--type-label-lh); }
+.btn--md, .nav-pill--md { --_h: var(--control-md); }
+.btn--lg, .nav-pill--lg { --_h: var(--control-lg); --_px: var(--space-5); }
 .btn--split { justify-content: space-between; min-width: var(--btn-split-w); }
 .btn--block { display: flex; width: 100%; justify-content: space-between; }
 
@@ -30,10 +35,12 @@
 /* Round icon button: .round-btn + (--outline|--light) + size */
 .round-btn {
   --_s: var(--control-sm);
-  display: inline-grid; place-items: center; width: var(--_s); height: var(--_s); border-radius: var(--radius-full);
+  display: inline-grid; place-items: center; flex: none; width: var(--_s); height: var(--_s); border-radius: var(--radius-full);
   border: 1px solid var(--accent); color: var(--accent); background: transparent;
-  transition: background var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  transition: background-color var(--dur-hover-disc) var(--ease-hover), color var(--dur-hover-disc) var(--ease-hover), border-color var(--dur-hover-disc) var(--ease-hover);
 }
+/* round form: same label metrics / gap as the base (it only has a glyph) */
+:is(.round-btn, .icon-ring--action) { gap: var(--space-3); font-size: var(--type-body-size); line-height: var(--type-body-lh); font-weight: var(--font-weight-regular); letter-spacing: var(--type-body-ls); text-decoration: none; text-transform: none; }
 .round-btn--md { --_s: var(--control-md); } .round-btn--lg { --_s: var(--control-lg); }
 /* outline round button: hover/pressed = disc (DISC block at the end of the file) */
 .round-btn--light { background: var(--surface-white); border-color: var(--accent-contrast); color: var(--accent); }
@@ -46,13 +53,6 @@
    ::before is a disc (transform scale only, 0 > 1 from the centre, --dur-base, ease-out). Light controls: white fill + white 1px border at rest (size never changes), a disc in the section fill (--surface-accent) grows over the white; end state = "empty" button with white border and white label/arrow. Outline control: the mirror, a white disc grows, label turns blue. The disc colour is --_hole; reverse on mouse-out. Not for buttons on a photo (.svc-supply__cta, see pages/services.css) and not for light surfaces (.btn--primary darkens). */
 .btn--light, .round-btn--light, .btn--outline-on-accent { --_hole: var(--surface-accent); position: relative; isolation: isolate; overflow: hidden; }
 .btn--outline-on-accent { --_hole: var(--surface-white); }
-.btn--light::before, .round-btn--light::before, .btn--outline-on-accent::before {
-  content: ""; position: absolute; z-index: -1; pointer-events: none; border-radius: var(--radius-full); background: var(--_hole);
-  scale: 0; transition: scale var(--dur-hover-disc) var(--ease-out);
-}
-.round-btn--light::before { inset: 0; }
-.btn--light::before, .btn--outline-on-accent::before { left: 50%; top: 50%; width: calc(100% + var(--control-lg)); aspect-ratio: 1; translate: -50% -50%; }
-.btn.btn--light, .btn.btn--outline-on-accent, .round-btn.round-btn--light { transition-property: color, border-color, transform; transition-duration: var(--dur-hover-disc), var(--dur-hover-disc), var(--dur-fast); transition-timing-function: var(--ease-out); }
 .btn--light.is-hover, .round-btn--light.is-hover, .btn--light.is-pressed, .round-btn--light.is-pressed { color: var(--accent-contrast); border-color: var(--accent-contrast); }
 .btn--light.is-hover::before, .round-btn--light.is-hover::before, .btn--light.is-pressed::before, .round-btn--light.is-pressed::before,
 .btn--outline-on-accent.is-hover::before, .btn--outline-on-accent.is-pressed::before { scale: 1; }
@@ -71,18 +71,11 @@
 
 
 /* Filled dark button (.btn--primary), customer 2026-11-13: the same H1a disc from the centre as on light/outline buttons. Disc = --accent-hover (--_hole), label/icon stay white above it (z-index -1 of ::before inside isolation). Active: disc --accent-active + translateY(1px). Reduced motion: instant (see below). Focus ring unchanged. */
-.btn--primary::before {
-  content: ""; position: absolute; z-index: -1; pointer-events: none; border-radius: var(--radius-full); background: var(--_hole);
-  left: 50%; top: 50%; width: calc(100% + var(--control-lg)); aspect-ratio: 1; translate: -50% -50%;
-  scale: 0; transition: scale var(--dur-hover-disc) var(--ease-out);
-}
-.btn.btn--primary { transition-property: color, border-color, transform; transition-duration: var(--dur-hover-disc), var(--dur-hover-disc), var(--dur-fast); transition-timing-function: var(--ease-out); }
 .btn--primary.is-hover::before { scale: 1; }
 .btn--primary:active, .btn--primary.is-pressed { --_hole: var(--accent-active); transform: translateY(1px); }
 .btn--primary:active::before, .btn--primary.is-pressed::before { scale: 1; }
 @media (hover: hover) { .btn--primary:hover::before { scale: 1; } }
 .btn--primary:disabled::before, .btn--primary.is-disabled::before { display: none; }
-@media (prefers-reduced-motion: reduce) { .btn--primary::before, .btn--light::before, .round-btn--light::before, .btn--outline-on-accent::before { transition: none; } .btn.btn--primary, .btn.btn--light, .btn.btn--outline-on-accent, .round-btn.round-btn--light { transition-duration: 0s; } }
 
 
 /* ==========================================================================
@@ -96,28 +89,36 @@
                                                                 disc = --accent, label/icon > --accent-contrast (white), 1px outline stays
    New button-like element = add its selector to the role list below (do not write a new hover). Exceptions only in tools/hover-gate.allowlist.json with a reason.
    ========================================================================== */
-:is(.btn--secondary, .btn--ghost, .round-btn:not(.round-btn--light), .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option) {
+:is(.btn--secondary, .btn--ghost, .round-btn:not(.round-btn--light), .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .lang-menu__option) {
   --_hole: var(--accent); --_fg: var(--accent-contrast); position: relative; isolation: isolate; overflow: hidden;
 }
-:is(.btn--secondary, .btn--ghost, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option)::before {
+/* ONE disc geometry for EVERY form (customer 2026-11-13 "ховер кнопок як на решті"): the disc diameter = (diameter of the circle that just covers the button: --_cover) x --disc-overscan, so the disc covers the whole button at the SAME fraction (1 / --disc-overscan) of the --dur-hover-disc ease curve for every width/height/round form (coverage time identical, checked by the hover-gate "coverage" metric).
+   --_cover: rect forms = hypot(width, height) minus the corner rounding 2(sqrt2-1)*radius-md (the circle through the rounded corners; --_h = the control height), round forms = their diameter (the shape clips the disc to a circle). */
+:where(.btn, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .lang-menu__option, .contact-line) { --_h: var(--control-md); }
+:is(.btn--light, .btn--outline-on-accent, .btn--primary, .btn--secondary, .btn--ghost, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .lang-menu__option, .contact-line) { --_cover: calc(hypot(100%, var(--_h)) - 0.83 * var(--radius-md)); }
+:is(.round-btn, .icon-ring--action) { --_cover: 100%; }
+:is(.btn--light, .btn--outline-on-accent, .btn--primary, .btn--secondary, .btn--ghost, .round-btn, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .lang-menu__option, .icon-ring--action, .contact-line)::before {
   content: ""; position: absolute; z-index: -1; pointer-events: none; border-radius: var(--radius-full); background: var(--_hole);
-  left: 50%; top: 50%; width: calc(100% + var(--control-lg)); aspect-ratio: 1; translate: -50% -50%; scale: 0; transition: scale var(--dur-hover-disc) var(--ease-out);
+  left: 50%; top: 50%; width: calc(100% + var(--control-lg)); width: calc(var(--_cover) * var(--disc-overscan)); aspect-ratio: 1; translate: -50% -50%; scale: 0; transition: scale var(--dur-hover-disc) var(--ease-hover);
 }
-.round-btn:not(.round-btn--light)::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: var(--radius-full); background: var(--_hole); scale: 0; transition: scale var(--dur-hover-disc) var(--ease-out); }
-html :is(.btn--secondary, .btn--ghost, .round-btn:not(.round-btn--light), .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option) {
-  transition-property: color, border-color, transform; transition-duration: var(--dur-hover-disc), var(--dur-hover-disc), var(--dur-fast); transition-timing-function: var(--ease-out);
+/* ONE tempo for EVERY button form (customer 2026-11-13: one hover tempo): label colour, 1px frame, pressed shift and icon use --dur-hover-disc / --ease-hover with NO delay, the same as the disc (hover-in = hover-out) */
+html :is(.btn--light, .btn--outline-on-accent, .btn--primary, .btn--secondary, .btn--ghost, .round-btn, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .lang-menu__option) {
+  transition-property: color, border-color, transform; transition-duration: var(--dur-hover-color); transition-delay: var(--delay-hover-color-in); transition-timing-function: var(--ease-hover);
 }
-html :is(.btn--secondary, .btn--ghost, .round-btn:not(.round-btn--light), .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option) .icon { color: inherit; transition: color var(--dur-hover-disc) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
+html :is(.btn--light, .btn--outline-on-accent, .btn--primary, .btn--secondary, .btn--ghost, .round-btn, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .lang-menu__option) .icon { color: inherit; transition: transform var(--dur-hover-disc) var(--ease-hover); }
 /* keyboard focus and forced states show the same end state; pressed = darker disc */
-:is(.btn--secondary, .btn--ghost, .round-btn:not(.round-btn--light), .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option):is(.is-hover, .is-focus, .is-pressed, :focus-visible, :active),
+:is(.btn--secondary, .btn--ghost, .round-btn:not(.round-btn--light), .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .lang-menu__option):is(.is-hover, .is-focus, .is-pressed, :focus-visible, :active),
 .product-card.is-hover .round-btn--outline, a.is-hover > .round-btn--outline { color: var(--_fg); }
-:is(.btn--secondary, .btn--ghost, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option):is(.is-hover, .is-focus, .is-pressed, :focus-visible, :active)::before,
+/* FRAME (customer 2026-11-13 "Рамка на всіх"): the disc comes WITH a 1px --accent frame; same border-color transition as the disc/label (reserved 1px transparent at rest, so size never changes) */
+:is(.btn--secondary, .btn--ghost, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .lang-menu__option):is(.is-hover, .is-focus, .is-pressed, :focus-visible, :active) { border-color: var(--accent); }
+:is(.btn--secondary, .btn--ghost, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .lang-menu__option):is(.is-hover, .is-focus, .is-pressed, :focus-visible, :active)::before,
 .round-btn:not(.round-btn--light):is(.is-hover, .is-focus, .is-pressed, :focus-visible, :active)::before, a.is-hover > .round-btn--outline::before, .product-card.is-hover .round-btn--outline::before { scale: 1; }
-:is(.btn--secondary, .btn--ghost, .round-btn:not(.round-btn--light), .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option):is(:active, .is-pressed) { --_hole: var(--accent-active); border-color: var(--accent-active); }
+:is(.btn--secondary, .btn--ghost, .round-btn:not(.round-btn--light), .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .lang-menu__option):is(:active, .is-pressed) { --_hole: var(--accent-active); border-color: var(--accent-active); }
 @media (hover: hover) {
-  :is(.btn--secondary, .btn--ghost, .round-btn:not(.round-btn--light), .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option):hover,
+  :is(.btn--secondary, .btn--ghost, .round-btn:not(.round-btn--light), .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .lang-menu__option):hover,
   a:hover > .round-btn--outline, .product-card:hover .round-btn--outline { color: var(--_fg); }
-  :is(.btn--secondary, .btn--ghost, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option):hover::before,
+  :is(.btn--secondary, .btn--ghost, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .lang-menu__option):hover:not(:active, .is-pressed) { border-color: var(--accent); }
+  :is(.btn--secondary, .btn--ghost, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .lang-menu__option):hover::before,
   .round-btn:not(.round-btn--light):hover::before, a:hover > .round-btn--outline::before, .product-card:hover .round-btn--outline::before { scale: 1; }
 }
 .btn--secondary:disabled::before, .btn--secondary.is-disabled::before, .round-btn:disabled::before, .round-btn.is-disabled::before { display: none; }
@@ -125,7 +126,6 @@ html :is(.btn--secondary, .btn--ghost, .round-btn:not(.round-btn--light), .nav-p
 
 /* Clickable icon ring (.icon-ring--action: mail/phone rows, header phone on tablet/mobile): same disc, --accent-hover, white glyph stays */
 .icon-ring--action { position: relative; isolation: isolate; overflow: hidden; --_hole: var(--accent-hover); }
-.icon-ring--action::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: var(--radius-full); background: var(--_hole); scale: 0; transition: scale var(--dur-hover-disc) var(--ease-out); }
 .icon-ring--action.icon-ring--on-accent { --_hole: var(--surface-accent); } /* light ring on blue: the mirror of .round-btn--light */
 .icon-ring--action.is-hover::before { scale: 1; }
 .icon-ring--action.icon-ring--on-accent.is-hover { color: var(--accent-contrast); }
@@ -133,18 +133,18 @@ html :is(.btn--secondary, .btn--ghost, .round-btn:not(.round-btn--light), .nav-p
   a:hover > .icon-ring--action::before, a:focus-visible > .icon-ring--action::before, button:hover > .icon-ring--action::before { scale: 1; }
   a:hover > .icon-ring--action.icon-ring--on-accent, button:hover > .icon-ring--action.icon-ring--on-accent { color: var(--accent-contrast); }
 }
-.icon-ring--action.icon-ring--on-accent { transition: color var(--dur-hover-disc) var(--ease-out); }
+.icon-ring--action { transition: color var(--dur-hover-disc) var(--ease-hover), background-color var(--dur-hover-disc) var(--ease-hover), border-color var(--dur-hover-disc) var(--ease-hover); }
 
 /* Card with a single action button (customer 2026-11-13): hovering the WHOLE card puts its button into the hover state (same disc, same colours; the card itself is not a link, no pointer). Same pattern as .link-card:hover .round-btn--light.
-   Instances: .text-card (Products, Documentation), .help-card (catalog help), .catalog__empty (empty state), .cta-block (product "Ready to order?"). New card with one button: add its selector to the :is() list below (and to tools/hover-gate.cjs CARDS). */
+   Instances: .text-card (Products, Documentation, catalog help + empty state = --compact). New card with one button: add its selector to the :is() list below (and to tools/hover-gate.cjs CARDS). */
 @media (hover: hover) {
-  :is(.text-card, .help-card, .catalog__empty, .cta-block):hover :is(.btn, .round-btn)::before { scale: 1; }
-  :is(.text-card, .help-card, .catalog__empty, .cta-block):hover :is(.btn--light, .round-btn--light) { color: var(--accent-contrast); border-color: var(--accent-contrast); }
-  :is(.text-card, .help-card, .catalog__empty, .cta-block):hover .btn--outline-on-accent { color: var(--accent); }
-  :is(.text-card, .help-card, .catalog__empty, .cta-block):hover :is(.btn--secondary, .btn--ghost) { color: var(--accent-contrast); }
+  :is(.text-card):hover :is(.btn, .round-btn)::before { scale: 1; }
+  :is(.text-card):hover :is(.btn--light, .round-btn--light) { color: var(--accent-contrast); border-color: var(--accent-contrast); }
+  :is(.text-card):hover .btn--outline-on-accent { color: var(--accent); }
+  :is(.text-card):hover :is(.btn--secondary, .btn--ghost) { color: var(--accent-contrast); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :is(.btn--secondary, .btn--ghost, .round-btn, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option, .icon-ring--action)::before { transition: none; }
-  :is(.btn--secondary, .btn--ghost, .round-btn, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .header__nav .lang-menu__option, .icon-ring--action) { transition-duration: 0s; }
+  :is(.btn--light, .btn--outline-on-accent, .btn--primary, .btn--secondary, .btn--ghost, .round-btn, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .lang-menu__option, .icon-ring--action, .contact-line)::before { transition: none; }
+  html :is(.btn--light, .btn--outline-on-accent, .btn--primary, .btn--secondary, .btn--ghost, .round-btn, .nav-pill, .lang-switch, .header__burger, .filter-item, .catalog__filters-toggle, .lang-menu__option, .icon-ring--action) { transition-duration: 0s; transition-delay: 0s; }
 }

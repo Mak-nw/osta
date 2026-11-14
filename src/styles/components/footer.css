@@ -3,10 +3,10 @@
 .footer__grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); }
 .footer__group { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); min-width: 0; }
 .footer__group--end { align-items: flex-end; text-align: right; }
-.footer__label { display: block; font-size: var(--type-label-size); line-height: var(--type-label-lh); letter-spacing: var(--type-label-ls); color: var(--text-muted); }
+.footer__label { display: block; font-size: var(--type-label-size); line-height: var(--type-label-lh); letter-spacing: var(--type-label-ls); color: var(--text); }
 .footer__group > .footer__label { margin-bottom: var(--space-3); }
 .footer a:not(.btn):not(.footer__label):not(.footer__logo) { color: var(--text-accent); }
-.footer a:not(.btn):not(.footer__logo):hover, .footer a.is-hover:not(.btn):not(.footer__logo) { color: var(--accent); text-decoration: underline; }
+/* text-link hover (disc fill): components/text-link.css */
 .footer__menu { padding-top: var(--space-8); align-items: start; }
 .footer__menu > .footer__group { grid-column: span 4; }
 .footer__mark { display: flex; justify-content: center; padding-block: var(--space-8); }
@@ -18,15 +18,13 @@
 .footer__reach > .footer__group { grid-column: span 4; }
 .footer__reach > .footer__group--cta { align-items: stretch; }
 /* Footer CTA: one line on desktop; on narrow widths the label wraps to 2 lines. min-height stays 44 (--control-md), text and arrow stay vertically centred (.btn align-items). */
-.footer__cta { height: auto; min-height: var(--control-md); white-space: normal; line-height: var(--type-body-lh); text-align: left; }
+.footer__cta { height: auto; min-height: var(--control-md); white-space: normal; text-align: left; }
 .footer__cta > span { min-width: 0; }
-/* Contact link row (mail, phone; several rows can stack in one .footer__group): 40 px ring (= --chip-lg, as on Contact) at the row start; the text's first line is centred on the ring via (ring − body line) / 2 padding, so the row is 40 px tall and rows stack at a 48 px pitch. */
-.footer__contact { display: flex; align-items: flex-start; gap: var(--space-3); }
-.footer__contact > .icon-ring { margin: 0; }
-.footer__contact > span:last-child { padding-block: calc((var(--chip-lg) - var(--type-body-lh)) / 2); }
+/* Contact rows in the footer use the shared .contact-line component (cards.css); .footer__contact stays as a marker class only. */
 /* Technical row exception: padding-top keeps the footer rhythm (--space-8); padding-bottom is halved on purpose (client request: technical links sit closer to the page edge). Desktop 64 -> 32. */
 .footer__bottom { align-items: baseline; padding-top: var(--space-8); padding-bottom: var(--space-6); font-size: var(--type-label-size); line-height: var(--type-label-lh); }
-.footer__bottom > * { grid-column: span 4; margin: 0; white-space: nowrap; }
+.footer__bottom > * { grid-column: span 4; white-space: nowrap; }
+.footer__bottom > :not(a) { margin: 0; } /* links keep the text-link negative margin (components/text-link.css) */
 .footer__bottom > a:nth-child(2) { grid-column: 5 / span 2; }
 .footer__bottom > a:nth-child(3) { grid-column: 7 / span 2; }
 .footer__bottom > a:nth-child(4) { grid-column: 9 / span 2; }
@@ -47,8 +45,8 @@
   .footer__group > .footer__label { margin-bottom: calc(var(--footer-gap-label) - var(--footer-gap-items)); }
   .footer__reach { row-gap: var(--footer-gap-items); }
   .footer__reach-label { margin-bottom: calc(var(--footer-gap-label) - var(--footer-gap-items)); }
-  .footer a:not(.btn):not(.footer__logo) { position: relative; display: inline-flex; align-items: center; }
-  .footer a:not(.btn):not(.footer__logo)::after { content: ""; position: absolute; inset: calc(var(--footer-gap-items) / -2) calc(-1 * var(--space-1)); }
+  .footer a:not(.btn):not(.footer__logo):not(.contact-line) { position: relative; display: inline-flex; align-items: center; }
+  .footer a:not(.btn):not(.footer__logo):not(.contact-line)::after { content: ""; position: absolute; inset: calc(var(--footer-gap-items) / -2) calc(-1 * var(--space-1)); }
   /* CTA -> copyright = copyright -> technical links = --space-6; technical links one under another, 5 apart */
   .footer__bottom { row-gap: var(--footer-gap-items); padding-top: var(--space-6); }
   .footer__bottom > .footer__owner { margin-bottom: calc(var(--space-6) - var(--footer-gap-items)); }

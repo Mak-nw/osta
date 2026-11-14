@@ -1,5 +1,5 @@
 /* Header (floating panel), nav-pill, language switch */
-/* Header: sticky wrapper is transparent; compact white floating panel (6 central grid columns = --header-w, never narrower than --header-min-w; centered) carries surface + 1px border */
+/* Header: sticky wrapper is transparent; compact white floating panel (6 central grid columns = --header-w, never narrower than --header-min-w; centered) carries surface only (no border; the white panel reads against the gradient by its colour) */
 .header { position: sticky; top: 0; z-index: var(--z-header); height: 0; overflow: visible; background: transparent; pointer-events: none; }
 /* Header takes no space in flow: first block of each page reserves --header-h itself (hero/contact start at y=0 under the panel) */
 .header + main { padding-top: var(--header-h); }
@@ -9,7 +9,7 @@
 .header__panel {
   pointer-events: auto; width: min(max(var(--header-w), var(--header-min-w)), 100%); margin: var(--header-top) auto 0; height: var(--header-bar-h);
   display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: var(--space-6);
-  padding-inline: var(--space-3); background: var(--surface-white); border: 1px solid var(--border);
+  padding-inline: var(--space-3); background: var(--surface-white);
   border-radius: var(--radius-lg);
 }
 .header__nav { display: flex; align-items: center; justify-content: flex-start; gap: var(--space-1); }
@@ -17,39 +17,22 @@
 .header__logo img { height: var(--logo-header-h); width: auto; display: block; }
 .header__actions { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-1); }
 .header__cta-phone { display: none; }
-.header__cta { margin-left: var(--space-2); min-width: 0; gap: var(--space-3); }
-.header .header__cta { font-size: var(--type-label-size); }
+.header__cta { margin-left: var(--space-2); min-width: 0; --_fs: var(--type-label-size); --_lh: var(--type-label-lh); }
 
 /* .nav-pill: text link, NO fill at rest (border 1px transparent keeps the size); hover / focus-visible / pressed = fill (see below). Sizes --sm|--md|--lg; states: .is-active */
-.nav-pill {
-  --_h: var(--control-md);
-  display: inline-flex; align-items: center; gap: var(--space-2); height: var(--_h); padding-inline: calc(var(--space-3) - 1px);
-  background: transparent; border: 1px solid transparent; color: var(--text-accent); border-radius: var(--radius-md);
-  font-size: var(--type-body-size); line-height: 1; white-space: nowrap;
-  transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease), color var(--dur) var(--ease);
-}
-.nav-pill--sm { --_h: var(--control-sm); }
-.nav-pill--md { --_h: var(--control-md); font-size: var(--type-label-size); }
-.nav-pill--lg { --_h: var(--control-lg); font-size: var(--type-body-size); padding-inline: calc(var(--space-5) - 1px); }
+.nav-pill { background: transparent; color: var(--text-accent); }
+.nav-pill--md { --_fs: var(--type-label-size); --_lh: var(--type-label-lh); } /* header items: label 14/20 */
 /* Hover / focus / pressed: the DISC mechanic (end of buttons.css, role "ghost on light"): --accent disc grows from the centre, label + icon turn --accent-contrast; nothing is declared here */
 /* .nav-pill--outline: Products, 1px accent outline at rest and when active; border-box keeps height = --_h */
-.nav-pill--outline { box-sizing: border-box; border: 1px solid var(--accent); padding-inline: var(--space-3); color: var(--text-accent); }
+.nav-pill--outline { border-color: var(--accent); color: var(--text-accent); }
 
-/* Language switch: EN + globe; same border-only hover rule as .nav-pill (no fill) */
-.lang-switch {
-  --_h: var(--control-md);
-  display: inline-flex; align-items: center; gap: var(--space-2); height: var(--_h); padding-inline: calc(var(--space-3) - 1px);
-  border: 1px solid transparent; border-radius: var(--radius-md); background: transparent; color: var(--text-accent); font-size: var(--type-label-size);
-  transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease), color var(--dur) var(--ease);
-}
+/* Language switch: EN + globe; hover = DISC + 1px accent frame (buttons.css), same as .nav-pill */
+.lang-switch { --_fs: var(--type-label-size); --_lh: var(--type-label-lh); background: transparent; color: var(--text-accent); }
 .lang-switch[aria-expanded="true"] { background: transparent; border-color: var(--accent); }
 /* hover / focus / pressed = DISC (buttons.css); open state keeps the outline */
-.lang-switch--md { --_h: var(--control-md); }
 /* keyboard focus on the trigger = the same disc as hover; no extra outline ring (it would draw a second contour next to the 1px border) */
-.lang-switch:focus-visible,
-.lang-switch.is-focus { outline: none; }
 /* Chevron-down (no stem) after the globe; turns 180deg while the menu is open. Colour follows .lang-switch .icon states; motion off via global reduced-motion rule */
-.lang-switch__chevron { transition: transform var(--dur-fast) var(--ease-out); }
+.lang-switch__chevron { transition: transform var(--dur-hover-disc) var(--ease-hover); }
 .lang-menu.is-open .lang-switch__chevron,
 .lang-switch[aria-expanded="true"] .lang-switch__chevron { transform: rotate(180deg); }
 
@@ -65,19 +48,22 @@
 /* hover bridge: invisible strip over the gap between trigger and list, so the pointer never leaves the .lang-menu hover zone */
 .lang-menu__list::before { content: ""; position: absolute; left: 0; right: 0; top: calc(-1 * var(--space-2)); height: var(--space-2); }
 .lang-menu.is-open .lang-menu__list { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
-.lang-menu__option {
-  display: flex; align-items: center; height: var(--control-md); padding-inline: calc(var(--space-3) - 1px); box-sizing: border-box;
-  border: 1px solid transparent; border-radius: var(--radius-md); color: var(--text); font-size: var(--type-label-size); line-height: 1; white-space: nowrap; cursor: pointer;
-  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
-}
-.lang-menu__option[aria-selected="true"] { color: var(--accent); }
-.lang-menu__option:hover,
-.lang-menu__option.is-focus { background: var(--accent-hover); border-color: var(--accent-hover); color: var(--accent-contrast); }
-/* only ONE option is highlighted at a time: while the pointer is over the list, the keyboard/open highlight (.is-focus) on the other options is suppressed, hover wins */
-.lang-menu__list:hover .lang-menu__option.is-focus:not(:hover) { background: transparent; border-color: transparent; color: var(--text); }
+/* Skip link (a11y): first Tab stop on every page. Hidden like .visually-hidden until focused, then a .btn--primary at the top left above the header. */
+.btn[data-skip-link]:not(:focus) { position: absolute; width: 1px; height: 1px; padding: 0; border: 0; overflow: hidden; clip: rect(0 0 0 0); }
+.btn[data-skip-link]:focus { position: fixed; width: auto; height: var(--_h); clip: auto; top: var(--space-3); left: var(--space-3); z-index: calc(var(--z-header) + 1); }
+
+.lang-menu__option { --_fs: var(--type-label-size); --_lh: var(--type-label-lh); display: flex; justify-content: flex-start; color: var(--text); }
+/* Option = button-like row (desktop dropdown and burger): hover / keyboard highlight (.is-focus) / pressed = DISC from buttons.css (--accent, label white, 800 ms from the centre). Active language = 1px accent outline + accent text; on the disc it turns white. */
+.lang-menu__option[aria-selected="true"]:not(:is(:active, .is-pressed)) { color: var(--accent); border-color: var(--accent); }
+.lang-menu__option[aria-selected="true"]:is(:hover, .is-focus, :active, .is-pressed) { color: var(--accent-contrast); }
+/* OPENING GATE (customer 2026-11-14): while the menu has just opened (.is-menu-opening, set by i18n.js open(), removed at the first pointer-enter on an option or the first arrow/Home/End key) the initial highlight (.is-focus) on the ACTIVE option shows no disc and animates nothing. After that the active option plays the same disc as the others (800 ms from the centre) on a real hover or keyboard highlight. */
+html .lang-menu.is-menu-opening .lang-menu__option[aria-selected="true"]:not(:hover), html .lang-menu.is-menu-opening .lang-menu__option[aria-selected="true"]:not(:hover)::before { transition: none; }
+html .lang-menu.is-menu-opening .lang-menu__option[aria-selected="true"].is-focus:not(:hover)::before { scale: 0; }
+html .lang-menu.is-menu-opening .lang-menu__option[aria-selected="true"].is-focus:not(:hover) { color: var(--accent); }
+/* only ONE option is highlighted at a time: while the pointer is over the list, the keyboard/open highlight (.is-focus) on the other options is suppressed (disc off), hover wins */
+.lang-menu__list:hover .lang-menu__option.is-focus:not(:hover)::before { scale: 0; }
+.lang-menu__list:hover .lang-menu__option.is-focus:not(:hover) { color: var(--text); }
 .lang-menu__list:hover .lang-menu__option.is-focus[aria-selected="true"]:not(:hover) { color: var(--accent); }
-.lang-menu__option:active,
-.lang-menu__option.is-pressed { background: var(--accent-active); border-color: var(--accent-active); color: var(--accent-contrast); }
 .lang-menu__list:focus-visible { outline: none; }
 /* highlight from hover/open is NOT a keyboard focus: no ring; ring only while the listbox has keyboard focus (not on the selected option) */
 .lang-menu__option.is-focus { outline: 0; }
@@ -104,18 +90,15 @@
      .icon-ring--action circle (40, --accent fill, white phone; hover fill --accent-hover comes from base.css a:hover > .icon-ring--action), symmetric to the burger */
   .header__cta {
     margin-left: 0; width: var(--control-md); height: var(--control-md); min-width: 0; padding: 0; justify-content: center; background: transparent; border-color: transparent; color: var(--accent);
-    transform: none; transition: none;
+    transform: none; transition: none; border-radius: var(--radius-full); /* the ONE focus outline (base.css) is drawn on the 44 hit area as a circle around the 40 ring */
   }
   .header__cta::before { display: none; } /* the bar shows only the .icon-ring--action circle: its own disc is the hover (buttons.css); no second disc on the transparent hit area */
   .header__cta-full, .header__cta-short, .header__cta > .icon:not(.header__cta-phone) { display: none; }
   .header__cta-phone { display: inline-grid; }
   .header__cta:hover, .header__cta:active, .header__cta:focus-visible { background: transparent; border-color: transparent; }
   .header__cta:active > .icon-ring--action { background: var(--accent-active); border-color: var(--accent-active); }
-  .header__cta:focus-visible { outline: none; }
-  .header__cta:focus-visible > .icon-ring--action { outline: var(--focus-outline); outline-offset: var(--focus-offset); }
   .header__burger {
-    display: inline-grid; place-items: center; flex: none; width: var(--control-md); height: var(--control-md); box-sizing: border-box;
-    border: 1px solid transparent; border-radius: var(--radius-md); color: var(--text-accent);
+    display: inline-grid; place-items: center; flex: none; width: var(--control-md); padding: 0; color: var(--text-accent); /* round-form delta: square control, glyph centred */
   }
   .header__burger[aria-expanded="true"] { border-color: var(--accent); }
   /* hover / focus / pressed = DISC (buttons.css) */

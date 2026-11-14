@@ -12,7 +12,7 @@
 /* meta list: 3 columns, tiny caption + value */
 .meta-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--space-3); margin: 0; }
 .meta-list__item { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
-.meta-list__label { margin: 0; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); font-size: var(--type-label-size); line-height: var(--type-label-lh); letter-spacing: var(--type-label-ls); color: var(--text-accent-subtle); }
+.meta-list__label { margin: 0; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); font-size: var(--type-label-size); line-height: var(--type-label-lh); letter-spacing: var(--type-label-ls); color: var(--text); }
 .meta-list__value { margin: 0; font-size: var(--type-label-size); line-height: var(--type-label-lh); letter-spacing: var(--type-label-ls); color: var(--text-accent); overflow-wrap: anywhere; }
 
 /* text flowing into two columns */

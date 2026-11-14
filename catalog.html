@@ -8,7 +8,7 @@
 </head>
 <body data-page="products">
   <!--@include partials/header.html-->
-  <main class="section--sm">
+  <main id="main" class="section--sm">
     <div class="container">
       <div class="layout-catalog">
         <aside class="layout-catalog__sidebar">
@@ -20,7 +20,7 @@
             </div>
             <div class="catalog__filters" data-adaptive-wrap>
             <button class="catalog__filters-toggle" type="button" data-adaptive data-filters-toggle aria-expanded="false" aria-controls="catalog-filters"><span data-i18n="catalog.filters">Filters</span><svg class="icon catalog__filters-chevron" aria-hidden="true"><use href="/assets/icons/sprite.svg#chevron-down"/></svg></button>
-            <span class="t-label t-muted" data-i18n="catalog.categories">Categories</span>
+            <span class="t-label t-subtle" data-i18n="catalog.categories">Categories</span>
             <div class="filter-list" id="catalog-filters">
               <button class="filter-item is-active" type="button" data-category="all"><svg class="icon icon-text" aria-hidden="true"><use href="/assets/icons/sprite.svg#grid"/></svg><span data-i18n="catalog.cat_all">All</span></button>
               <button class="filter-item" type="button" data-category="api"><svg class="icon icon-text" aria-hidden="true"><use href="/assets/icons/sprite.svg#molecule"/></svg><span data-i18n="catalog.cat_api">API</span></button>
@@ -28,22 +28,25 @@
               <button class="filter-item" type="button" data-category="food-grade"><svg class="icon icon-text" aria-hidden="true"><use href="/assets/icons/sprite.svg#leaf"/></svg><span data-i18n="catalog.cat_food">Food Grade</span></button>
             </div>
             </div>
-            <p class="t-body t-muted" id="catalog-count"></p>
+            <p class="t-body t-accent" id="catalog-count"></p>
           </div>
-          <div data-reveal="fade" class="card help-card catalog__help">
-            <p class="help-card__text" data-i18n="catalog.help_text">Can't find the product you're looking for?</p>
+          <div data-reveal="fade" class="text-card text-card--compact catalog__help">
+            <div class="text-card__body">
+              <p data-i18n="catalog.help_text">Can't find the product you're looking for?</p>
+            </div>
             <a class="btn btn--primary btn--md" href="/contact.html"><span data-i18n="common.chat_with_manager">Chat with manager</span> <svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
           </div>
         </aside>
         <section class="catalog__results" aria-live="polite">
           <div class="grid-3" id="catalog-grid"><!--@slot:catalog-list--></div>
           <button class="btn btn--primary btn--md catalog__more" type="button" id="catalog-more" hidden><span data-i18n="catalog.show_more">Show more</span></button>
-          <div class="card card--pad-lg catalog__empty" id="catalog-empty" hidden>
-            <h2 class="t-h2 t-accent" data-i18n="catalog.empty">No products found</h2>
-            <p class="t-body t-muted" data-i18n="catalog.empty_text">Try another name or category, or ask our manager.</p>
+          <div class="text-card text-card--compact catalog__empty" id="catalog-empty" role="status" hidden>
+            <div class="text-card__body">
+              <p data-i18n="catalog.empty">No products found</p>
+              <p data-i18n="catalog.empty_text">Try another name or category, or ask our manager.</p>
+            </div>
             <a class="btn btn--primary btn--md" href="/contact.html"><span data-i18n="common.chat_with_manager">Chat with manager</span> <svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
           </div>
-        <!--@slot:catalog-browse-->
         </section>
       </div>
     </div>

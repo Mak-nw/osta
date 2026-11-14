@@ -95,7 +95,7 @@ export function initClosingLines(host) {
   host.prepend(canvas);
   let renderer;
   try { renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true }); } catch { canvas.remove(); return null; }
-  renderer.setClearColor(0x000000, 0);
+  renderer.setClearColor(0x061f52, 0);
 
   const camera = new OrthographicCamera(-HALF_W, HALF_W, 1, -1, -10, 10);
   camera.position.z = 5;

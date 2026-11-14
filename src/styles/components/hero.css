@@ -1,30 +1,46 @@
-/* Hero (AIDA): title (Attention) > subtitle (Interest) > facts row (Desire) > CTA link (Action) > full-bleed image. Tokens only. */
-.hero { padding-top: calc(var(--header-h) + var(--space-8)); background: var(--surface); text-align: center; }
-.hero__title { margin: 0; }
-.hero__sub { margin: var(--space-5) auto 0; color: var(--text); }
-/* facts row on the 12-col grid: left 1-4 (start), CTA 5-8 (center), right 9-12 (end) */
-.hero__facts { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); align-items: center; margin-top: var(--space-7); }
-.hero__fact { margin: 0; color: var(--text); white-space: nowrap; }
-.hero__fact--l { grid-column: 1 / span 4; text-align: left; }
-.hero__cta { grid-column: 5 / span 4; justify-self: center; }
-.hero__facts .hero__cta { font-size: var(--type-body-size); line-height: var(--type-body-lh); } /* same size as facts; beats .link-cta (body size) by specificity */
-.hero__fact--r { grid-column: 9 / span 4; text-align: right; }
-/* hero media block (all pages): full viewport width (edge-to-edge, no side gutters), border-block 1px --border-strong (same as .btn--ghost / inputs), no radius, no side borders */
-.hero__media { position: relative; box-sizing: border-box; width: 100%; margin: var(--space-7) 0 0; aspect-ratio: 16 / 7; max-height: 72vh; overflow: hidden; background: var(--surface-raised); border: 0; border-block: 1px solid var(--border-strong); border-radius: 0; }
-.hero__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity var(--dur-slow) var(--ease-out); }
+/* Inner-page hero (About, Services; customer 2026-11-13, "Home composition, LIGHT surface"): full-bleed band on --surface (vertical gradient --hero-light-gradient: white top > --surface bottom, rule U1; the next section is a different surface, so no divider line), dark text.
+   >=1200: 12-col grid, three zones vertically centred: cols 1-5 = .hero__head (.section-head: tag > h1), cols 5-8 = .hero__media (the illustration slot: free, no mask, no frame, no clipping, centred), cols 9-12 = .hero__aside (.section-head: description + btn--primary).
+   <=1199: stack, left-aligned: media on top, head, aside. The 3D scenes read --accent from the media host (blue on the light surface). */
+.hero:not(.hero--home) { box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; padding-block: calc(var(--header-h) + var(--space-7)) var(--space-8); background: var(--surface); background-image: var(--hero-light-gradient); color: var(--text); text-align: left; }
+.hero__inner { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--space-7); align-items: center; }
+/* H1 = two phrases (same markup as Home: .hero__title-part--l cols 1-4 left-aligned, --r cols 9-12 right-aligned), row 1, on the SAME axis as the illustration (cols 5-8); no eyebrow tag (customer 2026-11-13) */
+.hero__inner > .hero__title { grid-column: 1 / -1; grid-row: 1; display: grid; grid-template-columns: subgrid; align-items: center; position: relative; z-index: 1; pointer-events: none; margin: 0; }
+.hero__inner > .hero__title .hero__title-part--l { grid-column: 1 / span 4; }
+.hero__inner > .hero__title .hero__title-part--r { grid-column: 9 / span 4; text-align: right; justify-self: end; }
+@media (min-width: 1200px) { .hero:not(.hero--home) { min-height: 100svh; } } /* taller hero: fills the viewport, content centred vertically */
+.hero__sub br { display: none; }
+.hero__sub { align-self: stretch; text-wrap: balance; }
+.hero__aside { grid-column: 4 / span 6; grid-row: 2; min-width: 0; text-align: center; } /* .section-head--center: description (6 cols) > button, both on the page centre */
+.hero:not(.hero--home) .hero__title { color: var(--text-accent); }
+.hero__sub { color: var(--text); }
+/* illustration slot: transparent, no fill, no border, no radius, NOT clipped (the scene is centred in it on both axes) */
+.hero .hero__media { grid-column: 5 / span 4; grid-row: 1; position: relative; box-sizing: border-box; width: 100%; aspect-ratio: 4 / 3; --media-a: 0.75; overflow: visible; background: transparent; border: 0; border-radius: 0; }
+.hero__canvas { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; display: block; opacity: 0; }   /* above the poster; shown by `.is-ready` in ONE frame together with hiding the poster (utils/hero-poster.js): no opacity transition, the poster and the canvas have identical geometry */
 .hero__canvas.is-ready { opacity: 1; }
 /* decorative 3D replaces the photo; the image stays as fallback (no JS, no WebGL, init failure) */
 .hero__image { display: none; width: 100%; height: 100%; object-fit: cover; object-position: center 60%; }
 html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
-@media (prefers-reduced-motion: reduce) { .hero__canvas { transition: none; } }
 
-/* Underlined text CTA: no fill, no arrow */
-.link-cta { color: var(--accent); font-size: var(--type-body-size); line-height: var(--type-body-lh); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .25em; transition: color var(--dur-base) var(--ease-out); }
-.link-cta:hover { color: var(--accent-active); } /* underline stays 1px in every state (lines <= 1px) */
-.link-cta:focus-visible { outline: var(--focus-outline); outline-offset: var(--focus-offset); border-radius: var(--radius-sm); }
-.link-cta--on-accent { color: var(--text-on-accent); }
-.link-cta--on-accent:hover { color: var(--text-on-accent-muted); } /* text link on blue: visible hover = label dims (dE >= 10, gate) */
-.link-cta--on-accent:focus-visible { outline-color: var(--text-on-accent); }
+/* LIGHT-HERO GRADIENT for heroes that are not a full-bleed .hero band (rule U1; ONE token --hero-light-gradient, same as .hero:not(.hero--home) above): .legal__hero (FAQ, Impressum, Privacy, Terms, Data processing) and .product-hero (category hubs, 404; NOT the product page: its hero sits on the WebGL page background, marked .product-hero--bg).
+   The band is a full-bleed ::before behind the hero; it reaches up under the transparent header (main's padding-top = --header-h), so the page starts white without a strip. Bottom = --surface = the page colour. */
+:is(.legal, .product-hero:not(.product-hero--bg)) { isolation: isolate; overflow-x: clip; }
+:is(.legal__hero, .product-hero:not(.product-hero--bg)) { position: relative; }
+:is(.legal__hero, .product-hero:not(.product-hero--bg))::before { content: ''; position: absolute; z-index: -1; top: calc(-1 * var(--header-h)); bottom: 0; left: 50%; width: 100vw; translate: -50% 0; background: var(--hero-light-gradient); pointer-events: none; }
+
+/* HERO POSTER (static frame 0 of the WebGL hero scene, utils/hero-poster.js; generated by tools/gen-posters.cjs, `npm run poster`; ONE component for Home / About / Services).
+   `img[data-hero-poster]` sits inside the scene host, absolute, in the first paint with the text (preloaded, fetchpriority high); the live canvas (z-index 1) replaces it in ONE frame (no fade) and the poster is hidden. Reserved size: no layout shift.
+   Size = the scene's own fit, so the live scene starts where the poster is: About (globe fitted to the smaller side, world square of half-extent 1.2 => 106.25 cqmin); Services (drawing fitted whole with 7 % margin of the smaller side,
+   box ratio --poster-ratio, +2 % world margin); Home (placed by JS with the live fit: --hp-x / --hp-y / --hp-u, world square 4.5 units; CSS defaults below are only the first-paint approximation). Constants: tools/gen-posters.cjs checks them. */
+.hero .hero__media[data-hero-media], .hero .hero__media[data-hero-scene] { container-type: size; }   /* explicit (not :has()): the container must exist in the very first style pass */
+[data-hero-poster] { display: block; position: absolute; inset: 0; margin: auto; max-width: none; pointer-events: none; user-select: none; }   /* centred by layout (inset 0 + margin auto), NOT by transform: a transformed image is painted at a fractional pixel position and resampled (blur, dot lattice shifts); a layout-centred one is pixel-snapped, so the 1:1 poster bitmap lands exactly on the live canvas pixels */
+[data-hero-poster][hidden] { display: none; }
+[data-hero-poster][data-poster="about"] { width: calc(106.25 * var(--media-a) * 1cqw); height: auto; aspect-ratio: 1; }   /* = 106.25 cqmin; written with cqw and the slot aspect (--media-a = height / width, kept next to its aspect-ratio): Chrome evaluates cqh / cqmin with a stale container height in the first style pass */
+[data-hero-poster][data-poster="services"] { --poster-ratio: 1.09; width: calc(1.02 * min((100 - 14 * var(--media-a)) * 1cqw, 86 * var(--media-a) * var(--poster-ratio) * 1cqw)); height: auto; aspect-ratio: var(--poster-ratio); }
+[data-hero-poster][data-poster="home"] { --hp-x: 50%; --hp-y: 50%; --hp-u: min((50cqw - 8px) / 1.57, 13svh); inset: auto; left: var(--hp-x); top: var(--hp-y); margin: calc(-2.25 * var(--hp-u)) 0 0 calc(-2.25 * var(--hp-u)); width: calc(4.5 * var(--hp-u)); height: auto; aspect-ratio: 1; }
+@media (min-width: 1200px) { [data-hero-poster][data-poster="home"] { --hp-u: 7.9vw; --hp-y: calc(50% - 50px); } }   /* the H1 axis sits ~50 px above the hero centre */
+@media (min-width: 1440px) { [data-hero-poster][data-poster="home"] { --hp-u: 7.3vw; } }
+@media (min-width: 1600px) { [data-hero-poster][data-poster="home"] { --hp-u: 11.8vw; } }
+
 
 /* Hero, Home variant (.hero--home), V4 "centre composition" (customer decision 2026-11-13): full-bleed blue screen (min-height 100svh, vertical gradient --surface-accent-deep (top) > --surface-accent (bottom): the ONLY gradient on the site, customer exception 2026-11-12; no shadows).
    >=1200: `.hero__content` = 12-col grid, 2 rows: row 1 (1fr) = H1 (`.hero__title`, subgrid: `--l` cols 1-4 left-aligned, `--r` cols 9-12 right-aligned, first baselines shared) vertically centred in the free zone; row 2 = `.hero__find` (label > ONE white control 56 > category row), centred, cols 4-9 (chips cols 3-10), pressed to the bottom of the hero (padding-bottom --space-8 = 64 ~ 60).
@@ -34,12 +50,12 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
 .hero--home .hero__title { color: var(--text-on-accent); position: relative; z-index: 1; }
 .hero__title-part { display: block; }
 .hero__find { position: relative; z-index: 1; }
-.hero__scene3d { position: relative; z-index: 0; pointer-events: none; }
-.hero__scene3d canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity var(--dur-slow) var(--ease-out); }
+.hero__scene3d { position: relative; z-index: 0; pointer-events: none; overflow: clip; container-type: size; }   /* size container: the poster default size uses cq units */
+.hero__scene3d canvas { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; display: block; opacity: 0; }
 .hero__scene3d canvas.is-ready { opacity: 1; }
 /* search width (tablet/mobile) = 5 grid columns from the left edge; cqw = .hero__content width; tablet --grid-cols 8 gives 5 of 8; mobile full width; >=1200 the group is centred (see the media block below) */
 .hero-search { margin-top: var(--space-7); width: calc((100cqw - (var(--grid-cols) - 1) * var(--grid-gap)) / var(--grid-cols) * 5 + 4 * var(--grid-gap)); max-width: 100%; } /* .field gives the column + white on-accent label */
-.hero-search__bar { display: flex; align-items: center; height: var(--control-lg); background: var(--field-glass-bg); border: 1px solid var(--field-glass-border); border-radius: var(--radius-md); transition: border-color var(--dur-base) var(--ease-out); } /* glass field (no backdrop-filter): white fill --field-glass-alpha (20%); border sits exactly on the panel edge */
+.hero-search__bar { display: flex; align-items: center; height: var(--control-lg); background: var(--surface-field-on-accent); border: 1px solid var(--field-glass-border); border-radius: var(--radius-md); transition: border-color var(--dur-hover-disc) var(--ease-hover); } /* solid field on blue: fill --surface-field-on-accent (no alpha); border sits exactly on the panel edge */
 .hero-search__bar:focus-within { border-color: var(--field-glass-border-focus); } /* focus = the SAME border brighter: no outline, no offset, size unchanged */
 .hero-search .search .icon { color: var(--accent-contrast); }
 .hero-search .search .input { color: var(--text-on-accent); caret-color: var(--text-on-accent); }
@@ -73,20 +89,20 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
 /* HERO TITLE RULE (customer 2026-11-13): each phrase is at most TWO lines at every width, EN and DE. Sizes are picked per breakpoint from the scale (table in design-system.md) via --hero-fs/--hero-lh/--hero-ls. Exception to "one role = one token". */
 .hero--home .hero__title { --hero-fs: var(--type-h1-size); --hero-lh: var(--type-h1-lh); --hero-ls: var(--type-h1-ls); font-size: var(--hero-fs); line-height: var(--hero-lh); letter-spacing: var(--hero-ls); }
 @media (min-width: 1200px) and (max-width: 1439px) { .hero--home .hero__title { --hero-fs: var(--type-h2-size); --hero-lh: var(--type-h2-lh); --hero-ls: var(--type-h2-ls); } }
-@media (prefers-reduced-motion: reduce) { .hero__scene3d canvas { transition: none; } }
 
 /* ==========================================================================
    Responsive heroes. Tablet (<= 1199) / mobile (<= 767).
-   About / Services hero: facts and CTA stack centred; media keeps full bleed, taller aspect.
-   Home hero: <=1199 the scene sits above the text (flex column); the search control stays one row on all widths; mobile: category caption on its own line, chips wrap.
+   About / Services hero: text then media (stack, left-aligned). Home hero: <=1199 the scene sits above the text (flex column); the search control stays one row on all widths; mobile: category caption on its own line, chips wrap.
    ========================================================================== */
 @media (max-width: 1199px) {
-  .hero { padding-top: calc(var(--header-h) + var(--space-7)); }
-  .hero__sub { margin-top: var(--space-4); }
-  .hero__facts { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); margin-top: var(--space-6); }
-  .hero__fact { white-space: normal; text-align: center; }
-  .hero__fact--l, .hero__fact--r { text-align: center; }
-  .hero__media { margin-top: var(--space-6); aspect-ratio: 16 / 9; }
+  .hero:not(.hero--home) { padding-block: calc(var(--header-h) + var(--space-7)) var(--space-7); }
+  .hero__inner { row-gap: var(--space-6); }
+  .hero__inner > .hero__title, .hero__aside, .hero .hero__media { grid-column: 1 / -1; }
+  .hero__inner > .hero__title { grid-row: auto; display: block; pointer-events: auto; }
+  .hero__inner > .hero__title .hero__title-part--r { text-align: left; justify-self: auto; }
+  .hero__aside { grid-row: auto; }
+  .hero__inner > .hero__title .hero__title-part { white-space: normal; }
+  .hero .hero__media { grid-row: 1; aspect-ratio: 16 / 9; --media-a: 0.5625; } /* stack: illustration on top, then head, then aside */
 
   .hero--home { justify-content: flex-start; padding-top: calc(var(--header-h) + var(--space-6)); }
   .hero__content { display: flex; flex-direction: column; align-items: stretch; flex: 1 1 auto; }
@@ -96,10 +112,10 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
   .hero__scene3d { order: -1; flex: 1 1 auto; min-height: 0; margin: 0 0 var(--space-6); }
 }
 @media (max-width: 767px) {
-  .hero { padding-top: calc(var(--header-h) + var(--space-6)); }
-  .hero__facts { margin-top: var(--space-5); }
-  .hero__media { aspect-ratio: 4 / 3; max-height: none; }
-  .link-cta { display: inline-flex; align-items: center; min-height: var(--control-md); }
+  .hero__aside { text-align: left; align-items: stretch; } /* mobile: description left like the title, button full width (btn--block pattern) */
+  .hero__aside .btn { width: 100%; }
+  .hero:not(.hero--home) { padding-block: calc(var(--header-h) + var(--space-6)) var(--space-6); }
+  .hero .hero__media { aspect-ratio: 4 / 3; --media-a: 0.75; }
 
   .hero--home { padding-bottom: var(--space-6); }
   .hero--home .hero__title { --hero-fs: var(--type-h1-size); --hero-lh: var(--type-h1-lh); --hero-ls: var(--type-h1-ls); }
@@ -107,3 +123,7 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
   .hero-search { width: 100%; }
 }
 @media (max-width: 414px) { .hero--home .hero__title { --hero-fs: var(--type-h2-size); --hero-lh: var(--type-h2-lh); --hero-ls: var(--type-h2-ls); } }
+/* inner-page h1 (.t-h1) at the narrowest widths: one step down so DE stays on 2 lines (same step as the Home hero) */
+@media (max-width: 414px) { .hero:not(.hero--home) .hero__title { font-size: var(--type-h2-size); line-height: var(--type-h2-lh); letter-spacing: var(--type-h2-ls); } }
+/* inner-page h1 (.t-h1, 44) does not fit 5 columns in DE at 1200-1599: one step down (same step as the Home hero), so EN and DE stay on 2 lines */
+@media (min-width: 1200px) and (max-width: 1439px) { .hero:not(.hero--home) .hero__title { font-size: var(--type-h2-size); line-height: var(--type-h2-lh); letter-spacing: var(--type-h2-ls); } }

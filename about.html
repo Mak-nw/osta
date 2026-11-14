@@ -5,40 +5,29 @@
   <title>About us | OSTA Trading GmbH</title>
   <meta name="description" content="OSTA Trading GmbH is a specialised distributor of active pharmaceutical ingredients (APIs), excipients and specialty ingredients. Warehouse in Reinbek near Hamburg.">
   <link rel="stylesheet" href="/src/styles/pages/about.css">
-  <script type="module" src="/src/pages/about-services.js"></script>
-  <script type="module">
-    // Hero contour sphere (three.js, about-hero-sphere.js; the old hero-3d.js is disconnected): after first paint; any failure leaves the truck image as fallback.
-    const media = () => document.querySelector('[data-hero-media]');
-    const fallback = () => { const m = media(); if (!m) return; m.classList.add('hero--no3d'); ['role', 'aria-label', 'data-i18n-attr'].forEach((a) => m.removeAttribute(a)); };
-    const start = () => import('/src/pages/about-hero-sphere.js')
-      .then((m) => { if (!m.initAboutHeroSphere(media())) fallback(); })
-      .catch(fallback);
-    const idle = () => ('requestIdleCallback' in window ? requestIdleCallback(start, { timeout: 800 }) : setTimeout(start, 0));
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', idle); else idle();
-  </script>
+  <script type="module" src="/src/pages/services-cards.js"></script>
+  <script type="module" src="/src/pages/about-hero.js"></script>
 </head>
 <body data-page="about">
   <!--@include partials/header.html-->
-  <main>
-    <section class="hero">
-      <div class="container">
-        <h1 data-reveal-load="0" class="t-display t-accent hero__title" data-i18n-html="about.hero_title">From Hamburg<br>to the world</h1>
-        <p data-reveal-load="1" class="t-body hero__sub" data-i18n-html="about.hero_sub">Your choice for APIs,<br>excipients and expertise</p>
-        <div data-reveal-load="2" class="hero__facts">
-          <p class="t-body hero__fact hero__fact--l"><span data-i18n="about.hero_fact_l1">Europe &amp; worldwide</span> <span aria-hidden="true">//</span> <span data-i18n="about.hero_fact_l2">Located in the Hamburg area</span></p>
-          <a class="link-cta hero__cta" href="/catalog.html" data-i18n="about.hero_cta">Explore products</a>
-          <p class="t-body hero__fact hero__fact--r"><span data-i18n="about.hero_fact_r1">EudraGMDP registered</span> <span aria-hidden="true">//</span> <span data-i18n="about.hero_fact_r2">GDP warehouse</span></p>
+  <main id="main">
+    <section class="hero" aria-labelledby="about-hero-title">
+      <div class="container hero__inner">
+        <h1 id="about-hero-title" class="t-h1 hero__title" data-reveal-load="1"><span class="hero__title-part hero__title-part--l" data-i18n-html="about.hero_title_l">From Hamburg</span> <span class="hero__title-part hero__title-part--r" data-i18n-html="about.hero_title_r">to the world</span></h1>
+        <div class="hero__media" data-hero-media data-hero-art role="img" aria-label="Abstract contour map of a sphere" data-i18n-attr="aria-label:about.hero_media_label">
+          <picture data-hero-picture><source media="(min-width: 1800px) and (min-resolution: 1.75dppx)" srcset="/assets/img/hero-poster-about-1920-2.webp"><source media="(min-width: 1800px) and (min-resolution: 1.25dppx)" srcset="/assets/img/hero-poster-about-1920-1_5.webp"><source media="(min-width: 1800px)" srcset="/assets/img/hero-poster-about-1920-1.webp"><source media="(min-width: 1600px) and (max-width: 1799px) and (min-resolution: 1.75dppx)" srcset="/assets/img/hero-poster-about-1728-2.webp"><source media="(min-width: 1600px) and (max-width: 1799px) and (min-resolution: 1.25dppx)" srcset="/assets/img/hero-poster-about-1728-1_5.webp"><source media="(min-width: 1600px) and (max-width: 1799px)" srcset="/assets/img/hero-poster-about-1728-1.webp"><source media="(min-width: 1360px) and (max-width: 1599px) and (min-resolution: 1.75dppx)" srcset="/assets/img/hero-poster-about-1440-2.webp"><source media="(min-width: 1360px) and (max-width: 1599px) and (min-resolution: 1.25dppx)" srcset="/assets/img/hero-poster-about-1440-1_5.webp"><source media="(min-width: 1360px) and (max-width: 1599px)" srcset="/assets/img/hero-poster-about-1440-1.webp"><source media="(min-width: 1200px) and (max-width: 1359px) and (min-resolution: 1.75dppx)" srcset="/assets/img/hero-poster-about-1280-2.webp"><source media="(min-width: 1200px) and (max-width: 1359px) and (min-resolution: 1.25dppx)" srcset="/assets/img/hero-poster-about-1280-1_5.webp"><source media="(min-width: 1200px) and (max-width: 1359px)" srcset="/assets/img/hero-poster-about-1280-1.webp"><source media="(min-width: 900px) and (max-width: 1199px) and (min-resolution: 1.75dppx)" srcset="/assets/img/hero-poster-about-1024-2.webp"><source media="(min-width: 900px) and (max-width: 1199px) and (min-resolution: 1.25dppx)" srcset="/assets/img/hero-poster-about-1024-1_5.webp"><source media="(min-width: 900px) and (max-width: 1199px)" srcset="/assets/img/hero-poster-about-1024-1.webp"><source media="(min-width: 680px) and (max-width: 899px) and (min-resolution: 1.75dppx)" srcset="/assets/img/hero-poster-about-768-2.webp"><source media="(min-width: 680px) and (max-width: 899px) and (min-resolution: 1.25dppx)" srcset="/assets/img/hero-poster-about-768-1_5.webp"><source media="(min-width: 680px) and (max-width: 899px)" srcset="/assets/img/hero-poster-about-768-1.webp"><source media="(min-width: 480px) and (max-width: 679px) and (min-resolution: 2.5dppx)" srcset="/assets/img/hero-poster-about-600-3.webp"><source media="(min-width: 480px) and (max-width: 679px) and (min-resolution: 1.75dppx)" srcset="/assets/img/hero-poster-about-600-2.webp"><source media="(min-width: 480px) and (max-width: 679px) and (min-resolution: 1.25dppx)" srcset="/assets/img/hero-poster-about-600-1_5.webp"><source media="(min-width: 480px) and (max-width: 679px)" srcset="/assets/img/hero-poster-about-600-1.webp"><source media="(max-width: 479px) and (min-resolution: 2.5dppx)" srcset="/assets/img/hero-poster-about-375-3.webp"><source media="(max-width: 479px) and (min-resolution: 1.75dppx)" srcset="/assets/img/hero-poster-about-375-2.webp"><source media="(max-width: 479px) and (min-resolution: 1.25dppx)" srcset="/assets/img/hero-poster-about-375-1_5.webp"><source media="(max-width: 479px)" srcset="/assets/img/hero-poster-about-375-1.webp"><img data-hero-poster data-poster="about" src="/assets/img/hero-poster-about-1440-1.webp" alt="" width="836" height="838" fetchpriority="high" decoding="async"></picture>
         </div>
-      </div>
-      <div class="hero__media" data-hero-media role="img" aria-label="Abstract contour map of a sphere" data-i18n-attr="aria-label:about.hero_media_label">
-        <img class="hero__image" src="/assets/img/truck.jpg" alt="Delivery truck" data-i18n-attr="alt:about.truck_alt" width="1456" height="816" decoding="async">
+        <div class="section-head section-head--center hero__aside">
+          <p data-reveal-load="2" class="t-body hero__sub" data-i18n-html="about.hero_sub">Your choice for APIs,<br>excipients and expertise</p>
+          <a data-reveal-load="2" class="btn btn--primary btn--lg btn--split" href="/catalog.html"><span data-i18n="about.hero_cta">Explore products</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
+        </div>
       </div>
     </section>
 
     <section class="section--lg about-intro" id="about">
       <div class="container about-intro__grid">
         <div class="section-head about-intro__head">
-          <p data-reveal="fade" class="section-label t-accent" data-i18n="about.about_label">About us</p>
+          <p data-reveal="fade" class="section-label" data-i18n="about.about_label">About us</p>
           <h2 data-reveal class="t-display t-accent about-intro__title" data-i18n-html="about.about_title">Your choice for APIs, excipients and expertise</h2>
         </div>
         <p data-reveal class="t-lead t-accent about-intro__lead" data-i18n="about.intro_lead">OSTA Trading GmbH is a specialised distributor of active pharmaceutical ingredients (APIs), excipients and specialty ingredients for the pharmaceutical, food and cosmetics industries.</p>
@@ -72,37 +61,37 @@
       </div>
 
       <div class="container">
-        <div class="about-services__list" data-reveal>
-          <div class="service-list" data-services>
-            <article class="service-card" data-model="manufacturer">
-              <div class="service-card__body">
-                <h3 class="service-card__title t-h2" data-i18n-html="about.service_manufacturer_title">Manufacturer<br>search</h3>
-                <p class="service-card__text t-body" data-i18n="about.service_manufacturer_text">Suitable APIs and excipients manufacturers. Sources matched to the technical, quality, regulatory and commercial requirements of your project.</p>
-              </div>
-              <div class="service-card__media" aria-hidden="true"><span class="service-card__fallback"></span></div>
-            </article>
-            <article class="service-card" data-model="regulatory">
-              <div class="service-card__body">
-                <h3 class="service-card__title t-h2" data-i18n-html="about.service_regulatory_title">Regulatory<br>documents</h3>
-                <p class="service-card__text t-body" data-i18n="about.service_regulatory_text">Coordination of regulatory documentation. Coordinating the regulatory documentation your project requires.</p>
-              </div>
-              <div class="service-card__media" aria-hidden="true"><span class="service-card__fallback"></span></div>
-            </article>
-            <article class="service-card" data-model="samples">
-              <div class="service-card__body">
-                <h3 class="service-card__title t-h2" data-i18n="about.service_samples_title">Samples</h3>
-                <p class="service-card__text t-body" data-i18n="about.service_samples_text">Collection of samples Samples for your evaluation and qualification procedures.</p>
-              </div>
-              <div class="service-card__media" aria-hidden="true"><span class="service-card__fallback"></span></div>
-            </article>
-            <article class="service-card" data-model="specs">
-              <div class="service-card__body">
-                <h3 class="service-card__title t-h2" data-i18n-html="about.service_specs_title">Specs &amp;<br>quality</h3>
-                <p class="service-card__text t-body" data-i18n="about.service_specs_text">Specifications and quality requirements. Agreeing on the specifications and quality your project demands.</p>
-              </div>
-              <div class="service-card__media" aria-hidden="true"><span class="service-card__fallback"></span></div>
-            </article>
+        <div class="about-services__list">
+        <div class="svc-cards">
+        <article class="svc-card svc-card--on-accent" aria-labelledby="about-manufacturer-search-title">
+          <div class="svc-card__art" aria-hidden="true" data-scene="search"></div>
+          <div class="svc-card__text">
+            <h3 data-reveal="up" data-reveal-delay="0" class="t-h2 svc-card__title" id="about-manufacturer-search-title" data-i18n="services.manufacturer_label">Manufacturer search</h3>
+            <p class="t-body svc-card__desc" data-reveal="up" data-reveal-delay="0" data-i18n="services.manufacturer_card">You get sources matched to the technical, quality, regulatory and commercial requirements of your project.</p>
           </div>
+        </article>
+        <article class="svc-card svc-card--on-accent" aria-labelledby="about-regulatory-documents-title">
+          <div class="svc-card__art" aria-hidden="true" data-scene="documents"></div>
+          <div class="svc-card__text">
+            <h3 data-reveal="up" data-reveal-delay="1" class="t-h2 svc-card__title" id="about-regulatory-documents-title" data-i18n="services.regulatory_label">Regulatory documents</h3>
+            <p class="t-body svc-card__desc" data-reveal="up" data-reveal-delay="1" data-i18n="services.regulatory_card">You get one point of contact towards the manufacturer for the regulatory documentation.</p>
+          </div>
+        </article>
+        <article class="svc-card svc-card--on-accent" aria-labelledby="about-samples-title">
+          <div class="svc-card__art" aria-hidden="true" data-scene="samples"></div>
+          <div class="svc-card__text">
+            <h3 data-reveal="up" data-reveal-delay="2" class="t-h2 svc-card__title" id="about-samples-title" data-i18n="services.samples_label">Samples</h3>
+            <p class="t-body svc-card__desc" data-reveal="up" data-reveal-delay="2" data-i18n="services.samples_card">You get samples for your evaluation and support up to qualification.</p>
+          </div>
+        </article>
+        <article class="svc-card svc-card--on-accent" aria-labelledby="about-specs-quality-title">
+          <div class="svc-card__art" aria-hidden="true" data-scene="specs"></div>
+          <div class="svc-card__text">
+            <h3 data-reveal="up" data-reveal-delay="3" class="t-h2 svc-card__title" id="about-specs-quality-title" data-i18n="services.specs_label">Specs &amp; quality</h3>
+            <p class="t-body svc-card__desc" data-reveal="up" data-reveal-delay="3" data-i18n="services.specs_card">You get specifications and quality requirements agreed with the manufacturer before supply starts.</p>
+          </div>
+        </article>
+        </div>
         </div>
       </div>
 
@@ -133,7 +122,7 @@
               <h2 class="t-h2" data-i18n="about.logistics_heading">Reliable logistics are an integral part of our business</h2>
               <p class="t-body" data-i18n="about.logistics_text">OSTA Trading GmbH coordinates the supply chain from the manufacturer to the customer's destination, taking into consideration the specific handling, documentation and transport requirements applicable to pharmaceutical ingredients.</p>
             </div>
-            <a class="link-cta link-cta--on-accent" href="/contact.html" data-i18n="about.closing_cta">Contact us</a>
+            <a class="btn btn--light btn--md btn--split" href="/contact.html"><span data-i18n="about.closing_cta">Contact us</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
           </div>
           <div class="slide__photo"><img src="/assets/img/truck.jpg" alt="" loading="lazy" data-i18n-attr="alt:about.truck_alt"></div>
         </div>
@@ -143,7 +132,7 @@
     <section class="section--lg" id="team">
       <div class="container stack stack--7">
         <div class="section-head about-people__head">
-          <p data-reveal="fade" class="section-label t-accent about-people__label" data-i18n="about.people_label">Team</p>
+          <p data-reveal="fade" class="section-label about-people__label" data-i18n="about.people_label">Team</p>
           <h2 data-reveal class="t-display t-accent" data-i18n-html="about.people_title">Meet the people<br>behind your supply</h2>
         </div>
         <div class="stack stack--grid">
@@ -151,7 +140,7 @@
             <div class="people-card__media"><img class="people-card__photo" src="/assets/img/people-markus.jpg" alt="" data-i18n-attr="alt:about.people_markus_name"></div>
             <div class="people-card__body">
               <p class="t-lead" data-i18n-html="about.people_markus_quote">“Every order starts with a conversation. We listen first, then build the supply around your needs.”</p>
-              <div><h3 class="people-card__name" data-i18n="about.people_markus_name">Markus Weber</h3><div class="people-card__role" data-i18n="about.people_markus_role">Managing Director</div></div>
+              <div><div class="people-card__role" data-i18n="about.people_markus_role">Managing Director</div><h3 class="people-card__name" data-i18n="about.people_markus_name">Markus Weber</h3></div>
             </div>
             <div class="people-card__contacts">
               <a class="contact-line" href="tel:+494073128176"><span class="icon-ring icon-ring--action"><svg class="icon icon-text" aria-hidden="true"><use href="/assets/icons/sprite.svg#phone"/></svg></span><span data-i18n="about.people_phone">+49 40 731 281 – 76</span></a>
@@ -162,7 +151,7 @@
             <div class="people-card__media"><img class="people-card__photo" src="/assets/img/people-thomas.jpg" alt="" data-i18n-attr="alt:about.people_thomas_name"></div>
             <div class="people-card__body">
               <p class="t-lead" data-i18n-html="about.people_thomas_quote">“A reliable ingredient is only useful when it arrives on time. That is what we work on every day.”</p>
-              <div><h3 class="people-card__name" data-i18n="about.people_thomas_name">Thomas Keller</h3><div class="people-card__role" data-i18n="about.people_thomas_role">Head of Sourcing</div></div>
+              <div><div class="people-card__role" data-i18n="about.people_thomas_role">Head of Sourcing</div><h3 class="people-card__name" data-i18n="about.people_thomas_name">Thomas Keller</h3></div>
             </div>
             <div class="people-card__contacts">
               <a class="contact-line" href="tel:+494073128176"><span class="icon-ring icon-ring--action"><svg class="icon icon-text" aria-hidden="true"><use href="/assets/icons/sprite.svg#phone"/></svg></span><span data-i18n="about.people_phone">+49 40 731 281 – 76</span></a>
@@ -173,40 +162,14 @@
       </div>
     </section>
 
-    <section class="section--lg section--flush-top" id="quality">
+    <!-- Documentation: the SAME block as Home #quality (shared .quality-band > .quality-cards, texts = home.* keys, scenes = home-quality-scenes.js via main.js) -->
+    <section class="quality-band" id="quality" aria-labelledby="about-quality-title">
       <div class="container">
-        <div class="feature-grid">
-          <div class="feature-grid__intro section-head about-quality__head">
-            <p data-reveal="fade" class="section-label t-accent about-quality__label" data-i18n="about.quality_label">Documentation</p>
-            <h2 data-reveal class="t-h2 t-accent about-quality__title" data-i18n-html="about.quality_title">Quality and compliance are fundamental to our operations</h2>
-            <p data-reveal data-reveal-delay="1" class="t-body about-quality__text" data-i18n="about.quality_text">This way we ensure appropriate handling, storage and distribution of pharmaceutical ingredients.</p>
-            <a data-reveal data-reveal-delay="2" class="btn btn--secondary btn--md btn--split about-quality__cta" href="/contact.html"><span data-i18n="about.quality_cta">Request documentation</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
-          </div>
-          <article data-reveal class="feature-card feature-card--accent">
-            <div class="feature-card__head">
-              <h3 class="t-h2 feature-card__title" data-i18n="about.quality_specs_title">Specs &amp; quality</h3>
-              
-            </div>
-            <div class="feature-card__art-wrap">
-              <svg class="feature-card__art" viewBox="0 -20.5 340 236" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path class="il-canvas" d="M170.0 42.0 L319.0 128.0 L170.0 214.0 L21.0 128.0 Z"/><path class="il-grid" d="M194.8 56.3 L45.9 142.3 M145.2 56.3 L294.1 142.3 M219.7 70.7 L70.7 156.7 M120.3 70.7 L269.3 156.7 M244.5 85.0 L95.5 171.0 M95.5 85.0 L244.5 171.0 M269.3 99.3 L120.3 185.3 M70.7 99.3 L219.7 185.3 M294.1 113.7 L145.2 199.7 M45.9 113.7 L194.8 199.7"/><path class="il-line il-dash" d="M157.9 83.0 L157.9 25.0 M247.9 135.0 L247.9 77.0 M182.1 173.0 L182.1 115.0 M92.1 121.0 L92.1 63.0"/><path class="il-occ" d="M157.9 70.0 L247.9 122.0 L247.9 125.0 L182.1 163.0 L92.1 111.0 L92.1 108.0 Z"/><path class="il-sheet" d="M157.9 70.0 L247.9 122.0 L182.1 160.0 L92.1 108.0 Z"/><path class="il-edge" d="M247.9 122.0 L247.9 125.0 L182.1 163.0 L92.1 111.0 L92.1 108.0"/><path class="il-edge" d="M182.1 160.0 L182.1 163.0"/><path class="il-line" d="M152.7 83.0 L211.6 117.0"/><path class="il-line" d="M140.6 90.0 L204.6 127.0"/><path class="il-line" d="M128.4 97.0 L197.7 137.0"/><path class="il-occ" d="M157.9 46.0 L247.9 98.0 L247.9 101.0 L182.1 139.0 L92.1 87.0 L92.1 84.0 Z"/><path class="il-sheet" d="M157.9 46.0 L247.9 98.0 L182.1 136.0 L92.1 84.0 Z"/><path class="il-edge" d="M247.9 98.0 L247.9 101.0 L182.1 139.0 L92.1 87.0 L92.1 84.0"/><path class="il-edge" d="M182.1 136.0 L182.1 139.0"/><path class="il-line" d="M152.7 59.0 L211.6 93.0"/><path class="il-line" d="M140.6 66.0 L204.6 103.0"/><path class="il-line" d="M128.4 73.0 L197.7 113.0"/><path class="il-fill" d="M157.9 22.0 L247.9 74.0 L247.9 77.0 L182.1 115.0 L92.1 63.0 L92.1 60.0 Z"/><path class="il-ink" d="M157.9 22.0 L247.9 74.0 L182.1 112.0 L92.1 60.0 Z"/><path class="il-ink" d="M247.9 77.0 L182.1 115.0 L92.1 63.0"/><path class="il-ink" d="M182.1 112.0 L182.1 115.0"/><path class="il-ink" d="M247.9 74.0 L247.9 77.0"/><path class="il-ink" d="M92.1 60.0 L92.1 63.0"/><path class="il-ink il-bold" d="M157.9 32.0 L180.4 45.0"/><path class="il-ink" d="M145.8 39.0 L197.7 69.0"/><path class="il-ink" d="M137.1 44.0 L185.6 72.0"/><path class="il-ink" d="M128.4 49.0 L173.5 75.0"/><path class="il-ink" d="M119.8 54.0 L142.3 67.0"/><path class="il-ink" d="M187.3 99.0 L185.6 99.9 L183.6 100.6 L181.5 101.1 L179.2 101.4 L176.9 101.5 L174.6 101.4 L172.4 101.1 L170.3 100.6 L168.3 99.9 L166.5 99.0 L165.0 98.0 L163.8 96.9 L163.0 95.6 L162.4 94.3 L162.2 93.0 L162.4 91.7 L163.0 90.4 L163.8 89.1 L165.0 88.0 L166.5 87.0 L168.3 86.1 L170.3 85.4 L172.4 84.9 L174.6 84.6 L176.9 84.5 L179.2 84.6 L181.5 84.9 L183.6 85.4 L185.6 86.1 L187.3 87.0 L188.8 88.0 L190.0 89.1 L190.9 90.4 L191.4 91.7 L191.6 93.0 L191.4 94.3 L190.9 95.6 L190.0 96.9 L188.8 98.0 Z"/><path class="il-ink il-bold" d="M170.9 89.5 L170.9 94.5 L189.9 93.5"/></svg>
-            </div>
-            <div class="feature-card__foot">
-              <p class="feature-card__text" data-i18n="about.quality_specs_text">OSTA Trading GmbH is registered in EudraGMDP as an API distributor.</p>
-            </div>
-          </article>
-          <article data-reveal data-reveal-delay="1" class="feature-card feature-card--light">
-            <div class="feature-card__head">
-              <h3 class="t-h2 feature-card__title" data-i18n="about.quality_gdp_title">GDP</h3>
-              
-            </div>
-            <div class="feature-card__art-wrap">
-              <svg class="feature-card__art" viewBox="-5.2 -17.5 340 236" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path class="il-canvas" d="M170.0 42.0 L319.0 128.0 L170.0 214.0 L21.0 128.0 Z"/><path class="il-grid" d="M194.8 56.3 L45.9 142.3 M145.2 56.3 L294.1 142.3 M219.7 70.7 L70.7 156.7 M120.3 70.7 L269.3 156.7 M244.5 85.0 L95.5 171.0 M95.5 85.0 L244.5 171.0 M269.3 99.3 L120.3 185.3 M70.7 99.3 L219.7 185.3 M294.1 113.7 L145.2 199.7 M45.9 113.7 L194.8 199.7"/><path class="il-edge" d="M164.8 69.0 L164.8 11.0"/><path class="il-edge" d="M241.0 113.0 L241.0 55.0"/><path class="il-sheet" d="M164.8 40.0 L241.0 84.0 L215.0 99.0 L138.8 55.0 Z"/><path class="il-sheet" d="M164.8 11.0 L241.0 55.0 L215.0 70.0 L138.8 26.0 Z"/><path class="il-occ" d="M165.2 50.2 L185.7 62.1 L185.7 84.1 L168.4 94.1 L147.9 82.2 L147.9 60.2 Z"/><path class="il-sheet" d="M165.2 50.2 L185.7 62.1 L168.4 72.1 L147.9 60.2 Z"/><path class="il-edge" d="M185.7 62.1 L185.7 84.1 L168.4 94.1 L147.9 82.2 L147.9 60.2"/><path class="il-edge" d="M168.4 72.1 L168.4 94.1"/><path class="il-occ" d="M188.3 63.6 L208.8 75.4 L208.8 97.4 L191.5 107.4 L171.0 95.6 L171.0 73.6 Z"/><path class="il-sheet" d="M188.3 63.6 L208.8 75.4 L191.5 85.4 L171.0 73.6 Z"/><path class="il-edge" d="M208.8 75.4 L208.8 97.4 L191.5 107.4 L171.0 95.6 L171.0 73.6"/><path class="il-edge" d="M191.5 85.4 L191.5 107.4"/><path class="il-occ" d="M211.4 76.9 L231.9 88.8 L231.9 110.8 L214.6 120.8 L194.1 108.9 L194.1 86.9 Z"/><path class="il-sheet" d="M211.4 76.9 L231.9 88.8 L214.6 98.8 L194.1 86.9 Z"/><path class="il-edge" d="M231.9 88.8 L231.9 110.8 L214.6 120.8 L194.1 108.9 L194.1 86.9"/><path class="il-edge" d="M214.6 98.8 L214.6 120.8"/><path class="il-occ" d="M165.2 21.2 L185.7 33.1 L185.7 55.1 L168.4 65.1 L147.9 53.2 L147.9 31.2 Z"/><path class="il-sheet" d="M165.2 21.2 L185.7 33.1 L168.4 43.1 L147.9 31.2 Z"/><path class="il-edge" d="M185.7 33.1 L185.7 55.1 L168.4 65.1 L147.9 53.2 L147.9 31.2"/><path class="il-edge" d="M168.4 43.1 L168.4 65.1"/><path class="il-occ" d="M211.4 47.9 L231.9 59.8 L231.9 81.8 L214.6 91.8 L194.1 79.9 L194.1 57.9 Z"/><path class="il-sheet" d="M211.4 47.9 L231.9 59.8 L214.6 69.8 L194.1 57.9 Z"/><path class="il-edge" d="M231.9 59.8 L231.9 81.8 L214.6 91.8 L194.1 79.9 L194.1 57.9"/><path class="il-edge" d="M214.6 69.8 L214.6 91.8"/><path class="il-edge" d="M215.0 128.0 L215.0 70.0"/><path class="il-edge" d="M138.8 84.0 L138.8 26.0"/><path class="il-occ" d="M163.1 140.0 L204.6 164.0 L204.6 170.0 L170.0 190.0 L128.4 166.0 L128.4 160.0 Z"/><path class="il-sheet" d="M163.1 140.0 L204.6 164.0 L170.0 184.0 L128.4 160.0 Z"/><path class="il-edge" d="M204.6 164.0 L204.6 170.0 L170.0 190.0 L128.4 166.0 L128.4 160.0"/><path class="il-edge" d="M170.0 184.0 L170.0 190.0"/><path class="il-fill" d="M163.1 102.0 L197.7 122.0 L197.7 164.0 L170.0 180.0 L135.4 160.0 L135.4 118.0 Z"/><path class="il-ink" d="M163.1 102.0 L197.7 122.0 L170.0 138.0 L135.4 118.0 Z"/><path class="il-ink" d="M197.7 164.0 L170.0 180.0 L135.4 160.0"/><path class="il-ink" d="M170.0 138.0 L170.0 180.0"/><path class="il-ink" d="M197.7 122.0 L197.7 164.0"/><path class="il-ink" d="M135.4 118.0 L135.4 160.0"/><path class="il-occ" d="M109.4 101.0 L131.9 114.0 L131.9 136.0 L111.1 148.0 L88.6 135.0 L88.6 113.0 Z"/><path class="il-sheet" d="M109.4 101.0 L131.9 114.0 L111.1 126.0 L88.6 113.0 Z"/><path class="il-edge" d="M131.9 114.0 L131.9 136.0 L111.1 148.0 L88.6 135.0 L88.6 113.0"/><path class="il-edge" d="M111.1 126.0 L111.1 148.0"/></svg>
-            </div>
-            <div class="feature-card__foot">
-              <p class="feature-card__text" data-i18n="about.quality_gdp_text">Our Hamburg warehouse operates in compliance with GDP requirements.</p>
-            </div>
-          </article>
-        </div>
+        <ul class="quality-cards" data-reveal-stagger>
+          <li data-reveal><div class="text-card text-card--on-light"><div class="text-card__body"><div class="section-head"><p class="section-label" data-i18n="home.quality_label">Documentation</p><h2 class="t-h2" id="about-quality-title" data-i18n-html="home.quality_title">Quality and compliance<br>are fundamental<br>to our operations</h2></div><p class="t-body" data-i18n="home.quality_text">OSTA Trading GmbH is registered in EudraGMDP as an API distributor. Our warehouse operates in compliance with GDP requirements, so we handle, store and distribute pharmaceutical ingredients appropriately.</p></div><a class="btn btn--primary btn--md btn--split" href="/contact.html"><span data-i18n="home.quality_cta">Request documentation</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a></div></li>
+          <li data-reveal><article class="quality-card"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#shield-check"/></svg></span><span class="quality-card__art" data-scene="eudra" aria-hidden="true"></span><h3 class="t-h2 quality-card__title" data-i18n="home.quality_eudra_title">EudraGMDP</h3><p class="t-body quality-card__text" data-i18n="home.quality_eudra_text">Registered as API distributor.</p></article></li>
+          <li data-reveal><article class="quality-card"><span class="icon-ring"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#home"/></svg></span><span class="quality-card__art" data-scene="gdp" aria-hidden="true"></span><h3 class="t-h2 quality-card__title" data-i18n="home.quality_gdp_title">GDP</h3><p class="t-body quality-card__text" data-i18n="home.quality_gdp_text">Warehouse compliant with GDP requirements.</p></article></li>
+        </ul>
       </div>
     </section>
 
@@ -215,7 +178,6 @@
        <div class="home-closing__panel">
         <div class="home-closing__body section-head" data-reveal="fade">
           <p class="section-label" data-i18n="closing.label">Contacts</p>
-          <p class="t-lead home-closing__sub" data-i18n="about.closing_sub">We would love to hear your challenge.</p>
           <h2 class="t-display home-closing__title" data-i18n="about.closing_title">Professionalism, reliability and long-term cooperation are at the centre of everything we do</h2>
           <p class="t-body home-closing__desc" data-i18n="about.closing_desc">Our knowledgeable and resourceful team will always assist you to find the answer you look for.</p>
           <div class="home-closing__actions">

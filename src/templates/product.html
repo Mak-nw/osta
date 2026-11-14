@@ -9,25 +9,24 @@
 <body data-page="products">
   <!--@include partials/header.html-->
   <!-- Template of every /products/<slug>/ page. Filled at build/dev time by seo/core.js (renderPage): {{name}} and slot markers. Not a public page. -->
-  <main>
-    <section class="product-hero section--sm">
-      <div class="container stack stack--5 product-hero__inner">
+  <main id="main">
+    <section class="product-hero product-hero--bg section--sm">
+      <div class="container product-hero__inner">
         <nav data-reveal-load="0" class="breadcrumbs" aria-label="Breadcrumb">
           <a href="/index.html" data-i18n="product.breadcrumb_home">Home</a><span class="breadcrumbs__sep"></span>
           <a href="/catalog.html" data-i18n="product.breadcrumb_products">Products</a><span class="breadcrumbs__sep"></span>
           <span class="breadcrumbs__current" aria-current="page">{{name}}</span>
         </nav>
-        <h1 data-reveal-load="1" class="t-h1 t-accent t-center">{{name}}</h1>
-        <div class="row row--2" data-product-tags data-reveal-load="2"><!--@slot:tags--></div>
-        <p class="t-lead t-center product-answer"><!--@slot:answer--></p>
+        <div class="section-head product-hero__head">
+          <h1 data-reveal-load="1" class="t-h1 t-accent">{{name}}</h1>
+          <div class="row row--2" data-product-tags data-reveal-load="2"><!--@slot:tags--></div>
+          <p class="t-body product-answer"><!--@slot:answer--></p>
+          <!--@slot:cta-top-->
+        </div>
         <div class="product-info" data-reveal-stagger>
           <!--@slot:cards-->
-          <a class="card card--accent cta-block" href="<!--@slot:cta_href-->">
-            <span class="cta-block__title"><!--@slot:cta_title--></span>
-            <span class="cta-block__art"><svg class="cta-block__art-svg" viewBox="0 13 340 230" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path class="il-canvas" d="M170 42 L319 128 L170 214 L21 128 Z"/><path class="il-grid" d="M188.6 52.8 L39.7 138.8 M151.4 52.8 L300.3 138.8 M207.2 63.5 L58.3 149.5 M132.8 63.5 L281.7 149.5 M225.9 74.3 L76.9 160.3 M114.1 74.3 L263.1 160.3 M244.5 85 L95.5 171 M95.5 85 L244.5 171 M263.1 95.8 L114.1 181.8 M76.9 95.8 L225.9 181.8 M281.7 106.5 L132.8 192.5 M58.3 106.5 L207.2 192.5 M300.3 117.3 L151.4 203.3 M39.7 117.3 L188.6 203.3"/><path class="il-sheet" d="M239.3 96 L275.7 117 L244.5 135 L208.1 114 Z"/><path class="il-line" d="M245 105.3 L224.2 117.3 M252.3 109.5 L231.5 121.5 M259.5 113.7 L238.8 125.7"/><path class="il-line il-dash" d="M183.9 136 L223.7 159"/><path class="il-line" d="M233.2 155.5 L237.5 167 L217.6 164.5"/><path class="il-occ" d="M142.3 74 L196 105 L196 113 L144 143 L90.3 112 L90.3 104 Z"/><path class="il-edge" d="M142.3 74 L196 105 L144 135 L90.3 104 Z"/><path class="il-edge" d="M196 105 L196 113 L144 143 L90.3 112 L90.3 104"/><path class="il-edge" d="M144 135 L144 143"/><path class="il-line" d="M178.7 115 L178.7 123 M161.3 125 L161.3 133"/><path class="il-fill" d="M142.3 38 L183.9 62 L183.9 104 L142.3 128 L100.7 104 L100.7 62 Z"/><path class="il-ink" d="M142.3 38 L183.9 62 L142.3 86 L100.7 62 Z"/><path class="il-ink" d="M183.9 62 L183.9 104 L142.3 128 L100.7 104 L100.7 62"/><path class="il-ink" d="M142.3 86 L142.3 128"/><path class="il-ink il-bold" d="M121.5 50 L163.1 74 L163.1 88"/><path class="il-ink" d="M109.4 99 L123.2 107 L123.2 93 L109.4 85 Z"/></svg></span>
-            <span class="cta-block__foot"><span class="cta-block__text"><!--@slot:cta_text--></span><span class="round-btn round-btn--light round-btn--md" aria-hidden="true"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></span>
-          </a>
         </div>
+        <!--@slot:cta-->
       </div>
     </section>
     <!--@slot:related-->

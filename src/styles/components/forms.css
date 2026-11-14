@@ -1,32 +1,48 @@
 /* Fields: .field > .field__label + (.input|.select|.textarea) [+ .field__error].
-   DEFAULT = line field (transparent, bottom border only). Pill variant (.field--pill / .input--pill / .search .input)
-   is the old filled control: use it only for compact search/filter inputs and for forms on an accent card (.field--on-accent). */
+   DEFAULT = filled field with a floating label (customer 2026-11-14): solid --surface-white fill, 1px border, radius-md; the label sits INSIDE the field in place of a placeholder
+   (placeholder=" " is the :placeholder-shown hook) and flies up above the fill on focus / when the field has a value (select: a chosen option). The label row above the
+   fill is always reserved (padding-top), so the block height never changes. Pill variant (.field--pill / .input--pill / .search .input) = compact search/filter inputs and
+   forms on an accent card (.field--on-accent): no floating label, label stays above. */
 .field { display: flex; flex-direction: column; gap: var(--field-label-gap); } /* label -> field = one token site-wide */
-.field__label { font-size: var(--type-label-size); line-height: var(--type-label-lh); letter-spacing: var(--type-label-ls); color: var(--text-muted); transition: color var(--dur) var(--ease); }
-.field:focus-within .field__label { color: var(--text-accent); }
+.field__label { font-size: var(--type-label-size); line-height: var(--type-label-lh); letter-spacing: var(--type-label-ls); color: var(--text); transition: color var(--dur-hover-disc) var(--ease-hover); }
+.field:focus-within .field__label { color: var(--text); }
 .field--on-accent .field__label, .field--on-accent:focus-within .field__label { color: var(--text-on-accent); }
 
-/* ---- Line field (default). Height md = 44; --sm 32, --lg 56 ---- */
+/* ---- Filled field with floating label (default). Control = --control-md 44. Resting: the label sits INSIDE the fill (placeholder position). Floated (focus / value): it flies up OUT of the fill into the gap above the control (absolute, subtitle 14/20 --text, label -> control 4 = --space-1); the 32 gap between stacked fields leaves 8 (--space-2) above the label. No space is reserved: the block height never changes. ---- */
+.field:not(.field--pill):not(.field--on-accent) { position: relative; gap: 0; }
+.field:not(.field--pill):not(.field--on-accent) .field__label {
+  position: absolute; left: var(--space-4); top: calc((var(--control-md) - 1cap) / 2); z-index: 1; text-box: trim-both cap alphabetic; pointer-events: none; max-width: calc(100% - 2 * var(--space-4));
+  font-size: var(--type-body-size); line-height: var(--type-body-lh); color: var(--text-accent-subtle);
+  transition: top var(--dur-base) var(--ease-out), left var(--dur-base) var(--ease-out), font-size var(--dur-base) var(--ease-out), line-height var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
+}
+.field:not(.field--pill):not(.field--on-accent):focus-within .field__label,
+.field:not(.field--pill):not(.field--on-accent):has(.input:not(:placeholder-shown), .textarea:not(:placeholder-shown), .select:valid, .input.is-focus, .textarea.is-focus, .select.is-focus) .field__label {
+  left: 0; top: calc(-1 * (1cap + var(--space-1))); font-size: var(--type-label-size); line-height: var(--type-label-lh); color: var(--text);
+}
+/* error: in the gap under the control, right-aligned (the next field's floated label sits at the left), reserves no height */
+.field:not(.field--pill):not(.field--on-accent) .field__error { position: absolute; top: 100%; left: 0; right: 0; justify-content: flex-end; margin-top: var(--space-1); font-size: var(--type-label-size); line-height: var(--type-label-lh); }
+.field:not(.field--pill):not(.field--on-accent) .field__error .icon { margin-top: 0; }
 .input, .select, .textarea {
   --_h: var(--control-md);
-  width: 100%; height: var(--_h); padding-inline: 0; padding-block: 0;
-  background: transparent; color: var(--text);
-  border: 0; border-bottom: 1px solid var(--border-strong); border-radius: 0;
+  width: 100%; height: var(--_h); padding-inline: var(--space-4); padding-block: 0;
+  background: var(--surface-white); color: var(--text);
+  border: 1px solid var(--border); border-radius: var(--radius-md);
   font-size: var(--type-body-size); line-height: var(--type-body-lh);
   outline: 1px solid transparent; /* visible only in forced-colors mode */
   appearance: none;
-  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+  transition: border-color var(--dur-hover-disc) var(--ease-hover), background var(--dur-hover-disc) var(--ease-hover);
 }
 .input--sm, .select--sm { --_h: var(--control-sm); font-size: var(--type-body-size); }
 .input--lg, .select--lg { --_h: var(--control-lg); }
-.input::placeholder, .textarea::placeholder { color: var(--text-muted); opacity: 1; }
+.input::placeholder, .textarea::placeholder { color: var(--text-accent-subtle); opacity: 1; }
+.field:not(.field--pill):not(.field--on-accent) .input::placeholder, .field:not(.field--pill):not(.field--on-accent) .textarea::placeholder { color: transparent; } /* the floating label replaces the placeholder */
 .input:hover,
 .select:hover,
 .textarea:hover,
 .input.is-hover,
 .select.is-hover,
-.textarea.is-hover { border-bottom-color: var(--text); }
-/* Focus: no ring; the 1px bottom line turns accent (colour change only) */
+.textarea.is-hover { border-color: var(--border-strong); }
+/* Focus: no ring; the same 1px border turns accent (colour change only) */
 .input:focus,
 .select:focus,
 .textarea:focus,
@@ -35,13 +51,14 @@
 .textarea:focus-visible,
 .input.is-focus,
 .select.is-focus,
-.textarea.is-focus { border-bottom-color: var(--accent); outline-color: transparent; }
-.input:disabled, .select:disabled, .textarea:disabled { background: transparent; color: var(--disabled-text); border-bottom-style: dashed; border-bottom-color: var(--border); cursor: not-allowed; }
-.textarea { height: auto; min-height: calc(2 * var(--control-lg)); padding-block: var(--space-3); resize: none; }
+.textarea.is-focus { border-color: var(--accent); outline-color: transparent; }
+.input:focus-visible, .select:focus-visible, .textarea:focus-visible { transition: none; } /* ONE focus mark for fields (the focus mark appears instantly, hover keeps the site tempo): the 1px border turns --accent; no ring (rule B4) */
+.input:disabled, .select:disabled, .textarea:disabled { background: var(--disabled-bg); color: var(--disabled-text); border-color: var(--border); cursor: not-allowed; }
+.textarea { height: auto; min-height: calc(2 * var(--control-lg)); padding-block: calc((var(--control-md) - var(--type-body-lh)) / 2 - 1px); resize: none; }
 
 /* Error: red line (1px, colour) + message; set by .is-invalid on .field or aria-invalid on the control */
 .field.is-invalid .input, .field.is-invalid .select, .field.is-invalid .textarea,
-.input[aria-invalid="true"], .select[aria-invalid="true"], .textarea[aria-invalid="true"] { border-bottom-color: var(--border-error); }
+.input[aria-invalid="true"], .select[aria-invalid="true"], .textarea[aria-invalid="true"] { border-color: var(--border-error); }
 .field.is-invalid .field__label, .field.is-invalid:focus-within .field__label { color: var(--text-error); }
 .field__error {
   display: flex; align-items: flex-start; gap: var(--space-2); margin-top: var(--space-1);
@@ -65,7 +82,7 @@
 .input--pill:hover, .search .input:hover, .search .input.is-hover { border-color: var(--border-strong); }
 .field--pill .input:focus, .field--pill .select:focus, .field--pill .textarea:focus,
 .field--pill .input.is-focus, .field--pill .select.is-focus, .field--pill .textarea.is-focus,
-.input--pill:focus, .search .input:focus, .search .input.is-focus { border-color: var(--accent); outline: var(--focus-outline); outline-offset: var(--focus-offset); }
+.input--pill:focus, .search .input:focus, .search .input.is-focus { border-color: var(--accent); outline: none; outline-offset: 0; } /* focus = the SAME 1px border, brighter; no outer ring, no offset, size unchanged (rule in design-system.md) */
 .field--pill .input:disabled, .field--pill .select:disabled, .field--pill .textarea:disabled,
 .search .input:disabled { background: var(--disabled-bg); color: var(--disabled-text); border-style: solid; border-color: var(--border); }
 .field--pill .textarea { height: auto; min-height: calc(2 * var(--control-lg)); padding-block: var(--space-4); border-radius: var(--radius-md); resize: vertical; }
@@ -78,17 +95,16 @@
 .field--pill.field--on-accent .input:hover, .field--pill.field--on-accent .select:hover, .field--pill.field--on-accent .textarea:hover,
 .field--pill.field--on-accent .input.is-hover, .field--pill.field--on-accent .select.is-hover, .field--pill.field--on-accent .textarea.is-hover { border-color: var(--text-on-accent); }
 .field--pill.field--on-accent .input:focus, .field--pill.field--on-accent .select:focus, .field--pill.field--on-accent .textarea:focus,
-.field--pill.field--on-accent .input.is-focus, .field--pill.field--on-accent .select.is-focus, .field--pill.field--on-accent .textarea.is-focus { border-color: var(--text-on-accent); outline: var(--focus-w) solid var(--text-on-accent); outline-offset: var(--focus-offset); }
+.field--pill.field--on-accent .input.is-focus, .field--pill.field--on-accent .select.is-focus, .field--pill.field--on-accent .textarea.is-focus { border-color: var(--text-on-accent); outline: none; outline-offset: 0; }
 .field--pill.field--on-accent .input:disabled, .field--pill.field--on-accent .select:disabled, .field--pill.field--on-accent .textarea:disabled { background: transparent; color: var(--text-on-accent-muted); border-style: dashed; }
 .field--on-accent .select option { color: var(--text); }
 
 /* Select with chevron (line: bare icon at the right end of the line; pill: icon in a ring) */
 .select-wrap { position: relative; }
-.select { padding-right: var(--chip-md); cursor: pointer; }
-.select:invalid { color: var(--text-muted); } /* empty placeholder option reads as placeholder */
+.select { padding-right: calc(var(--space-4) + var(--chip-md)); cursor: pointer; }
 .select option { color: var(--text); }
 .select-wrap__chevron {
-  position: absolute; right: 0; top: 50%; translate: 0 -50%;
+  position: absolute; right: var(--space-2); top: 50%; translate: 0 -50%;
   width: var(--chip-md); height: var(--chip-md); display: grid; place-items: center;
   pointer-events: none; color: var(--accent);
 }
@@ -102,3 +118,7 @@
 .search { position: relative; --search-h: var(--control-md); --search-inset: calc((var(--search-h) - var(--icon-sm)) / 2); }
 .search .icon { position: absolute; left: var(--search-inset); top: 50%; translate: 0 -50%; color: var(--accent); pointer-events: none; }
 .search .input { padding-left: calc(var(--search-inset) + var(--icon-sm) + var(--space-2)); background: var(--surface-raised); }
+
+@media (prefers-reduced-motion: reduce) {
+  .field:not(.field--pill):not(.field--on-accent) .field__label { transition: none; }
+}

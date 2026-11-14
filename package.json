@@ -8,10 +8,14 @@
     "build": "vite build",
     "preview": "vite preview --port 4175",
     "audit:hover": "node tools/hover-gate.cjs",
+    "audit:style": "node tools/style-gate.cjs",
+    "audit:static": "node tools/static-gate.cjs",
+    "audit:poster": "node tools/poster-swap-gate.cjs",
     "audit:seo": "node tools/seo-audit.cjs",
     "seo:demo": "node tools/seo-demo.cjs",
     "seo:assets": "node tools/og.cjs",
-    "audit": "npm run audit:hover"
+    "audit": "npm run audit:hover && npm run audit:style",
+    "poster": "node tools/gen-posters.cjs"
   },
   "devDependencies": {
     "html2canvas": "^1.4.1",

@@ -1,40 +1,41 @@
-/* Contact page: split layout (photo panel + light content). Components come from the design system. */
-/* Full-bleed 12-col grid: [left screen margin] + 12 columns (same width/gap as .container) + [right margin]. Side tracks = gutter minus one gap (the grid gap is added back), so column k matches the page grid exactly. */
+/* Contact page: full-window photo behind (sticky, 100vh), the text container (card: solid surface, radius-lg) scrolls over it. Components come from the design system. */
+/* Desktop >= 1200: container = exactly 6 of the 12 page columns (6*col + 5*gap), centred. Two 261px email columns need 534px of inner width: from 1440 up the people grid has 2 columns, at 1200-1439 (container 530-583 minus padding) contacts stack in ONE column so a value never wraps. */
 .contact-split {
-  display: grid; align-items: start; column-gap: var(--grid-gap);
-  grid-template-columns:
-    minmax(calc(var(--gutter) - var(--grid-gap)), 1fr)
-    repeat(var(--grid-cols), minmax(0, calc((var(--container) - (var(--grid-cols) - 1) * var(--grid-gap)) / var(--grid-cols))))
-    minmax(calc(var(--gutter) - var(--grid-gap)), 1fr);
-  grid-template-rows: calc(var(--header-h) + var(--space-8)) repeat(4, auto) var(--space-8);
+  --_content-w: min(var(--container), calc(100% - 2 * var(--gutter)));
+  display: grid; align-items: start; grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: calc(var(--header-h) + var(--space-6)) auto var(--space-8); /* top gap under the header = --space-6 (32) */
 }
-.contact-split__body, .contact-split__content { display: contents; }
+.contact-split__body { display: contents; }
 
-/* Photo panel: left screen edge to end of column 4, starts at y=0 under the floating header, sticky */
-.contact-split__media { grid-column: 1 / span 5; grid-row: 1 / -1; position: sticky; top: 0; height: 100vh; overflow: hidden; }
+/* Photo: whole window width and height behind, stays while the page scrolls */
+.contact-split__media { grid-area: 1 / 1 / -1 / -1; position: sticky; top: 0; height: 100vh; overflow: hidden; }
 .contact-split__media img { width: 100%; height: 100%; object-fit: cover; }
 
-/* Headings: columns 5-7 (lines 6-9); content: columns 8-12 (lines 9-14) */
-.contact-split__title { grid-column: 6 / span 3; grid-row: 2; }
-.contact-info { grid-column: 9 / span 5; grid-row: 2; }
-.contact-split__rule { grid-column: 6 / 14; grid-row: 3; width: 100%; margin: var(--space-8) 0; border: 0; border-top: 1px solid var(--border); }
-.contact-split__form-head { grid-column: 6 / span 3; grid-row: 4; } /* .section-head: tag above the form heading */
-.contact-form { grid-column: 9 / span 5; grid-row: 4 / span 2; display: flex; flex-direction: column; gap: var(--space-6); }
+/* Text container (.card.card--pad-lg). ONE rhythm (Contact + Message us): label -> control 12 (--card-inner-gap), control -> control inside a group 16 (--space-4), element -> element 32 (--space-6); heading -> first element 32 (--space-6). */
+.contact-split__content {
+  grid-area: 2 / 1; justify-self: center; z-index: 1; min-width: 0;
+  width: calc((var(--_content-w) - 11 * var(--grid-gap)) / 12 * 6 + 5 * var(--grid-gap));
+  gap: var(--space-6); /* surface, radius and padding come from the card component: .card.card--pad-lg (32) */
+}
+.contact-split__title, .contact-split__form-head { margin: 0; }
+.contact-split__content :is(h1, h2) { text-box: trim-both cap alphabetic; } /* box = ink: measured gap = visible gap */
+.contact-split__rule { width: 100%; margin: calc(var(--space-8) - var(--space-6)) 0; border: 0; border-top: 1px solid var(--border); }
+.contact-form { display: flex; flex-direction: column; gap: var(--space-6); font-size: var(--type-label-size); margin-top: calc(1cap + var(--space-1)); } /* margin: room for the floated label (ink cap + 4) so heading -> floated label = 32; font-size only sets the 1cap unit (all children set their own size) */ /* field -> field 32 = 8 + floated label 20 + 4 (an error message also lives in that gap, absolutely) */
 
 /* Label -> value rows */
-.contact-row { display: flex; flex-direction: column; gap: var(--space-1); }
+.contact-row { display: flex; flex-direction: column; gap: var(--card-inner-gap); min-width: 0; } /* label -> contact-line = ONE token 12; the label is trimmed to its text box, so the visible gap = the token */
+.contact-row dt { text-box: trim-both cap alphabetic; }
 .contact-row dd { margin: 0; }
-.contact-link { transition: color var(--dur) var(--ease); }
-.contact-link:hover { color: var(--text-accent); }
+.contact-info { gap: var(--space-6); }
+.contact-rows > .contact-row:first-child { grid-column: 1 / -1; } /* General: full width above the Phone | Fax columns (same 2-col grid as the managers) */
 
 /* Managers: plain text blocks, no cards */
-.contact-people { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--grid-gap); }
-.contact-person { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
-.contact-person__link { display: flex; align-items: center; gap: var(--space-3); color: var(--text); overflow-wrap: anywhere; transition: color var(--dur) var(--ease); }
-.contact-person__link:hover { color: var(--text-accent); }
+.contact-people { display: grid; grid-template-columns: minmax(0, 1fr); column-gap: var(--grid-gap); row-gap: var(--space-6); }
+.contact-person { display: flex; flex-direction: column; gap: var(--card-inner-gap); min-width: 0; }
+.contact-lines { display: flex; flex-direction: column; gap: var(--space-4); align-items: flex-start; } /* round rows of one person: control -> control 16 */
 
 /* Form layout and status */
-.contact-form__row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--grid-gap); }
+.contact-form__row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--space-6); }
 .contact-form [data-field] { min-width: 0; }
 .contact-form__actions { display: flex; }
 .contact-form__status {
@@ -47,23 +48,19 @@
 .contact-form .btn[disabled] { pointer-events: none; }
 
 /* ==========================================================================
-   Responsive contact. Tablet / mobile: single column. The photo becomes a banner under the floating header (not sticky), then title, contacts, rule and form.
+   Responsive contact. Tablet / mobile (<= 1199): the container is full width minus the gutter, the photo stays behind.
    Tablet: contact people 2 columns, name fields side by side. Mobile: everything stacked, the send button full width.
    ========================================================================== */
+@media (min-width: 1440px) {
+  .contact-people { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 @media (max-width: 1199px) {
-  .contact-split { display: flex; flex-direction: column; align-items: stretch; }
-  .contact-split__body { display: block; }
-  .contact-split__content { display: flex; flex-direction: column; padding: var(--section-sm) var(--gutter) var(--section-md); gap: var(--space-6); }
-  .contact-split__media { position: relative; top: auto; height: auto; aspect-ratio: 16 / 9; width: 100%; }
-  .contact-split__rule { margin: 0; }
-  .contact-info, .contact-form { width: 100%; }
+  .contact-split__content { width: calc(100% - 2 * var(--gutter)); }
+  .contact-people { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 767px) {
-  .contact-split__media { aspect-ratio: 4 / 3; }
-  .contact-split__content { gap: var(--space-5); }
-  .contact-people { grid-template-columns: minmax(0, 1fr); gap: var(--space-5); }
+  .contact-split__content { --_pad: var(--space-5); }
+  .contact-people { grid-template-columns: minmax(0, 1fr); }
   .contact-form__row { grid-template-columns: minmax(0, 1fr); gap: var(--space-6); }
   .contact-form__actions .btn { width: 100%; }
-  .contact-person__link, .contact-link { min-height: var(--control-md); }
-  .contact-link { display: inline-flex; align-items: center; }
 }

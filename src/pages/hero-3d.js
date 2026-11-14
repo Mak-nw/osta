@@ -77,7 +77,7 @@ export function initHero3d(container) {
   const gl = renderer.getContext();
   if (!gl) return false;
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, MAX_DPR));
-  renderer.setClearColor(0x000000, 0);
+  renderer.setClearColor(0x061f52, 0);
   const canvas = renderer.domElement;
   canvas.setAttribute('aria-hidden', 'true');
   canvas.className = 'hero__canvas';

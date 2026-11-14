@@ -14,7 +14,7 @@
 .about-intro__figure { grid-column: 1 / span 3; grid-row: 2; margin: var(--space-6) 0 0; border-radius: var(--radius-lg); overflow: hidden; isolation: isolate; } /* zoom mask */
 .about-intro__figure .about-intro__photo { aspect-ratio: 4 / 3; height: auto; }
 
-/* blue services block */
+/* blue services block (cards = shared .svc-card--on-accent, components/service-card.css) */
 .about-services { padding-top: var(--section-lg); background: var(--surface-accent); color: var(--text-on-accent); }
 .about-services__top { padding-bottom: var(--space-9); } /* texts to the first divider; title-to-texts gap = About grid logic (row-gap 32 + title margin 16 = 48) */
 .about-services__texts { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--section-head-gap); align-items: start; }
@@ -25,8 +25,6 @@
 .about-services__texts p { margin: 0; }
 .about-services__list { padding-bottom: var(--section-lg); }
 
-/* block tags (People, Quality): .section-head (tag above the h2, gap --space-3), see components/editorial.css */
-.feature-grid__intro > .about-quality__cta { margin-top: auto; } /* CTA pinned to the bottom edge of the intro column */
 
 /* slides: two full-bleed slides (image + split), touching; layout and look come from components/slides.css */
 .about-slides { display: block; }

@@ -10,26 +10,26 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
 
 /* ---------- Hover / focus transitions ---------- */
-.btn, .nav-pill, .lang-switch, .round-btn, .filter-item, .filter-list a, .contact-link, .contact-person__link, .contact-line, a {
+/* ONE hover tempo (customer 2026-11-13): every interactive element (buttons, nav items, language switch, burger, form fields, cards, links) transitions with --dur-hover-disc / --ease-hover. */
+:is(a, button, .btn, .nav-pill, .lang-switch, .round-btn, .filter-item, .filter-list a) {
   transition-property: color, background-color, background, border-color, opacity, transform;
-  transition-duration: var(--dur-fast);
-  transition-timing-function: var(--ease-out);
+  transition-duration: var(--dur-hover-disc);
+  transition-timing-function: var(--ease-hover);
 }
-.field__label { transition: color var(--dur-fast) var(--ease-out); }
+.field__label { transition: color var(--dur-hover-disc) var(--ease-hover); }
 .input, .select, .textarea, .field {
   transition-property: color, background-color, background, border-color;
-  transition-duration: var(--dur-base);
-  transition-timing-function: var(--ease-out);
+  transition-duration: var(--dur-hover-disc);
+  transition-timing-function: var(--ease-hover);
 }
 .card--link, .product-card {
   transition-property: background-color, background, border-color, transform;
-  transition-duration: var(--dur-base);
-  transition-timing-function: var(--ease-out);
+  transition-duration: var(--dur-hover-disc);
+  transition-timing-function: var(--ease-hover);
 }
-.product-card:hover { transform: translateY(-3px); }
 
 /* round-btn icon grows slightly in place on hover (no shift) */
-.round-btn .icon, .btn .icon { transition: transform var(--dur-base) var(--ease-out); }
+.round-btn .icon, .btn .icon { transition: transform var(--dur-hover-disc) var(--ease-hover); }
 .round-btn:hover .icon,
 .product-card:hover .round-btn .icon,
 a:hover > .round-btn .icon { transform: scale(1.1); }
@@ -95,5 +95,4 @@ a:hover > .round-btn .icon { transform: scale(1.1); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
-  .product-card:hover { transform: none; }
 }

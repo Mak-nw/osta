@@ -1,34 +1,27 @@
-/* service-card (Home, Services): .service-list > .service-card (article) > h3.service-card__title.t-h2 + p.service-card__text.t-body + .service-card__media > .service-card__fallback.
-   Stack of transparent cards on the blue section (no fill, no radius; 1px --divider-on-accent border-top on every card, white text --text-on-accent, padding --space-6 0), always open (no accordion logic). Numbering: CSS counter on .service-list/.service-card, decorative ::before "01…04" top-left on the top line (cols 1-2, title size 36/40, --c-blue-400, muted).
-   Card = inner 12-col grid, one row: .service-card__body (cols 6-8, top) = title + description stacked on one vertical line in col 6 (same x as the first paragraph of the Services top block), --space-4 between them, description text-wrap pretty; cols 1-5 and 9-10 empty (air); media cols 11-12 (top, right-aligned to the end of col 12, fixed height 208px = space-9 + space-8 + space-7).
-   Media slot = no plate, models stand directly on the blue; ONE shared WebGL canvas (.service-list__canvas, transparent) lies over the whole list and renders a model into each slot.
-   .is-3d (set by JS) = canvas visible, fallback ring hidden. */
-.service-list { position: relative; display: grid; grid-auto-rows: 1fr; gap: 0; counter-reset: service-num; } /* equal-height cards; numbering counter */
-.service-card { counter-increment: service-num; display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--space-4); align-items: start; align-content: start; box-sizing: border-box; padding: var(--space-6) 0; border-top: 1px solid var(--divider-on-accent); background: none; color: var(--text-on-accent); }
-.service-card__body { grid-column: 6 / span 3; grid-row: 1; display: grid; row-gap: var(--space-4); align-content: start; min-width: 0; }
-/* Number 01–04: top-left of the card, on the top line (cols 1-2, same top as the title in col 6).
-   Type = card title size (t-h2 36/40, Asta Sans Medium, --type-h2-ls), muted --c-blue-400 (below the white title).
-   margin-inline-start -0.0475em cancels the digit side bearing (measured at 80px, scaled) so the ink starts at the container edge (x 32).
-   Decorative: pointer-events none. */
-.service-card::before { content: counter(service-num, decimal-leading-zero); grid-column: 1 / span 2; grid-row: 1; justify-self: start; align-self: start; margin-inline-start: -0.0475em; font-family: var(--font-sans); font-size: var(--type-h2-size); line-height: var(--type-h2-lh); letter-spacing: var(--type-h2-ls); font-weight: var(--font-weight-medium); color: var(--c-blue-400); pointer-events: none; user-select: none; }
-.service-card__title { margin: 0; }
-.service-card__text { margin: 0; text-wrap: pretty; }
-.service-card__media { position: relative; grid-column: 11 / span 2; grid-row: 1; justify-self: end; width: 100%; height: calc(var(--space-9) + var(--space-8) + var(--space-7)); display: grid; place-items: center; overflow: hidden; }
-.service-card__fallback { width: 30%; aspect-ratio: 1; border: 1px solid var(--border-on-accent); border-radius: var(--radius-full); opacity: .6; transition: opacity var(--dur-base) var(--ease-out); }
-.service-list__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: 1; opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
-.service-list.is-3d .service-list__canvas { opacity: 1; }
-.service-list.is-3d .service-card__fallback { opacity: 0; }
-@media (prefers-reduced-motion: reduce) { .service-list__canvas, .service-card__fallback { transition: none !important; } }
-
-/* Responsive service list (About blue block). Tablet (8 cols): number | text (cols 2-6) | 3D slot (cols 7-8). Mobile (4 cols): number + slot on top, text below. */
+/* service card (Services, About): ONE definition. .svc-cards (grid) > article.svc-card > .svc-card__art[data-scene] (3D scene, services-card-scenes.js) + .svc-card__text > h3.svc-card__title.t-h2 + p.svc-card__desc.t-body.
+   Two levels: art on top, text below pressed to the BOTTOM edge. The card is a SUBGRID of 2 rows (art / text) of .svc-cards, so the text row is as tall as the tallest text in the row (auto), the same for all cards,
+   with no JS measuring; the art row = the art div aspect ratio (scene scale follows the slot width). Surface: light card (--surface-raised) on a light section; .svc-card--on-accent on the BLUE section
+   (--surface-card-on-accent, white text and scene lines, customer 2026-11-13). No outline, no shadow, not clickable. */
+.svc-cards { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); grid-template-rows: auto auto; column-gap: var(--grid-gap); row-gap: var(--grid-gap); align-items: stretch; }
+.svc-card { grid-column: span 3; grid-row: span 2; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: subgrid; row-gap: 0; box-sizing: border-box; min-width: 0; padding: var(--space-5); background: var(--surface-raised); color: var(--text); border: 0; border-radius: var(--radius-lg); }
+.svc-card > * { margin: 0; }
+.svc-card__art { position: relative; display: grid; place-items: center; min-width: 0; min-height: 0; aspect-ratio: 8 / 7; overflow: hidden; } /* decorative, aria-hidden */
+.svc-card__text { display: flex; flex-direction: column; gap: var(--space-4); justify-content: flex-end; min-width: 0; min-height: 0; padding-top: var(--card-inner-gap); }
+.svc-card__title { color: var(--text-accent); text-wrap: balance; min-width: 0; overflow-wrap: break-word; hyphens: manual; }
+.svc-card__desc { text-wrap: pretty; }
+/* illustrations: the same four 3D scenes everywhere (src/pages/service-scenes.js), one shared WebGL renderer per row (services-card-scenes.js), canvas fills the art zone, NO floor dot field.
+   Light card: lines and main object = --accent, scene background = card colour. */
+.svc-card__art { --il-fill: var(--accent); --il-soft: var(--accent); --il-bg: var(--surface-raised); }
+.svc-card__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+/* card on the blue section: white text and scene lines */
+.svc-card--on-accent { background: var(--surface-card-on-accent); color: var(--text-on-accent); }
+.svc-card--on-accent .svc-card__title { color: var(--text-on-accent); }
+.svc-card--on-accent .svc-card__art { --il-fill: var(--text-on-accent); --il-soft: var(--text-on-accent); --il-bg: var(--surface-card-on-accent); }
 @media (max-width: 1199px) {
-  .service-card { padding: var(--space-5) 0; }
-  .service-card::before { grid-column: 1 / span 1; }
-  .service-card__body { grid-column: 2 / span 5; }
-  .service-card__media { grid-column: 7 / span 2; height: calc(var(--space-9) + var(--space-5)); }
+  .svc-card { grid-column: span 4; }
+  .svc-card__art { aspect-ratio: 3 / 2; }
 }
 @media (max-width: 767px) {
-  .service-card::before { grid-column: 1 / span 2; }
-  .service-card__body { grid-column: 1 / -1; grid-row: 2; }
-  .service-card__media { grid-column: 3 / span 2; height: calc(var(--space-9)); }
+  .svc-card { grid-column: 1 / -1; }
+  .svc-card__art { aspect-ratio: 8 / 7; }
 }

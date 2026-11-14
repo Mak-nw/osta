@@ -8,7 +8,7 @@
 </head>
 <body data-page="home">
   <!--@include partials/header.html-->
-  <main>
+  <main id="main">
     <!-- 1. Hero (Attention), V4 "centre composition" (.hero--home, >=1200): H1 = two spans (left phrase cols 1-4 left-aligned, right phrase cols 9-12 right-aligned) and the 3D scene (home-hero-scene.js) share ONE horizontal axis and the page centre; the search group (.hero__find: label > search control 56 > category row) is centred (cols 4-9) at the bottom of the hero. <=1199: stack (scene > title > search). -->
     <section class="hero hero--home" aria-labelledby="home-hero-title">
       <div class="container hero__content">
@@ -26,12 +26,12 @@
           </form>
           <nav class="hero-cats" data-reveal-load="2" aria-label="Categories" data-i18n-attr="aria-label:catalog.categories">
             <span class="t-label hero-cats__label" data-i18n="home.hero_cats_label">Or browse by category</span>
-            <a class="btn btn--outline-on-accent btn--md" href="/products/category/api/"><span data-i18n="catalog.cat_api">API</span></a>
-            <a class="btn btn--outline-on-accent btn--md" href="/products/category/excipients/"><span data-i18n="catalog.cat_excipients">Excipients</span></a>
-            <a class="btn btn--outline-on-accent btn--md" href="/products/category/food-grade/"><span data-i18n="catalog.cat_food">Food Grade</span></a>
+            <a class="btn btn--outline-on-accent btn--md" href="/products/category/api/"><span data-i18n="catalog.cat_api">API</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
+            <a class="btn btn--outline-on-accent btn--md" href="/products/category/excipients/"><span data-i18n="catalog.cat_excipients">Excipients</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
+            <a class="btn btn--outline-on-accent btn--md" href="/products/category/food-grade/"><span data-i18n="catalog.cat_food">Food Grade</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
           </nav>
         </div>
-        <div class="hero__scene3d" data-hero-scene aria-hidden="true"></div>
+        <div class="hero__scene3d" data-hero-scene aria-hidden="true"><picture data-hero-picture><source media="(min-width: 1800px) and (min-resolution: 1.75dppx)" srcset="/assets/img/hero-poster-home-1920-2.webp"><source media="(min-width: 1800px) and (min-resolution: 1.25dppx)" srcset="/assets/img/hero-poster-home-1920-1_5.webp"><source media="(min-width: 1800px)" srcset="/assets/img/hero-poster-home-1920-1.webp"><source media="(min-width: 1600px) and (max-width: 1799px) and (min-resolution: 1.75dppx)" srcset="/assets/img/hero-poster-home-1728-2.webp"><source media="(min-width: 1600px) and (max-width: 1799px) and (min-resolution: 1.25dppx)" srcset="/assets/img/hero-poster-home-1728-1_5.webp"><source media="(min-width: 1600px) and (max-width: 1799px)" srcset="/assets/img/hero-poster-home-1728-1.webp"><source media="(min-width: 1360px) and (max-width: 1599px) and (min-resolution: 1.75dppx)" srcset="/assets/img/hero-poster-home-1440-2.webp"><source media="(min-width: 1360px) and (max-width: 1599px) and (min-resolution: 1.25dppx)" srcset="/assets/img/hero-poster-home-1440-1_5.webp"><source media="(min-width: 1360px) and (max-width: 1599px)" srcset="/assets/img/hero-poster-home-1440-1.webp"><source media="(min-width: 1200px) and (max-width: 1359px) and (min-resolution: 1.75dppx)" srcset="/assets/img/hero-poster-home-1280-2.webp"><source media="(min-width: 1200px) and (max-width: 1359px) and (min-resolution: 1.25dppx)" srcset="/assets/img/hero-poster-home-1280-1_5.webp"><source media="(min-width: 1200px) and (max-width: 1359px)" srcset="/assets/img/hero-poster-home-1280-1.webp"><source media="(min-width: 900px) and (max-width: 1199px) and (min-resolution: 1.75dppx)" srcset="/assets/img/hero-poster-home-1024-2.webp"><source media="(min-width: 900px) and (max-width: 1199px) and (min-resolution: 1.25dppx)" srcset="/assets/img/hero-poster-home-1024-1_5.webp"><source media="(min-width: 900px) and (max-width: 1199px)" srcset="/assets/img/hero-poster-home-1024-1.webp"><source media="(min-width: 680px) and (max-width: 899px) and (min-resolution: 1.75dppx)" srcset="/assets/img/hero-poster-home-768-2.webp"><source media="(min-width: 680px) and (max-width: 899px) and (min-resolution: 1.25dppx)" srcset="/assets/img/hero-poster-home-768-1_5.webp"><source media="(min-width: 680px) and (max-width: 899px)" srcset="/assets/img/hero-poster-home-768-1.webp"><source media="(min-width: 480px) and (max-width: 679px) and (min-resolution: 2.5dppx)" srcset="/assets/img/hero-poster-home-600-3.webp"><source media="(min-width: 480px) and (max-width: 679px) and (min-resolution: 1.75dppx)" srcset="/assets/img/hero-poster-home-600-2.webp"><source media="(min-width: 480px) and (max-width: 679px) and (min-resolution: 1.25dppx)" srcset="/assets/img/hero-poster-home-600-1_5.webp"><source media="(min-width: 480px) and (max-width: 679px)" srcset="/assets/img/hero-poster-home-600-1.webp"><source media="(max-width: 479px) and (min-resolution: 2.5dppx)" srcset="/assets/img/hero-poster-home-375-3.webp"><source media="(max-width: 479px) and (min-resolution: 1.75dppx)" srcset="/assets/img/hero-poster-home-375-2.webp"><source media="(max-width: 479px) and (min-resolution: 1.25dppx)" srcset="/assets/img/hero-poster-home-375-1_5.webp"><source media="(max-width: 479px)" srcset="/assets/img/hero-poster-home-375-1.webp"><img data-hero-poster data-poster="home" src="/assets/img/hero-poster-home-1440-1.webp" alt="" width="1398" height="1398" fetchpriority="high" decoding="async"></picture></div>
       </div>
     </section>
 
@@ -60,7 +60,7 @@
     <section class="home-section home-services" id="services" aria-labelledby="home-services-title">
       <div class="container how-split">
         <div class="how-split__sticky section-head">
-          <p class="section-label t-accent" data-i18n="home.services_label">Services</p>
+          <p class="section-label" data-i18n="home.services_label">Services</p>
           <h2 class="t-display t-accent" id="home-services-title" data-i18n-html="home.services_title">We support<br>your project<br>from first inquiry<br>to regular supply</h2>
           <p class="t-body" data-i18n="home.services_text">We search for manufacturers, coordinate regulatory documents, collect samples and agree specifications and quality with you. Logistics is part of the same service.</p>
           <a class="btn btn--primary btn--lg btn--split" href="/services.html"><span data-i18n="home.services_cta">Learn more</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>

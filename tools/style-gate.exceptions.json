@@ -1,0 +1,33 @@
+{
+  "_readme": "Exceptions to tools/style-gate.cjs. ONLY the orchestrator edits this file, ONLY after a literal customer approval (diff is checked). Every entry MUST have ALL fields: selector, rule, reason, approvedBy ('customer'), approvedAt (YYYY-MM-DD), quote (verbatim customer words), source (questions/answers.json id, review/comments.json#id or chat date+id). An entry missing any field is IGNORED by the gate and reported as FAIL (E0). Optional: pages[], widths[], value (exempt only when the measured value equals it).",
+  "entries": [
+    {
+      "selector": ".hero--home",
+      "rule": "A5.2",
+      "reason": "Hero Home background: the ONLY gradient on the site (vertical linear, --surface-accent-deep -> --surface-accent); design-system.md, Tokens.",
+      "approvedBy": "customer",
+      "approvedAt": "2026-11-12",
+      "quote": "верх темніший, лінійний зверху вниз",
+      "source": "chat 2026-11-12 21:49 / c379a499 (content/audit/restyle-changelog.md, S2)"
+    },
+    {
+      "selector": ".text-card, .text-card *",
+      "rule": "A3.1",
+      "reason": "Text card internal gap = --text-card-gap 30 px (explicit exception to the 24 px heading-group rule).",
+      "approvedBy": "customer",
+      "approvedAt": "2026-11-13",
+      "quote": "гап однаковий… зробимо 30 пікселів. Таке ж правило для інших карток",
+      "source": "chat 2026-11-13 21:32 / 344d6ba1 and 22:26 / 00ab1035 (content/audit/restyle-changelog.md, G3)",
+      "value": 30
+    },
+    {
+      "selector": "a.footer__contact[href=\"tel:+494073676290\"]",
+      "rule": "A1.3",
+      "reason": "Footer fax row keeps the phone icon and the tel: link (clickable blue action circle, as the customer asked).",
+      "approvedBy": "customer",
+      "approvedAt": "2026-11-13",
+      "quote": "Лишити як є",
+      "source": "рішення замовника у формі questions c3827e (also a15aac: «tel: (як зараз, кнопка-коло)»)"
+    }
+  ]
+}

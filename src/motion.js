@@ -227,13 +227,14 @@ function refresh() {
 // ---------- Photo zoom-out: every photo sits in a clip mask; the img inside zooms scale(--photo-zoom-from) -> 1 once, on entering the viewport ----------
 // No opacity or translate reveal for photos. Pre-state (.photo-zoom) is added here, so without JS / under reduced motion the photo is plain scale 1.
 const PHOTO_MASKS = '.photo-panel, .svc-supply, .about-intro__figure, .slide--image, .slide__photo, .people-card__media, .contact-split__media, .hero__media';
+const PHOTO_EL = 'img:not([data-hero-poster])'; // the zoomed element inside a mask: a photo <img> (service-card 3D scenes rotate on their own, no zoom; the hero POSTER img must stay at scale 1 = the live scene's size)
 function initPhotoZoom() {
   if (reduced.matches) return;
-  const masks = [...document.querySelectorAll(PHOTO_MASKS)].filter((m) => m.querySelector('img'));
+  const masks = [...document.querySelectorAll(PHOTO_MASKS)].filter((m) => m.querySelector(PHOTO_EL));
   if (!masks.length) return;
   const play = (m) => {
     m.classList.add('is-zoomed');
-    const img = m.querySelector('img');
+    const img = m.querySelector(PHOTO_EL);
     const done = () => m.classList.add('is-zoom-done');
     img?.addEventListener('transitionend', done, { once: true });
     setTimeout(done, parseFloat(getComputedStyle(root).getPropertyValue('--dur-zoom')) + 500 || 5500);

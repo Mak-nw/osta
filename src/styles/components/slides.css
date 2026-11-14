@@ -35,12 +35,11 @@
 .slide__photo { grid-column: 7 / -1; overflow: hidden; isolation: isolate; } /* zoom mask */
 .slide__photo > img { object-position: center 60%; }
 /* Text = columns 1-3 only (max width of 3 grid columns); columns 4-5 of the panel stay empty. */
-.slide__content { grid-column: 2 / 5; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; padding-block: var(--section-md); }
+.slide__content { grid-column: 2 / 5; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-6); padding-block: var(--section-md); }
 .slide__body { margin-top: auto; display: flex; flex-direction: column; gap: var(--space-4); }
 .slide__body > * { margin: 0; }
 .slide--split .slide__body > h2 { text-wrap: balance; }
 .slide--split .slide__body > p { text-wrap: pretty; }
-.slide__content > .link-cta { margin-top: var(--space-6); }
 
 /* ==========================================================================
    Responsive slides (About). The side tracks shrink to the page gutter (gutter - gap), columns follow --grid-cols (8 / 4).
@@ -53,10 +52,9 @@
   .slide__text { grid-column: 2 / span 6; }
   .slide--split { min-height: 0; grid-template-rows: auto auto; }
   .slide__panel { grid-column: 1 / -1; grid-row: 1; margin-right: 0; }
-  .slide__content { grid-column: 2 / -2; grid-row: 1; padding-block: var(--section-md); }
+  .slide__content { grid-column: 2 / -2; grid-row: 1; gap: var(--space-5); padding-block: var(--section-md); }
   .slide__body { margin-top: 0; gap: var(--space-4); }
   .slide__photo { grid-column: 1 / -1; grid-row: 2; aspect-ratio: 16 / 9; }
-  .slide__content > .link-cta { margin-top: var(--space-5); }
 }
 @media (max-width: 767px) {
   .slide--image { min-height: 560px; }

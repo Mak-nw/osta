@@ -1,0 +1,486 @@
+{
+  "_readme": "Component registry (source of truth for tools/style-gate.cjs, rule A2.1). One role = ONE component class. A new class for a role that is already here is forbidden; a new role = new entry here + a question to the customer (questions/qa.py ask). Sources: design-system.md (tables 'Компоненти: єдине визначення', 'Кнопки: hover', 'Картка') and src/styles/**. BEM children (`<root>__x`) of a registered root are accepted automatically; modifiers (`<root>--x`) must be listed explicitly. Only the style-gate reads this file; do not add classes here to silence the gate without a customer decision.",
+  "kinds": {
+    "_note": "kind = how the gate recognises an element by LOOK (not by class): 'button' = clickable AND (filled / bordered / pill); 'card' = filled or bordered surface with radius >= 4 and size >= 120x72. An element of that kind MUST carry a class of a role of the same kind (or of kind 'chrome')."
+  },
+  "roles": {
+    "button": {
+      "kind": "button",
+      "description": "Every button-like clickable. Hover = disc from the centre (buttons.css DISC block, gate: npm run audit:hover).",
+      "file": "src/styles/components/buttons.css",
+      "classes": {
+        "btn": {
+          "modifiers": [
+            "btn--primary",
+            "btn--secondary",
+            "btn--ghost",
+            "btn--light",
+            "btn--outline-on-accent",
+            "btn--sm",
+            "btn--md",
+            "btn--lg",
+            "btn--split",
+            "btn--block"
+          ]
+        },
+        "round-btn": {
+          "modifiers": [
+            "round-btn--outline",
+            "round-btn--light",
+            "round-btn--md",
+            "round-btn--lg"
+          ]
+        }
+      }
+    },
+    "icon-ring": {
+      "kind": "button",
+      "description": "Icon in a circle. decor (no modifier) = non-clickable; --action = filled clickable ring (mail/phone, header phone); --on-accent = on the blue surface. Clickable ancestor without --action / --action without clickable ancestor = A1.3.",
+      "file": "src/styles/components/buttons.css",
+      "classes": {
+        "icon-ring": {
+          "modifiers": [
+            "icon-ring--action",
+            "icon-ring--on-accent"
+          ]
+        }
+      },
+      "decorInLink": {
+        "allowedIn": [],
+        "pendingDecision": [
+          ".link-card"
+        ],
+        "note": "Home Products: decorative ring inside a whole-card link (trust-audit A.1): needs a customer decision (WARN until decided)."
+      }
+    },
+    "nav-pill": {
+      "kind": "button",
+      "description": "Header / burger navigation items (no fill at rest, disc on hover).",
+      "file": "src/styles/components/nav.css",
+      "classes": {
+        "nav-pill": {
+          "modifiers": [
+            "nav-pill--sm",
+            "nav-pill--md",
+            "nav-pill--lg",
+            "nav-pill--outline"
+          ]
+        }
+      }
+    },
+    "lang-switch": {
+      "kind": "button",
+      "description": "Language dropdown trigger and its rows (.lang-menu__option, one mechanic).",
+      "file": "src/styles/components/nav.css",
+      "classes": {
+        "lang-switch": {
+          "modifiers": [
+            "lang-switch--md"
+          ]
+        },
+        "lang-menu": {
+          "modifiers": []
+        }
+      }
+    },
+    "header-controls": {
+      "kind": "button",
+      "description": "Header action buttons (burger, phone/CTA).",
+      "file": "src/styles/components/nav.css",
+      "classes": {
+        "header__burger": {
+          "modifiers": []
+        },
+        "header__cta": {
+          "modifiers": []
+        }
+      }
+    },
+    "chip": {
+      "kind": "button",
+      "description": "Category chip / tag; .chip--tag is a non-clickable tag inside a card link.",
+      "file": "src/styles/components/chips.css",
+      "classes": {
+        "chip": {
+          "modifiers": [
+            "chip--md",
+            "chip--sm",
+            "chip--pill",
+            "chip--tag"
+          ]
+        },
+        "meta-tag": {
+          "modifiers": []
+        }
+      }
+    },
+    "filter": {
+      "kind": "button",
+      "description": "Catalog filter items / toggle / A-Z and pagination controls.",
+      "file": "src/styles/components/chips.css",
+      "classes": {
+        "filter-item": {
+          "modifiers": []
+        },
+        "filter-list": {
+          "modifiers": []
+        },
+        "catalog__filters-toggle": {
+          "modifiers": []
+        },
+        "catalog__more": {
+          "modifiers": []
+        }
+      }
+    },
+    "text-card": {
+      "kind": "card",
+      "description": "Text card (eyebrow + h2 + p + one button). Surface by modifier: on-accent (blue) / on-light; compact (Catalog help + empty, no h2). Internal gaps = --text-card-gap 30.",
+      "file": "src/styles/components/cards.css",
+      "classes": {
+        "text-card": {
+          "modifiers": [
+            "text-card--on-accent",
+            "text-card--on-light",
+            "text-card--compact"
+          ]
+        }
+      },
+      "tokens": {
+        "gap": "--text-card-gap"
+      }
+    },
+    "quality-card": {
+      "kind": "card",
+      "description": "Illustration card (icon-ring + art slot + h3 + p) on Home/About Quality.",
+      "file": "src/styles/components/cards.css",
+      "classes": {
+        "quality-card": {
+          "modifiers": []
+        }
+      }
+    },
+    "link-card": {
+      "kind": "card",
+      "description": "Whole-card link (icon-ring + h3 + p), Home Products / Services categories.",
+      "file": "src/styles/components/link-list.css",
+      "classes": {
+        "link-card": {
+          "modifiers": []
+        },
+        "link-cards": {
+          "modifiers": [
+            "link-cards--3"
+          ]
+        }
+      }
+    },
+    "service-item": {
+      "kind": "card",
+      "description": "The 4 services (Manufacturer search / Regulatory / Samples / Specs). TARGET: ONE class for Home, About, Services. Today two: how-step, svc-card (+ .svc-card--on-accent on the blue About section) (pendingMerge: WARN while more than one is in use).",
+      "file": "src/styles/components/service-card.css (svc-card) | src/styles/pages/services.css | src/styles/components/how-split.css",
+      "classes": {
+        "svc-card": {
+          "modifiers": [
+            "svc-card--on-accent"
+          ]
+        },
+        "how-step": {
+          "modifiers": []
+        }
+      },
+      "pendingMerge": [
+        "svc-card",
+        "how-step"
+      ]
+    },
+    "card": {
+      "kind": "card",
+      "description": "Base card + special cards built on it (list cards on light pages = filled tiles, no border: design-system.md 'Поверхня картки').",
+      "file": "src/styles/components/cards.css",
+      "classes": {
+        "card": {
+          "modifiers": [
+            "card--white",
+            "card--muted",
+            "card--outline",
+            "card--accent",
+            "card--dark",
+            "card--light",
+            "card--link",
+            "card--pad-md",
+            "card--pad-lg",
+            "card--rounded-md"
+          ]
+        },
+        "product-card": {
+          "modifiers": []
+        },
+        "info-card": {
+          "modifiers": [
+            "info-card--wide"
+          ]
+        },
+        "people-card": {
+          "modifiers": []
+        },
+        "contact-card": {
+          "modifiers": []
+        },
+        "tile": {
+          "modifiers": []
+        },
+        "catalog__help": {
+          "modifiers": []
+        },
+        "catalog__empty": {
+          "modifiers": []
+        }
+      }
+    },
+    "heading-group": {
+      "kind": "chrome",
+      "description": "Eyebrow > h2 > description > CTA = ONE wrapper .section-head (gap 24 between every pair). Local '*__head' wrappers are allowed ONLY together with .section-head (mustAlsoMatch).",
+      "file": "src/styles/components/editorial.css",
+      "classes": {
+        "section-head": {
+          "modifiers": [
+            "section-head--center"
+          ]
+        },
+        "section-label": {
+          "modifiers": []
+        }
+      },
+      "tokens": {
+        "gap": "--section-head-gap"
+      },
+      "mustAlsoMatch": [
+        {
+          "selector": "[class*='__head']:not(.card__head):not(.feature-card__head):not(.info-card__head):not(.svc-card__head):not(.slide__head)",
+          "requires": ".section-head",
+          "note": "local *__head wrapper without .section-head = new heading-group component"
+        }
+      ]
+    },
+    "field": {
+      "kind": "chrome",
+      "description": "Form field: label above, 16 px label->control gap on every form (--field-label-gap); search = pill variant.",
+      "file": "src/styles/components/forms.css",
+      "classes": {
+        "field": {
+          "modifiers": [
+            "field--on-accent",
+            "field--pill"
+          ]
+        },
+        "input": {
+          "modifiers": [
+            "input--sm",
+            "input--md",
+            "input--lg",
+            "input--pill"
+          ]
+        },
+        "select": {
+          "modifiers": [
+            "select--sm",
+            "select--md",
+            "select--lg",
+            "select--pill"
+          ]
+        },
+        "select-wrap": {
+          "modifiers": []
+        },
+        "textarea": {
+          "modifiers": [
+            "textarea--pill"
+          ]
+        },
+        "search": {
+          "modifiers": []
+        },
+        "hero-search": {
+          "modifiers": []
+        },
+        "contact-form": {
+          "modifiers": []
+        }
+      },
+      "tokens": {
+        "labelGap": "--field-label-gap"
+      }
+    },
+    "hero": {
+      "kind": "chrome",
+      "description": "Hero: .hero--home (the only gradient on the site) and inner-page hero (.hero__head = .section-head: tag > h1 > sub > CTA, + .hero__media).",
+      "file": "src/styles/components/hero.css",
+      "classes": {
+        "hero": {
+          "modifiers": [
+            "hero--home",
+            "hero--no3d"
+          ]
+        },
+        "product-hero": {
+          "modifiers": [
+            "product-hero--bg"
+          ]
+        },
+        "legal": {
+          "modifiers": []
+        }
+      }
+    },
+    "art-slot": {
+      "kind": "chrome",
+      "description": "Illustration slot in a card (3D point+line scene on the shared engine src/utils/il-scene.js, no dashes, no fat lines). TARGET: ONE slot class. Today 7 (pendingMerge). Any NEW *__art class = FAIL.",
+      "file": "src/styles/components/*.css",
+      "classes": {},
+      "artClasses": [
+        "link-card__art",
+        "quality-card__art",
+        "svc-card__art",
+        "svc-art",
+        "service-card__media",
+        "process-scroll__art",
+        "feature-card__art"
+      ],
+      "pendingMerge": [
+        "link-card__art",
+        "quality-card__art",
+        "svc-card__art",
+        "svc-art",
+        "service-card__media",
+        "process-scroll__art"
+      ]
+    },
+    "contact-row": {
+      "kind": "chrome",
+      "description": "Contact row (footer / contact page): ALWAYS a filled .icon-ring--action + text; fax must not reuse the phone icon as a tel: link (customer 2026-11-12).",
+      "file": "src/styles/components/footer.css",
+      "classes": {
+        "footer__contact": {
+          "modifiers": []
+        },
+        "contact-person": {
+          "modifiers": []
+        },
+        "contact-line": {
+          "modifiers": []
+        },
+        "contact-row": {
+          "modifiers": []
+        }
+      }
+    },
+    "page-chrome": {
+      "kind": "chrome",
+      "description": "Header panel, footer, breadcrumbs, legal blocks, slides, photo panels and other layout containers (not components of their own: they may look like surfaces).",
+      "file": "src/styles/components/*.css",
+      "classes": {
+        "header": {
+          "modifiers": []
+        },
+        "footer": {
+          "modifiers": []
+        },
+        "breadcrumbs": {
+          "modifiers": []
+        },
+        "slide": {
+          "modifiers": [
+            "slide--image",
+            "slide--split"
+          ]
+        },
+        "photo-panel": {
+          "modifiers": []
+        },
+        "how-split": {
+          "modifiers": []
+        },
+        "feature-card": {
+          "modifiers": [
+            "feature-card--accent",
+            "feature-card--light"
+          ]
+        },
+        "iso-art": {
+          "modifiers": [
+            "iso-art--on-accent",
+            "iso-art--raised"
+          ]
+        },
+        "meta-list": {
+          "modifiers": []
+        },
+        "spec-table": {
+          "modifiers": []
+        }
+      }
+    }
+  },
+  "removedClasses": {
+    "_note": "Deleted by customer decision: must not exist in the DOM (FAIL).",
+    "classes": [
+      "round-btn--accent",
+      "link-card-note",
+      "quality-note",
+      "hero__facts"
+    ]
+  },
+  "deprecatedClasses": {
+    "_note": "No longer used on pages (trust-audit A.2): WARN if present, remove from CSS with the next cleanup.",
+    "classes": [
+      "feature-card",
+      "iso-art",
+      "il-bold",
+      "il-dash"
+    ]
+  },
+  "ignoreCardLike": {
+    "_note": "Selectors never treated as an unregistered card/button by the heuristic (layout wrappers, media frames, controls with their own spec).",
+    "selectors": [
+      ".header__panel",
+      ".hero__media",
+      ".photo-panel",
+      ".hero-search__bar",
+      ".select-wrap",
+      ".lang-menu__list",
+      ".process-scroll__frame",
+      ".svc-card__window",
+      ".slide__photo",
+      "[data-hero-media]",
+      ".catalog__filters",
+      ".spec-table",
+      ".product-answer",
+      ".legal__toc"
+    ]
+  },
+  "spacing": {
+    "sectionHeadGap": 24,
+    "textCardGap": 30,
+    "labelToField": 16,
+    "footerItems": 5,
+    "footerLabel": 7,
+    "tolerance": 1
+  },
+  "cardContainers": [
+    "link-cards",
+    "how-step"
+  ],
+  "_cardContainersNote": "Skipped by card surface (B) and row (A7) checks: list wrappers and ruled list steps (how-step).",
+  "allowedStandaloneRenderers": [
+    "src/pages/home-hero-scene.js",
+    "src/pages/closing-lines.js",
+    "src/utils/il-hero.js",
+    "src/pages/product-bg.js"
+  ],
+  "_renderersNote": "Free scenes / backgrounds with their own WebGLRenderer by design (customer-confirmed via coordinator 2026-11-13; architectural exception, not a style one). Any NEW renderer file outside this list and il-scene.js = FAIL.",
+  "animatedColorStates": [
+    ".fill-word"
+  ],
+  "_animatedNote": "Elements whose colour is animated by scroll (text fill): any alpha of the token base colour (--c-white / --text-on-accent / --accent-contrast) is allowed for A5.1. Architectural rule, not a customer signature."
+}

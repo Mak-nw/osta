@@ -30,7 +30,7 @@
   .home-closing__scene { position: relative; left: auto; right: auto; top: auto; bottom: auto; height: calc(4 * var(--space-8)); margin-top: var(--space-4); } /* full-width strip 256, funnel lies HORIZONTALLY (closing-lines.js, matchMedia <= 767) */
   /* two buttons in ONE row, equal width, one text line; the row wraps to a column only when two labels physically cannot fit side by side (min-width: auto) */
   .home-closing__actions { flex-direction: row; flex-wrap: wrap; align-items: stretch; column-gap: var(--space-3); width: 100%; }
-  .home-closing__actions .btn { flex: 1 1 0; width: auto; min-width: auto; height: var(--control-md); --_px: var(--space-2); font-size: var(--type-label-size); justify-content: center; }
+  .home-closing__actions .btn { flex: 1 1 0; width: auto; min-width: auto; height: var(--control-md); --_px: var(--space-4); --_fs: var(--type-label-size); --_lh: var(--type-label-lh); justify-content: center; }
   .home-closing__panel:has(.home-closing__scene[hidden]) { padding-bottom: var(--section-lg); }
 }
 @media (max-width: 560px) { .home-closing__actions .btn .icon { display: none; } }

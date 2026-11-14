@@ -8,6 +8,7 @@ const LOADERS = {
 };
 const DEFAULT = 'en';
 const KEY = 'osta-lang';
+const FOCUS_KEY = 'osta-lang-focus';
 
 const get = (obj, path) => path.split('.').reduce((o, k) => (o == null ? o : o[k]), obj);
 
@@ -79,16 +80,20 @@ function initMenu(menu) {
     clearTimeout(closeTimer);
     menu.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true');
     hoverOpen = byHover;
+    menu.classList.add('is-menu-opening'); // opening gate (nav.css): the initial highlight of the active option plays no disc until a real pointer-enter / arrow key
     focusOpt(Math.max(0, opts.findIndex((o) => o.dataset.lang === currentLang())));
     if (focus) list.focus({ preventScroll: true });
   };
   const close = (back) => {
     clearTimeout(closeTimer); hoverOpen = false;
-    menu.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false');
+    menu.classList.remove('is-open', 'is-menu-opening'); btn.setAttribute('aria-expanded', 'false');
     opts.forEach((o) => o.classList.remove('is-focus')); list.removeAttribute('aria-activedescendant');
     if (back) btn.focus();
   };
-  const pick = (o) => { setLang(o.dataset.lang); close(true); };
+  const pick = (o, byKey = false) => {
+    if (byKey && o.dataset.lang !== currentLang()) { try { sessionStorage.setItem(FOCUS_KEY, '1'); } catch { /* ignore */ } } // the language change reloads the page: initI18n() puts focus back on the trigger
+    setLang(o.dataset.lang); close(true);
+  };
   btn.addEventListener('click', (e) => {
     // Click on a hover-opened menu pins it open (no toggle-close while the pointer is still over it)
     if (menu.classList.contains('is-open') && !hoverOpen) { close(); return; }
@@ -108,14 +113,24 @@ function initMenu(menu) {
   btn.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); if (!menu.classList.contains('is-open')) open(true); }
   });
-  opts.forEach((o) => o.addEventListener('click', () => pick(o)));
+  // options are real links (crawlable, middle-click / open in new tab work); a plain click is handled by setLang (keeps the query/hash)
+  opts.forEach((o) => {
+    o.addEventListener('mouseenter', () => menu.classList.remove('is-menu-opening'));
+    const alt = document.documentElement.dataset[`alt${o.dataset.lang[0].toUpperCase()}${o.dataset.lang.slice(1)}`];
+    if (alt && o.tagName === 'A') o.setAttribute('href', alt);
+    o.addEventListener('click', (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button) return;
+      e.preventDefault(); pick(o, e.detail === 0);
+    });
+  });
   list.addEventListener('keydown', (e) => {
     const k = e.key;
+    if (k === 'ArrowDown' || k === 'ArrowUp' || k === 'Home' || k === 'End') menu.classList.remove('is-menu-opening');
     if (k === 'ArrowDown') { e.preventDefault(); focusOpt(idx + 1); }
     else if (k === 'ArrowUp') { e.preventDefault(); focusOpt(idx - 1); }
     else if (k === 'Home') { e.preventDefault(); focusOpt(0); }
     else if (k === 'End') { e.preventDefault(); focusOpt(opts.length - 1); }
-    else if (k === 'Enter' || k === ' ') { e.preventDefault(); pick(opts[idx]); }
+    else if (k === 'Enter' || k === ' ') { e.preventDefault(); pick(opts[idx], true); }
     else if (k === 'Escape') { e.preventDefault(); e.stopPropagation(); close(true); }
     else if (k === 'Tab') close();
   });
@@ -125,5 +140,13 @@ function initMenu(menu) {
 
 export function initI18n() {
   document.querySelectorAll('[data-lang-menu]').forEach(initMenu);
+  try {
+    if (sessionStorage.getItem(FOCUS_KEY)) { // keyboard language switch reloaded the page: focus returns to the language trigger instead of <body>
+      sessionStorage.removeItem(FOCUS_KEY);
+      const menu = [...document.querySelectorAll('[data-lang-menu]')].find((m) => m.offsetParent !== null);
+      const btn = menu?.querySelector('[data-lang-switch]');
+      (btn && btn.offsetParent !== null ? btn : menu?.querySelector('[role="listbox"]'))?.focus({ preventScroll: true });
+    }
+  } catch { /* ignore */ }
   return applyLang();
 }

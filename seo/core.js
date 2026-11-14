@@ -272,15 +272,21 @@ export function rewriteLinks(html, { lang, base, dePaths }) {
 
 // ------------------------------------------------------------------ slots / pages
 const icon = (id, cls = 'icon icon-text') => `<svg class="${cls}" aria-hidden="true"><use href="/assets/icons/sprite.svg#${id}"/></svg>`;
-const chip = (ctx, cat, lang) => `<span class="chip chip--tag">${icon(CAT_ICON[cat])}<span data-i18n="${CAT_KEY[cat]}">${esc(ctx.get(CAT_KEY[cat], lang))}</span></span>`;
+const chip = (ctx, cat, lang, cls = 'chip--tag') => `<span class="chip ${cls}">${icon(CAT_ICON[cat])}<span data-i18n="${CAT_KEY[cat]}">${esc(ctx.get(CAT_KEY[cat], lang))}</span></span>`;
 
-export function productCard(ctx, p, lang, { level = 2, status = false } = {}) {
-  const st = status ? `<span class="chip chip--tag"><span data-i18n="product.status_${p.availability}">${esc(ctx.get(`product.status_${p.availability}`, lang))}</span></span>` : '';
+// customer 2026-11-13: a list card shows NO availability mark (the catalogue lists only in-stock items; the mark belongs on non-catalogue pages only)
+export function productCard(ctx, p, lang, { level = 2 } = {}) {
   return `<a class="card card--link product-card" href="/products/${p.slug}/" data-slug="${p.slug}"${lang === 'de' ? ' hreflang="en"' : ''}>
-    <div class="product-card__tags">${p.categories.map((c) => chip(ctx, c, lang)).join('')}${st}</div>
+    <div class="product-card__tags">${p.categories.map((c) => chip(ctx, c, lang)).join('')}</div>
     <h${level} class="product-card__title">${esc(p.name)}</h${level}>
     <div class="product-card__footer"><span data-i18n="common.know_more">${esc(ctx.get('common.know_more', lang))}</span><span class="round-btn round-btn--outline">${icon('arrow-up-right', 'icon')}</span></div>
   </a>`;
+}
+
+// one definition of the product CTA (customer 2026-11-13): rendered twice on a product page, under the intro (slot cta-top) and under the info tiles (slot cta)
+function productCta(ctx, p, lang) {
+  const key = p.availability === 'in_stock' ? 'product.cta_quote' : 'product.cta_sourcing';
+  return `<a class="btn btn--primary btn--lg btn--split" href="/contact.html?product=${encodeURIComponent(p.slug)}"><span data-i18n="${key}">${esc(ctx.get(key, lang))}</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>`;
 }
 
 function specRows(ctx, p, lang) {
@@ -291,7 +297,7 @@ function specRows(ctx, p, lang) {
   if (p.formula) rows.push([t('product.formula'), esc(p.formula)]);
   if (p.colour) rows.push([t('product.spec_appearance'), esc(p.colour)]);
   rows.push([t('product.spec_category'), p.categories.map((c) => esc(t(CAT_KEY[c]))).join(', ')]);
-  rows.push([t('product.spec_status'), esc(t(`product.status_${p.availability}`))]);
+  if (p.availability !== 'in_stock') rows.push([t('product.spec_status'), esc(t(`product.status_${p.availability}`))]);
   rows.push([t('product.spec_updated'), `<time datetime="${p.updated_at}">${p.updated_at}</time>`]);
   return rows;
 }
@@ -302,10 +308,10 @@ function related(ctx, p, lang) {
   const pick = same.slice(0, 3);
   if (!pick.length) return '';
   const h = ctx.get('product.related', lang);
-  return `<section class="section--sm" aria-labelledby="related-title"><div class="container stack stack--5">
-    <h2 class="t-h2 t-accent" id="related-title" data-i18n="product.related">${esc(h)}</h2>
+  return `<section class="section--sm product-related" aria-labelledby="related-title"><div class="container stack stack--5">
+    <div class="section-head"><h2 class="t-h2 t-accent" id="related-title" data-i18n="product.related">${esc(h)}</h2></div>
     <div class="grid-3">${pick.map((q) => productCard(ctx, q, lang, { level: 3 })).join('\n')}</div>
-    <p class="t-body"><a class="link-cta" href="/products/category/${p.primary}/">${esc(ctx.tt(lang, 'product.related_more', { category: ctx.get(CAT_KEY[p.primary], lang) }))}</a> · <a class="link-cta" href="/products/a-z/">${esc(ctx.get('hub.az_link', lang))}</a></p>
+    <a class="btn btn--secondary btn--md" href="/catalog.html"><span data-i18n="common.all_products">${esc(ctx.get('common.all_products', lang))}</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>
   </div></section>`;
 }
 
@@ -324,18 +330,18 @@ function hubSlots(ctx, e) {
   const t = (k) => ctx.get(k, lang); const reg = e.reg[lang] || e.reg.en;
   const nav = [['/products/a-z/', t('hub.az_nav')], ...CATS.map((c) => [catPath(c), t(CAT_KEY[c])]), ['/catalog.html', t('hub.in_stock_nav')]]
     .filter(([href]) => href !== e.reg.path)
-    .map(([href, label]) => `<a class="btn btn--secondary btn--md" href="${href}">${esc(label)}</a>`).join('');
+    .map(([href, label]) => `<a class="btn btn--secondary btn--md" href="${href}"><span>${esc(label)}</span><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></a>`).join('');
   let listHtml;
   if (e.hub === 'az') {
     const letters = [...new Set(list.map((p) => (/^[A-Z]/i.test(p.name) ? p.name[0].toUpperCase() : AZ_SPECIAL)))].sort();
     const jump = `<nav class="row row--2 row--wrap" aria-label="${escAttr(t('hub.az_jump'))}">${letters.map((l) => `<a class="btn btn--secondary btn--sm" href="#letter-${l === AZ_SPECIAL ? '0' : l}">${l}</a>`).join('')}</nav>`;
     const secs = letters.map((l) => {
       const items = list.filter((p) => (/^[A-Z]/i.test(p.name) ? p.name[0].toUpperCase() : AZ_SPECIAL) === l);
-      return `<section class="stack stack--5" id="letter-${l === AZ_SPECIAL ? '0' : l}" aria-labelledby="letter-title-${l === AZ_SPECIAL ? '0' : l}"><h2 class="t-h2 t-accent" id="letter-title-${l === AZ_SPECIAL ? '0' : l}">${l}</h2><div class="grid-3">${items.map((p) => productCard(ctx, p, lang, { level: 3, status: true })).join('\n')}</div></section>`;
+      return `<section class="stack stack--5" id="letter-${l === AZ_SPECIAL ? '0' : l}" aria-labelledby="letter-title-${l === AZ_SPECIAL ? '0' : l}"><h2 class="t-h2 t-accent" id="letter-title-${l === AZ_SPECIAL ? '0' : l}">${l}</h2><div class="grid-3">${items.map((p) => productCard(ctx, p, lang, { level: 3 })).join('\n')}</div></section>`;
     }).join('\n');
     listHtml = `<div class="stack stack--7">${jump}${secs}</div>`;
   } else {
-    listHtml = `<h2 class="t-h2 t-accent" id="hub-list-title">${esc(ctx.tt(lang, 'hub.list_title', { n: list.length, category: t(CAT_KEY[e.hub]) }))}</h2><div class="grid-3">${list.map((p) => productCard(ctx, p, lang, { level: 3, status: true })).join('\n')}</div>`;
+    listHtml = `<h2 class="t-h2 t-accent" id="hub-list-title">${esc(ctx.tt(lang, 'hub.list_title', { n: list.length, category: t(CAT_KEY[e.hub]) }))}</h2><div class="grid-3">${list.map((p) => productCard(ctx, p, lang, { level: 3 })).join('\n')}</div>`;
   }
   return {
     h1: esc(reg.h1 || reg.name || reg.title), intro: esc(reg.intro || reg.description), nav, list: e.hub === 'az' ? listHtml : `<div class="stack stack--5">${listHtml}</div>`,
@@ -350,24 +356,23 @@ export function renderPage(ctx, e, srcHtml, { vite = false } = {}) {
   // dynamic slots
   if (e.kind === 'product') {
     const p = e.product; const t = (k) => ctx.get(k, lang);
-    const ctaKey = p.availability === 'in_stock' ? 'product.cta_quote' : 'product.cta_sourcing';
+    const cta = productCta(ctx, p, lang);
     const cards = [];
     const card = (id, ic, label, body) => `<div class="card info-card" data-block="${id}"><div class="info-card__head"><span class="icon-ring">${icon(ic)}</span><h2 class="info-card__label">${esc(label)}</h2></div>${body}</div>`;
     if (p.description) cards.push(card('description', 'info-diamond', t('product.description'), `<p class="info-card__value info-card__value--body">${esc(p.description)}</p>`));
-    if (p.usage) cards.push(card('usage', 'info-diamond', t('product.usage'), `<p class="info-card__value info-card__value--body">${esc(p.usage)}</p>`));
+    if (p.usage) cards.push(card('usage', 'search-check', t('product.usage'), `<p class="info-card__value info-card__value--body">${esc(p.usage)}</p>`));
     const table = `<table class="spec-table"><tbody>${specRows(ctx, p, lang).map(([k, v]) => `<tr><th scope="row">${esc(k)}</th><td>${v}</td></tr>`).join('')}</tbody></table>`;
-    cards.push(card('specs', 'info-diamond', t('product.specs'), `<div class="info-card__value info-card__value--body">${table}</div>`).replace('class="card info-card"', 'class="card info-card info-card--wide"'));
-    if (p.faq?.length) cards.push(`<div class="card info-card info-card--wide" data-block="faq"><div class="info-card__head"><span class="icon-ring">${icon('info-diamond')}</span><h2 class="info-card__label">${esc(t('product.faq'))}</h2></div><div class="info-card__value info-card__value--body">${p.faq.map((f) => `<h3 class="t-lead">${esc(f.q)}</h3><p>${esc(f.a)}</p>`).join('')}</div></div>`);
-    const cas = p.cas ? `<span class="meta-tag"><span class="meta-tag__key" data-i18n="product.cas">${esc(t('product.cas'))}</span><span>${esc(p.cas)}</span></span>` : '';
-    const status = `<span class="meta-tag"><span class="meta-tag__key" data-i18n="product.spec_status">${esc(t('product.spec_status'))}</span><span data-i18n="product.status_${p.availability}">${esc(t(`product.status_${p.availability}`))}</span></span>`;
+    cards.push(card('specs', 'file', t('product.specs'), `<div class="info-card__value info-card__value--body">${table}</div>`).replace('class="card info-card"', 'class="card info-card info-card--wide"'));
+    if (p.faq?.length) cards.push(`<div class="card info-card info-card--wide" data-block="faq"><div class="info-card__head"><span class="icon-ring">${icon('chat-lines')}</span><h2 class="info-card__label">${esc(t('product.faq'))}</h2></div><div class="info-card__value info-card__value--body">${p.faq.map((f) => `<h3 class="t-lead">${esc(f.q)}</h3><p>${esc(f.a)}</p>`).join('')}</div></div>`);
+    const cas = p.cas ? `<span class="chip chip--pill chip--sm"><span class="meta-tag__key" data-i18n="product.cas">${esc(t('product.cas'))}</span><span>${esc(p.cas)}</span></span>` : '';
+    const status = p.availability === 'in_stock' ? '' : `<span class="chip chip--pill chip--sm"><span class="meta-tag__key" data-i18n="product.spec_status">${esc(t('product.spec_status'))}</span><span data-i18n="product.status_${p.availability}">${esc(t(`product.status_${p.availability}`))}</span></span>`;
     html = html.split('{{name}}').join(esc(p.name));
     html = fill(html, {
-      tags: p.categories.map((c) => chip(ctx, c, lang)).join('') + cas + status,
+      tags: p.categories.map((c) => chip(ctx, c, lang, 'chip--pill chip--sm')).join('') + cas + status,
       answer: esc(answerBlock(ctx, p, lang)),
       cards: cards.join('\n'),
-      cta_title: `<span data-i18n="product.cta_title">${esc(t('product.cta_title'))}</span>`,
-      cta_text: `<span data-i18n="${ctaKey}">${esc(t(ctaKey))}</span>`,
-      cta_href: `/contact.html?product=${encodeURIComponent(p.slug)}`,
+      cta,
+      'cta-top': cta,
       related: related(ctx, p, lang),
     });
   } else if (e.kind === 'hub') {
@@ -376,9 +381,7 @@ export function renderPage(ctx, e, srcHtml, { vite = false } = {}) {
     html = fill(html, { intro: s.intro, nav: s.nav, list: s.list });
   } else if (e.kind === 'catalog') {
     const list = ctx.products.filter((p) => p.availability === 'in_stock' && p.indexable).sort(sortName);
-    const t = (k) => ctx.get(k, lang);
-    const browse = `<p class="t-body t-muted catalog__browse"><a class="link-cta" href="/products/a-z/">${esc(t('hub.az_link'))}</a> · ${CATS.map((c) => `<a class="link-cta" href="${catPath(c)}">${esc(t(CAT_KEY[c]))}</a>`).join(' · ')}</p>`;
-    html = fill(html, { 'catalog-list': list.map((p) => productCard(ctx, p, lang)).join('\n'), 'catalog-browse': browse });
+    html = fill(html, { 'catalog-list': list.map((p) => productCard(ctx, p, lang)).join('\n') });
   }
   // i18n prerender
   const urlFn = (v) => v;
@@ -396,6 +399,9 @@ export function renderPage(ctx, e, srcHtml, { vite = false } = {}) {
   html = rewriteLinks(html, { lang, base, dePaths });
   // data-alt-* hold site paths: add base
   if (base !== '/') html = html.replace(/(data-alt-(?:en|de)=")\/([^"]*")/g, (m, a, r) => `${a}${base}${r}`);
+  // language options in the switcher are real links to the equivalent page of the other language (crawlable without JS)
+  const alt = { en: html.match(/data-alt-en="([^"]*)"/)?.[1], de: html.match(/data-alt-de="([^"]*)"/)?.[1] };
+  html = html.replace(/(<a\b[^>]*\bclass="lang-menu__option"[^>]*?\bhref=")[^"]*("[^>]*\bdata-lang="(en|de)")/g, (m, a, b, l) => `${a}${alt[l] || ''}${b}`);
   return html;
 }
 

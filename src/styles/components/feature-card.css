@@ -16,28 +16,18 @@
 .feature-card--light .feature-card__title { color: var(--text-accent); }
 .feature-card__foot { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-5); }
 .feature-card__text { margin: 0; max-width: 55%; font-size: var(--type-body-size); line-height: var(--type-body-lh); }
-/* Optional illustration slot: the same isometric language as svc-art (services.css): thin one-colour lines, ONE main object with a solid fill (.il-fill + thin .il-ink edges),
-   the rest = thin outline only, dashed floor grid, .il-occ hides lines behind solids with the card colour. Colours via local tokens (--il-*), stroke <=1.25px. */
+/* Optional illustration slot: isometric language: thin one-colour lines, ONE main object with a solid fill (.il-fill + thin .il-ink edges),
+   the rest = thin outline only, .il-occ hides lines behind solids with the card colour. Colours via local tokens (--il-*), stroke <=1.25px. */
 .feature-card__art-wrap { position: relative; flex: 1 1 0; min-height: 0; } /* the art fills the wrap (absolute, so its aspect never grows the card); the viewBox is centred on the objects' bbox, so objects = wrap centre */
-.feature-card__art { --il-bg: var(--surface-raised); --il-fill: var(--accent); --il-ink: var(--c-white); --il-soft: var(--c-blue-400); --il-canvas: var(--c-blue-200); --il-grid: var(--c-blue-200);
+.feature-card__art { --il-bg: var(--surface-raised); --il-fill: var(--accent); --il-ink: var(--c-white); --il-soft: var(--c-blue-400); --il-canvas: var(--c-blue-200);
   display: block; position: absolute; inset: 0; width: 100%; height: 100%; stroke-width: 1px; }
-.feature-card--accent .feature-card__art { --il-bg: var(--accent); --il-fill: var(--c-white); --il-ink: var(--accent); --il-soft: var(--c-blue-200); --il-canvas: var(--c-blue-400); --il-grid: var(--c-blue-500); }
-:is(.feature-card__art, .iso-art) .il-occ { fill: var(--il-bg); stroke: none; }
-:is(.feature-card__art, .iso-art) .il-fill { fill: var(--il-fill); stroke: none; }
-:is(.feature-card__art, .iso-art) .il-ink { stroke: var(--il-ink); }
-:is(.feature-card__art, .iso-art) .il-bold { stroke-width: 1.25px; }
-:is(.feature-card__art, .iso-art) .il-canvas { stroke: var(--il-canvas); }
-:is(.feature-card__art, .iso-art) .il-grid { stroke: var(--il-grid); stroke-width: 0.75px; stroke-dasharray: 2 3; }
-:is(.feature-card__art, .iso-art) .il-dash { stroke-dasharray: 2 3; stroke-width: 0.75px; }
-:is(.feature-card__art, .iso-art) :is(.il-edge, .il-sheet, .il-line) { stroke: var(--il-soft); }
-
-/* .iso-art: the same isometric illustration language as a standalone inline SVG outside a feature card (Home hero band, Home Products).
-   Palette = the light card (main object --accent fill + white edges, the rest --c-blue-400/200); --on-accent = the accent card palette (white main object) for blue sections.
-   --il-bg must equal the surface behind the art (.il-occ hides lines behind solids). Paths carry vector-effect: non-scaling-stroke, so 1 / 1.25 / 0.75 px stay exact at any size. */
-.iso-art { --il-bg: var(--surface); --il-fill: var(--accent); --il-ink: var(--c-white); --il-soft: var(--c-blue-400); --il-canvas: var(--c-blue-200); --il-grid: var(--c-blue-200);
-  display: block; width: 100%; height: auto; stroke-width: 1px; }
-.iso-art--raised { --il-bg: var(--surface-raised); }
-.iso-art--on-accent { --il-bg: var(--surface-accent); --il-fill: var(--c-white); --il-ink: var(--accent); --il-soft: var(--c-blue-200); --il-canvas: var(--c-blue-400); --il-grid: var(--c-blue-500); }
+.feature-card--accent .feature-card__art { --il-bg: var(--accent); --il-fill: var(--c-white); --il-ink: var(--accent); --il-soft: var(--c-blue-200); --il-canvas: var(--c-blue-400); }
+.feature-card__art .il-occ { fill: var(--il-bg); stroke: none; }
+.feature-card__art .il-fill { fill: var(--il-fill); stroke: none; }
+.feature-card__art .il-ink { stroke: var(--il-ink); }
+.feature-card__art .il-bold { stroke-width: 1.25px; }
+.feature-card__art .il-canvas { stroke: var(--il-canvas); }
+.feature-card__art :is(.il-edge, .il-sheet, .il-line) { stroke: var(--il-soft); }
 
 /* Responsive feature grid (About Quality): intro on top full width, cards 2 per row (tablet) / 1 per row (mobile) */
 @media (max-width: 1199px) {

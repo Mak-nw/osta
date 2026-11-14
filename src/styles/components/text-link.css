@@ -1,0 +1,44 @@
+/* ==========================================================================
+   TEXT-LINK: the ONE component for every plain text link (customer 2026-11-13: "нехай буде заливка фону кнопки"; rule B6, checked by `npm run audit:hover`).
+   Instances (one selector list, no per-page overrides): footer links incl. group titles (.footer a, except .btn / logo / .contact-line), breadcrumbs,
+   inline links in prose (a:not([class]) in p/li/dd/td: FAQ, legal, Impressum). Not text links: .contact-line (own row with ring, same disc, cards.css), logo links (own block at the end of this file), .btn / .nav-pill / cards.
+   Hover = the button mechanic: a fill LIGHTER than the surface (--surface-white; every host surface is page/raised/sunken, all darker) grows from the CENTRE as a disc (--dur-hover-disc, --ease-hover),
+   hover:hover only, same end state for :focus-visible / :active / .is-hover; reduced motion = instant. Text colour and text-decoration never change on hover (rule B1: only prose links are underlined, and they stay underlined at rest).
+   Implementation: a ::before plate (rounded --radius-md, scale 0 > 1 from the centre) for links that stay on one line (footer, breadcrumbs, contact); inline PROSE links wrap, so a scaled plate cannot follow their lines: they get the same fill as a background-color on the link itself (box-decoration-break: clone paints it per line) with the same token duration/easing (customer: "по рядках").
+   Horizontal padding is reserved at rest and cancelled by the negative margin, so text never moves and the box never changes size.
+   ========================================================================== */
+:is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a, :where(main) :is(p, li, dd, td) > a:not([class])) {
+  --_hole: var(--surface-white); --_tl-px: var(--space-2);
+  width: fit-content; padding-inline: var(--_tl-px); margin-inline: calc(-1 * var(--_tl-px)); border-radius: var(--radius-md);
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+/* one-line links: the plate */
+:is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a) { position: relative; isolation: isolate; }
+:is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a)::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: var(--radius-md); background: var(--_hole); scale: 0; transition: scale var(--dur-hover-disc) var(--ease-hover);
+}
+:is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a):is(.is-hover, .is-focus, :focus-visible, :active)::before { scale: 1; }
+/* prose links wrap: no horizontal padding (clone would indent every wrapped line); the fill hugs the text, the 1px underline of rest stays (rule B1) */
+:where(main) :is(p, li, dd, td) > a:not([class]) { --_tl-px: 0px; width: auto; color: var(--accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .25em; background-color: transparent; transition: background-color var(--dur-hover-disc) var(--ease-hover); }
+:where(main) :is(p, li, dd, td) > a:not([class]):is(.is-hover, .is-focus, :focus-visible, :active) { background-color: var(--_hole); }
+@media (hover: hover) {
+  :is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a):hover::before { scale: 1; }
+  :where(main) :is(p, li, dd, td) > a:not([class]):hover { background-color: var(--_hole); }
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a)::before, :where(main) :is(p, li, dd, td) > a:not([class]) { transition: none; }
+}
+
+/* Logo links (header, footer): the same plate mechanic as the text links, no underline (customer 2026-11-13: logos react on hover too). The plate is one step visible against the host surface:
+   footer (sunken) = --surface-white, header panel (white) = --surface-raised. Padding is reserved at rest and cancelled by the negative margin (logo never moves). */
+:is(.header__logo, .footer__logo) {
+  --_hole: var(--surface-white); --_tl-px: var(--space-2); position: relative; isolation: isolate; border-radius: var(--radius-md);
+  padding-inline: var(--_tl-px); margin-inline: calc(-1 * var(--_tl-px));
+}
+.header__logo { --_hole: var(--surface-raised); }
+:is(.header__logo, .footer__logo)::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: var(--radius-md); background: var(--_hole); scale: 0; transition: scale var(--dur-hover-disc) var(--ease-hover);
+}
+:is(.header__logo, .footer__logo):is(.is-hover, .is-focus, :focus-visible, :active)::before { scale: 1; }
+@media (hover: hover) { :is(.header__logo, .footer__logo):hover::before { scale: 1; } }
+@media (prefers-reduced-motion: reduce) { :is(.header__logo, .footer__logo)::before { transition: none; } }

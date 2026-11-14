@@ -23,10 +23,11 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .t-h3 { font-size: var(--type-h3-size); line-height: var(--type-h3-lh); letter-spacing: var(--type-h3-ls); font-weight: var(--font-weight-medium); }
 .t-lead { font-size: var(--type-lead-size); line-height: var(--type-lead-lh); letter-spacing: var(--type-lead-ls); font-weight: var(--font-weight-regular); }
 .t-lead--medium { font-weight: var(--font-weight-medium); }
+.t-lead--medium { color: var(--text-accent); } /* name role (Contact managers): names = --text-accent */
 .t-body { font-size: var(--type-body-size); line-height: var(--type-body-lh); font-weight: var(--font-weight-regular); }
 .t-label { font-size: var(--type-label-size); line-height: var(--type-label-lh); letter-spacing: var(--type-label-ls); font-weight: var(--font-weight-regular); }
 .t-accent { color: var(--text-accent); }
-.t-muted { color: var(--text-muted); }
+.t-subtle { color: var(--text); }
 .t-on-accent { color: var(--text-on-accent); }
 .t-center { text-align: center; }
 .t-soft { color: var(--text-accent-soft); }
@@ -45,7 +46,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .icon-ring { display: inline-grid; place-items: center; flex: none; width: var(--chip-lg); height: var(--chip-lg); box-sizing: border-box; border: 1px solid currentColor; border-radius: var(--radius-full); background: transparent; color: var(--accent); }
 .icon-ring--on-accent { color: var(--accent-contrast); }
 /* Role: .icon-ring = DECORATIVE (outline, not clickable). .icon-ring--action = the ring is the icon of a clickable link/button row (mail, phone): same 40 px / 1 px, filled with --icon-ring-action-bg. Not for rings inside whole-card links (a.link-card). */
-.icon-ring--action { background: var(--icon-ring-action-bg); border-color: var(--icon-ring-action-bd); color: var(--icon-ring-action-fg); transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease); }
+.icon-ring--action { background: var(--icon-ring-action-bg); border-color: var(--icon-ring-action-bd); color: var(--icon-ring-action-fg); transition: background-color var(--dur-hover-disc) var(--ease-hover), border-color var(--dur-hover-disc) var(--ease-hover); }
 /* hover = disc from the centre (--icon-ring-action-bg-hover), see the DISC block at the end of components/buttons.css */
 .icon-ring--action.icon-ring--on-accent { background: var(--accent-contrast); border-color: var(--accent-contrast); color: var(--accent); }
 .icon-ring .icon-text { color: inherit; }

@@ -27,9 +27,6 @@
   --c-mist-50:  #f4f9f9;
   --c-mist-25:  #f7fafa;
   --c-teal-600: #3e7b85;
-  --c-grey-500: #6f7e82;
-  --c-grey-600: #566265;   /* muted text (darker step of grey-500 for 4.5:1+ on all surfaces) */
-  --c-ink-900:  #080d17;   /* text (customer) */
   --c-white:    #ffffff;
   --c-red-700:  #b3261e;   /* error; 5.5:1 on --surface, 6.5:1 on white */
 
@@ -41,13 +38,15 @@
   --surface-muted:    var(--c-mist-200);   /* people card, disabled fills */
   --surface-white:    var(--c-white);      /* nav-pills, raised-on-raised */
   --surface-accent:   var(--c-blue-700);
+  --surface-card-on-accent: color-mix(in srgb, var(--c-blue-700) 60%, var(--c-blue-800)); /* cards on the BLUE section: barely darker than --surface-accent, no outline (customer 2026-11-13); tone = one line: A 70/30, C 45/55 */
+  --hero-light-gradient: linear-gradient(to bottom, var(--surface-white) 0%, var(--surface) 100%);   /* LIGHT hero background (rule U1): top pure white, bottom = the page colour --surface (no seam with the next section); the ONLY light-hero gradient, used by .hero (About/Services), .legal__hero, .product-hero (hub, 404) */
   --surface-accent-deep: var(--c-blue-950);   /* ONLY the top stop of the Home hero vertical gradient (customer exception 2026-11-12); darker step of the same blue, not black */
   --surface-dark:     var(--c-blue-950);
-  --text:             var(--c-ink-900);
-  --text-muted:       var(--c-grey-600);   /* ≥4.7:1 on #E8EEEE, #F4F9F9, white and the darkest shader pixel rgb(216,224,231) */
+  --text:             var(--c-blue-950);   /* #061f52 DEEP NAVY (customer 2026-11-13: «чорний скрізь замінити на темно-синій, темніший за звичайний синій»); the site has NO black */
+  --text-ink-deep:    var(--text);   /* #061f52: DEEP-NAVY body text, darker than --text-accent (customer 2026-11-13: «чорний замінити на темно-синій»); 14.5:1 on white; for text/lines that were black */
   --text-accent:      var(--c-blue-700);
   --text-accent-soft: var(--c-blue-400);   /* large text only (>=24px, 3:1+): second half of lead sentences */
-  --text-accent-subtle: var(--c-blue-500); /* small text on light surfaces (>=4.5:1): meta labels */
+  --text-accent-subtle: var(--c-blue-500); /* small text on light surfaces (>=4.5:1): placeholders and disabled only (labels use --text-accent) */
   --text-on-accent:   var(--c-white);
   --text-on-accent-muted: color-mix(in srgb, var(--c-white) 62%, transparent);
   --accent:           var(--c-blue-700);
@@ -64,19 +63,18 @@
   --icon-ring-action-bd: var(--accent);
   --icon-ring-action-bg-hover: var(--accent-hover);
   --disabled-bg:      var(--c-mist-200);
-  --disabled-text:    var(--c-grey-500);
+  --disabled-text:    var(--text-accent-subtle);
   --c-error:          var(--c-red-700);   /* validation error: one shade for text, border, icon */
   --text-error:       var(--c-error);
   --border-error:     var(--c-error);
   --field-label-gap: var(--space-4);   /* label -> field: ONE gap on every form (.field), 16px (was 4 on forms / 8 in the hero search) */
-  --field-glass-alpha: 7%;             /* glass field on blue (Home hero search): white fill alpha (customer: 40% > 20% > 10% > 7%) */
   --field-glass-border-alpha: 10%;     /* rest: 1px border exactly on the panel edge */
   --field-glass-border-alpha-focus: 70%; /* focus: the SAME border brighter (no outline, no offset); >=3:1 vs the blue */
-  --field-glass-bg: color-mix(in srgb, var(--accent-contrast) var(--field-glass-alpha), transparent);
+  --surface-field-on-accent: #294e8b;  /* ONE solid fill for fields/controls on the BLUE (customer 2026-11-14: the colour that the translucent white gave becomes the main fill, no alpha); measured pixel of the old glass fill on the hero blue (#0a347a) */
   --field-glass-border: color-mix(in srgb, var(--accent-contrast) var(--field-glass-border-alpha), transparent);
   --field-glass-border-focus: color-mix(in srgb, var(--accent-contrast) var(--field-glass-border-alpha-focus), transparent);
   --field-glass-placeholder: color-mix(in srgb, var(--accent-contrast) 70%, transparent);
-  --overlay-field:    color-mix(in srgb, var(--c-white) 14%, transparent); /* inputs on accent */
+  --overlay-field:    var(--surface-field-on-accent); /* inputs on accent: same solid token (was white 14% = #2c5393 on #0a3782, dE 2.6) */
 
   /* ---------- 3a. Spacing (4/8 step) ---------- */
   --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
@@ -85,6 +83,7 @@
   --section-head-gap: var(--space-5);  /* EVERY vertical gap of a heading group (.section-head): tag -> heading -> description -> CTA = 24 (customer 2026-11-13) */
   --text-card-gap: 30px;               /* EXPLICIT EXCEPTION (customer 2026-11-13): eyebrow -> h2 -> paragraph inside .text-card (Products, Documentation) */
   /* footer rhythm in responsive (<= 1199), customer exception, off the 4/8/12 scale: gap between link items 5, group label -> first item 7 (same for menu, contacts, technical links) */
+  --gap-small: 10px;                  /* gap between SMALL elements: chips / tags (API, Cas No., product-card tags, hub tags) = 10 (customer 2026-11-13); footer keeps its own 5/7 */
   --footer-gap-items: 5px; --footer-gap-label: 7px;
 
   /* ---------- 3b. Typography ---------- */
@@ -109,9 +108,9 @@
   /* ---------- 3d. Control sizes (3 heights) ---------- */
   --control-sm: 32px; --control-md: 44px; --control-lg: 56px;
   --icon-sm: 16px; --icon-md: 20px; --icon-lg: 24px;
+  --hit-min: 24px;   /* minimum click target (WCAG 2.5.8): the visual size of text links stays, the clickable box grows */
   --chip-sm: 24px; --chip-md: 32px; --chip-lg: 40px;   /* decorative icon chips */
   --btn-split-w: 176px;        /* Contact Us style button (label left, icon right) */
-  --btn-pad-trim: 5px;         /* .btn right padding = left padding − this (icon sits 5px closer to the right edge); symmetric when no icon */
   --logo-header-h: 44px;
   --logo-footer-h: 132px;      /* big centred mark in the footer */
   --card-min-h: 240px; --card-tall-min-h: 252px; --card-cta-min-h: 176px;
@@ -126,12 +125,14 @@
   --container: 1680px;          /* main content box */
   --gutter: 64px;               /* side padding of container (1728: content x=64..1664, width 1600) */
   --grid-cols: 12;
-  --grid-gap: 16px;
+  --grid-gap: var(--space-3);          /* gap between grid columns / cards in a row = 12 (customer 2026-11-13; was 16); ONE token for every breakpoint */
+  --card-inner-gap: var(--space-3);    /* art <-> text gap inside a card (svc-card, quality-card, link-card--3) = 12; ONE token */
   --sidebar-w: 240px;
   --header-top: var(--space-3);                                   /* gap above the floating panel */
   --header-bar-pad: 10px;        /* vertical gap between panel edge and its md controls / logo */
   --header-bar-h: calc(var(--control-md) + 2 * var(--header-bar-pad)); /* 64: floating panel height (md control 44 + 10 above/below) */
   --cols-6: calc((100% - var(--grid-gap)) / 2);                   /* width of 6 of 12 grid columns (6*col + 5*gap) as a share of the container content box; use only as width of a block inside .container */
+  --cols-4: calc((100% - 11 * var(--grid-gap)) / 12 * 4 + 3 * var(--grid-gap)); /* width of 4 of 12 grid columns (4*col + 3*gap, col = (100% - 11*gap)/12) as a share of the container content box; same 100% base as --cols-6 (use on a grid item spanning 1 / -1, or a block inside .container) */
   --header-w: var(--cols-6);                                     /* floating panel = the 6 central columns (4-9 of 12), centered; desktop >=1200 */
   --header-min-w: 640px;                                         /* content floor of the bar (EN/DE: nav 266 + logo 60 + actions 232 + gaps/padding): 6 columns are narrower below ~1424px, so the bar never goes under this (see design-system.md) */
   --header-h: calc(var(--header-top) + var(--header-bar-h));      /* space taken by sticky header = top gap + panel (76) */
@@ -145,7 +146,10 @@
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   --dur-fast: 150ms; --dur: 200ms;
   --dur-base: 250ms; --dur-hover-disc: 800ms; /* H1a/primary hover disc + synchronous label colour (customer 2026-11-13: "8" read as 0.8 s). Reverse uses the same token. */ --dur-slow: 600ms;
-  --ease-out: cubic-bezier(.22,.61,.36,1); --ease-in-out: cubic-bezier(.65,0,.35,1);
+  --disc-overscan: 1.35; /* hover disc diameter = (circle that just covers the button) x this, for EVERY button form: the button is fully covered at 1/1.35 = 74% of the disc travel (~290 ms of the 800 ms ease) whatever its shape */
+  --dur-hover-color: var(--dur-hover-disc); /* ONE hover tempo (customer 2026-11-13): label colour, frame and icon use the SAME duration as the disc; no separate faster colour flip */
+  --delay-hover-color-in: 0ms; --delay-hover-color-round-in: 0ms; /* no delays: everything in a hover starts and ends together */
+  --ease-out: cubic-bezier(.22,.61,.36,1); --ease-hover: cubic-bezier(.22,.61,.36,1); /* the ONE easing of the hover disc (+ synchronous colours); same curve as --ease-out, but a separate token so the hover can be tuned alone */ --ease-in-out: cubic-bezier(.65,0,.35,1);
   --reveal-distance: 16px; --stagger: 60ms;
   --dur-zoom: 5000ms; --photo-zoom-from: 1.12; /* photo zoom-out inside its clip mask (motion.js: .photo-zoom) */
 }
@@ -157,7 +161,7 @@
    ========================================================================== */
 @media (max-width: 1199px) {
   :root {
-    --gutter: 40px; --grid-cols: 8; --grid-gap: 16px;
+    --gutter: 40px; --grid-cols: 8;
     --logo-footer-h: 96px;
     --type-display-size: 48px; --type-display-lh: 48px;
     --type-h1-size: 36px;      --type-h1-lh: 44px;
@@ -169,7 +173,7 @@
 }
 @media (max-width: 767px) {
   :root {
-    --gutter: 24px; --grid-cols: 4; --grid-gap: 16px;
+    --gutter: 24px; --grid-cols: 4;
     --logo-footer-h: 72px;
     --type-display-size: 36px; --type-display-lh: 36px;
     --type-h1-size: 30px;      --type-h1-lh: 36px;

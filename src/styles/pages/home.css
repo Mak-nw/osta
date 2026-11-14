@@ -29,31 +29,20 @@
 /* Supply & logistics: the photo band is full viewport width (edge to edge, no radius); the section adds no padding of its own */
 .home-supply { padding-block: 0; background: var(--surface); }
 
-/* Quality (LIGHT band, so two blue bands never touch): one row of 3 square cards (4 cols each): text card + EudraGMDP + GDP (components/cards.css .quality-*); no separate head block, padding like Products */
-.home-quality { padding-block: var(--space-8); background: var(--surface); color: var(--text); }
-.home-quality__cards { grid-column: 1 / -1; grid-row: 1; }
+/* Quality (LIGHT band): shared component .quality-band / .quality-cards (components/cards.css), also used on About */
 
 /* ==========================================================================
    Responsive Home. Tablet (8 columns): heads and text full width, cards 2 x 2 (Quality: text card full width, the two fact cards under it).
    Mobile (4 columns): one column; Products cards 1 per row (aspect released, min-height instead), Quality tiles stacked.
    ========================================================================== */
-/* Quality text card = 1:1 (the row of three squares); Products row sets 3:4 in link-list.css */
-:where(.home-quality__cards) .text-card { aspect-ratio: 1 / 1; }
 @media (max-width: 1199px) {
   .home-grid { row-gap: var(--space-6); }
   .home-about__head { grid-column: 1 / -1; } /* tablet / mobile: headings full width, left */
-  .link-cards, .quality-cards { row-gap: var(--grid-gap); }
+  .link-cards { row-gap: var(--grid-gap); }
   .link-cards > li, .link-cards--3 > li { grid-column: span 4; }
-  .home-quality__cards > li { grid-column: span 4; }
-  .home-quality__cards > li:first-child { grid-column: 1 / -1; }  /* text card full width, the two fact cards under it */
-  :where(.home-quality__cards) .text-card { aspect-ratio: auto; flex-direction: row; align-items: flex-end; flex-wrap: wrap; justify-content: space-between; }
-  :where(.home-quality__cards) .text-card__body { flex: 1 1 60%; max-width: 70ch; }
 }
 @media (max-width: 767px) {
   .home-grid { row-gap: var(--space-5); }
   .link-cards > li, .link-cards--3 > li { grid-column: 1 / -1; }
   .link-cards--3 .link-card { aspect-ratio: auto; min-height: 340px; }
-  .home-quality__cards > li, .home-quality__cards > li:first-child { grid-column: 1 / -1; }
-  .home-quality__cards .quality-card { aspect-ratio: auto; min-height: 440px; }
-  .home-quality__cards .quality-card__text { min-height: 2lh; } /* both cards reserve 2 text lines, so the art zones (and the shared floor) have the same height */
 }

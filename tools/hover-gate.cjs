@@ -34,7 +34,11 @@ function pageFns() {
     if (el.matches('[class*="btn"],[class*="round-btn"]') || BTN_CLASS.test(cls) || bg[3] > 0.02 || bw || el.querySelector('.round-btn,.icon-ring--action')) return 'button';
     return 'link';
   };
-  return { toRGB, sig, visible, classify };
+  /* duration/delay (ms) of one transitioned property from computed style (lists are comma separated, cycled by property index) */
+  const timing = (s, prop) => { const ms = (v) => parseFloat(v) * (/ms\s*$/.test(v) ? 1 : 1000); const P = s.transitionProperty.split(',').map((x) => x.trim()), D = s.transitionDuration.split(','), L = s.transitionDelay.split(','); let i = P.indexOf(prop); if (i < 0) i = P.indexOf('all'); if (i < 0) return null; return { dur: Math.round(ms(D[i % D.length].trim())), delay: Math.round(ms(L[i % L.length].trim())), prop: P[i] }; };
+  const tokens = () => { const cs = getComputedStyle(document.documentElement); const ms = (v) => { v = v.trim(); return Math.round(parseFloat(v) * (/ms$/.test(v) ? 1 : 1000)); }; return { cdur: ms(cs.getPropertyValue('--dur-hover-color')), cdelays: ['--delay-hover-color-in', '--delay-hover-color-round-in'].map((n) => ms(cs.getPropertyValue(n))), k: parseFloat(cs.getPropertyValue('--disc-overscan')) }; };
+  const token = () => { const v = getComputedStyle(document.documentElement).getPropertyValue('--dur-hover-disc').trim(); return Math.round(parseFloat(v) * (/ms$/.test(v) ? 1 : 1000)); };
+  return { toRGB, sig, visible, classify, timing, token, tokens };
 }
 const fnSrc = pageFns.toString();
 
@@ -51,6 +55,30 @@ const dE = (a, b) => { const A = lab(a), B = lab(b); return Math.hypot(A[0] - B[
 const lum = (c) => { const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }; return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]); };
 const contrast = (a, b) => { const l1 = lum(a), l2 = lum(b); return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05); };
 
+/* LANG SEQUENCE (customer 2026-11-14): menu opens on the ACTIVE language WITHOUT a disc (opening gate), then hover on the other language = disc, then RETURN to the active one = the SAME disc (time to full cover within +-10% of the other option). FAIL if the return to the active option plays no disc. burger = the options are always visible (no opening step). */
+async function testLangSequence(page, key, burger) {
+  const rect = (sel) => page.evaluate((s) => { const e = document.querySelector(s); if (!e) return null; const b = e.getBoundingClientRect(); return { x: b.x + b.width / 2, y: b.y + b.height / 2 }; }, sel);
+  const sample = (sel) => page.evaluate((s) => { window.__s = []; const e = document.querySelector(s); const t0 = performance.now(); const f = () => { const c = getComputedStyle(e, '::before'); window.__s.push([performance.now() - t0, c.scale === 'none' ? 1 : parseFloat(c.scale)]); if (performance.now() - t0 < 1500) requestAnimationFrame(f); }; f(); }, sel);
+  const reach = () => page.evaluate(() => { const a = window.__s; const t = a.find((v) => v[1] >= 0.99); const st = a.find((v) => v[1] > 0.02); return { full: t ? Math.round(t[0] - (st ? st[0] : 0)) : null, max: Math.max(...a.map((v) => v[1])) }; });
+  const rest = '.header .lang-menu__option[aria-selected="true"]', other = '.header .lang-menu__option:not([aria-selected="true"])';
+  const row = { page: key.page, w: key.w, scene: burger ? 'burger-menu' : 'lang-dropdown', el: '.lang-menu__option (active: open -> other -> return)', kind: 'button', text: 'seq', checks: {}, info: {} };
+  try {
+    await page.mouse.move(1, 1); await new Promise((r) => setTimeout(r, 600));
+    if (!burger) { const t = await rect('.header [data-lang-switch]'); await page.mouse.move(t.x, t.y, { steps: 3 }); await new Promise((r) => setTimeout(r, 700)); }
+    const open = await page.evaluate((s) => { const c = getComputedStyle(document.querySelector(s), '::before'); return c.scale === 'none' ? 1 : parseFloat(c.scale); }, rest);
+    row.checks.openNoDisc = open < 0.05; /* burger has no opening step, the pointer is still outside */
+    const o = await rect(other), a = await rect(rest);
+    await sample(other); await page.mouse.move(o.x, o.y, { steps: 2 }); await new Promise((r) => setTimeout(r, 1700)); const ro = await reach();
+    await page.mouse.move(1, 1); /* leave and re-enter the menu to re-open it */
+    if (!burger) { const t = await rect('.header [data-lang-switch]'); await page.mouse.move(t.x, t.y, { steps: 3 }); await new Promise((r) => setTimeout(r, 700)); await page.mouse.move(o.x, o.y, { steps: 2 }); await new Promise((r) => setTimeout(r, 900)); }
+    else { await new Promise((r) => setTimeout(r, 900)); await page.mouse.move(o.x, o.y, { steps: 2 }); await new Promise((r) => setTimeout(r, 900)); }
+    await sample(rest); await page.mouse.move(a.x, a.y, { steps: 2 }); await new Promise((r) => setTimeout(r, 1700)); const ra = await reach();
+    row.checks.returnDisc = ra.max >= 0.99 && ra.full !== null; row.checks.sameTime = ro.full !== null && ra.full !== null && Math.abs(ra.full - ro.full) <= Math.max(ro.full * 0.1, 40);
+    row.info = { open, otherMs: ro.full, activeMs: ra.full }; if (opt('verbose', false)) console.error('LANGSEQ ' + key.w + ' open=' + open + ' otherMs=' + ro.full + ' activeMs=' + ra.full);
+  } catch (e) { row.checks.error = false; row.note = String(e.message).slice(0, 80); }
+  row.status = Object.values(row.checks).every(Boolean) ? 'PASS' : 'FAIL'; return row;
+}
+
 /* collect clickable elements of a scope; returns descriptors (index into the matching list) */
 const COLLECT = (scope) => `(() => { const F = (${fnSrc})(); const root = ${scope ? `document.querySelector(${JSON.stringify(scope)})` : 'document'}; if (!root) return [];
   const els = [...root.querySelectorAll('a,button,[role=button],[role=option],[role=tab],summary,input[type=submit]')];
@@ -61,11 +89,12 @@ const MEASURE = (scope, i) => `(() => { const F = (${fnSrc})(); const root = ${s
   const els = [...root.querySelectorAll('a,button,[role=button],[role=option],[role=tab],summary,input[type=submit]')]; const el = els[${i}];
   el.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' });
   const cand = [el, ...el.querySelectorAll('.round-btn,.icon-ring--action,[class*="btn"]')];
-  const sc = (n) => { const s = getComputedStyle(n, '::before'); if (s.content === 'none' || s.content === 'normal' || s.display === 'none') return null; const v = s.scale === 'none' ? 1 : parseFloat(s.scale); const m = /matrix\\(([^,]+)/.exec(s.transform); return { scale: v, tf: m ? parseFloat(m[1]) : 1, bg: F.toRGB(s.backgroundColor) }; };
-  const r = (n) => { const b = n.getBoundingClientRect(); return { x: b.x, y: b.y, w: b.width, h: b.height }; };
+  const sc = (n) => { const s = getComputedStyle(n, '::before'); if (s.content === 'none' || s.content === 'normal' || s.display === 'none') return null; const v = s.scale === 'none' ? 1 : parseFloat(s.scale); const m = /matrix\\(([^,]+)/.exec(s.transform); return { scale: v, tf: m ? parseFloat(m[1]) : 1, bg: F.toRGB(s.backgroundColor), dur: F.timing(s, 'scale'), own: F.timing(getComputedStyle(n), 'color'), D: parseFloat(s.width) || 0, ease: s.transitionTimingFunction, rad: parseFloat(getComputedStyle(n).borderTopLeftRadius) || 0, bw: parseFloat(getComputedStyle(n).borderTopWidth) || 0 }; };
+  const r = (n) => { const cr = n.getClientRects(); const b = cr.length > 1 && getComputedStyle(n).display === 'inline' ? cr[0] : n.getBoundingClientRect(); /* wrapped inline link: hover its first line box, not the empty centre of the union box */ return { x: b.x, y: b.y, w: b.width, h: b.height }; };
   const s = getComputedStyle(el); const cs = getComputedStyle(el);
-  return { rect: r(el), color: F.toRGB(s.color), bg: F.toRGB(s.backgroundColor), td: s.textDecorationLine, op: +s.opacity,
-    cand: cand.map((n) => ({ idx: cand.indexOf(n), sc: sc(n), rect: r(n), bg: F.toRGB(getComputedStyle(n).backgroundColor), color: F.toRGB(getComputedStyle(n).color) })),
+  return { rect: r(el), color: F.toRGB(s.color), bc: F.toRGB(s.borderTopColor), bw: parseFloat(s.borderTopWidth), frame: el.matches('.btn--secondary,.btn--ghost,.nav-pill,.lang-switch,.header__burger,.filter-item,.catalog__filters-toggle,.lang-menu__option'), bg: F.toRGB(s.backgroundColor), td: s.textDecorationLine, op: +s.opacity,
+    cand: cand.map((n) => ({ idx: cand.indexOf(n), sel: n.matches('[aria-selected=true]'), sc: sc(n), rect: r(n), bg: F.toRGB(getComputedStyle(n).backgroundColor), color: F.toRGB(getComputedStyle(n).color) })),
+    tl: el.matches('.footer a, .breadcrumbs a, main :is(p, li, dd, td) > a:not([class])') && !el.matches('.btn, .footer__logo, .contact-line') ? (() => { const ps = getComputedStyle(el, '::before'); if (ps.content !== 'none' && ps.content !== 'normal') return { v: ps.scale === 'none' ? 1 : parseFloat(ps.scale), hole: F.toRGB(ps.backgroundColor), dur: F.timing(ps, 'scale') }; const bg = F.toRGB(s.backgroundColor); return { v: bg[3], hole: bg, dur: F.timing(s, 'background-color') }; })() : null, /* TEXT-LINK fill (text-link.css): ::before plate scale 0>1, or (prose) background-color */
     top: (() => { const b = el.getBoundingClientRect(); const t = document.elementFromPoint(b.x + b.width / 2, b.y + b.height / 2); return !!t && (el.contains(t) || t.contains(el)); })() }; })()`;
 
 /* wait until every short CSS transition (< 2 s) has finished (robust under CPU load, unlike a fixed sleep); min 150 ms so a transition has started */
@@ -98,18 +127,45 @@ async function testElement(page, d, scope, key) {
   const target = disc || m1.cand[0]; // sampling rect/bg
   const dim = (a, b) => Math.abs(a.w - b.w) + Math.abs(a.h - b.h);
   res.checks.disc = !!disc;
+  /* speed gate (customer 2026-11-13): every instance runs the ONE token --dur-hover-disc (+-1 ms) with delay 0, on the disc (::before scale) and on the owner's colour */
+  if (disc) { const tok = await page.evaluate(`(${fnSrc})().token()`); const ct = await page.evaluate(`(${fnSrc})().tokens()`); const dd = disc.sc.dur, oc = disc.sc.own; const colChanges = dE(m0.cand[dk].color.slice(0, 3), m1.cand[dk].color.slice(0, 3)) > 1; /* the owner's colour is checked only where it really changes on hover (e.g. contact-line / header ring keep their colour) */
+    res.checks.discDuration = (!!dd && Math.abs(dd.dur - tok) <= 1 && dd.delay === 0 && (!colChanges || (!!oc && Math.abs(oc.dur - ct.cdur) <= 1 && ct.cdelays.some((d) => Math.abs(oc.delay - d) <= 1)))); res.info.disc = { token: tok, before: dd, color: oc, colorToken: [ct.cdur, ...ct.cdelays] };
+    /* COVERAGE (customer 2026-11-13, rule B2b): time from hover start until the disc completely covers the button (disc radius >= farthest point of the padding box, rounded corners included), from the real geometry + the disc's own easing. Must be the same for EVERY form (+-10% of the median of the whole run, checked after the crawl). */
+    const R0 = disc.sc.D / 2, cw = Math.max(1, disc.rect.w - 2 * disc.sc.bw), ch = Math.max(1, disc.rect.h - 2 * disc.sc.bw), rr = Math.min(disc.sc.rad, cw / 2, ch / 2); const Rn = rr >= Math.min(cw, ch) / 2 - 0.5 ? Math.max(cw, ch) / 2 : Math.hypot(cw / 2 - rr, ch / 2 - rr) + rr;
+    const bz = /cubic-bezier\(([^)]+)\)/.exec(disc.sc.ease); const [x1, y1, x2, y2] = bz ? bz[1].split(',').map(Number) : [0, 0, 1, 1]; const Bx = (u) => 3 * x1 * (1 - u) ** 2 * u + 3 * x2 * (1 - u) * u * u + u ** 3, By = (u) => 3 * y1 * (1 - u) ** 2 * u + 3 * y2 * (1 - u) * u * u + u ** 3;
+    const frac = R0 > 0 ? Rn / R0 : Infinity; let covT = null; if (frac <= 1) { let lo = 0, hi = 1; for (let it = 0; it < 40; it++) { const m = (lo + hi) / 2; By(m) < frac ? lo = m : hi = m; } covT = Math.round(Bx((lo + hi) / 2) * tok); }
+    res.info.coverMs = covT; res.info.geo = [Math.round(R0), Math.round(Rn), Math.round(cw), Math.round(ch), +frac.toFixed(2)]; const hAssumed = await page.evaluate((i, scope) => { const root = scope ? document.querySelector(scope) : document; const el = [...root.querySelectorAll('a,button,[role=button],[role=option],[role=tab],summary,input[type=submit]')][i]; const v = parseFloat(getComputedStyle(el).getPropertyValue('--_h')); return v || 0; }, d.i, scope); const multiLine = hAssumed > 0 && disc.rect.h > hAssumed * 1.25; /* a label that wraps to several lines is taller than the control height --_h the disc geometry is built on: reported, not compared */
+    if (multiLine) res.info.coverSkipped = 'multi-line label (h ' + Math.round(disc.rect.h) + ' > 1.25 x --_h ' + hAssumed + ')';
+    if (!(m1.tl || m0.tl || multiLine)) { /* text links have their own radial-gradient fill (rule B6) (the active language option is covered by the same disc check, customer 2026-11-14) */ res.checks.covered = covT !== null; res.coverMs = covT; } }
   const surf = disc ? (disc.sc.bg) : px1;
   const blend = (c, bg) => { const a = c[3] === undefined ? 1 : c[3]; return [0, 1, 2].map((i) => c[i] * a + bg[i] * (1 - a)); }; // semi-transparent labels are composited over the pixel behind them
   const colorDE = dE(blend(m0.cand[dk].color, px0), blend(m1.cand[dk].color, px1)); // label colour of the element that owns the disc (the link itself or its ring/round button)
   const labelC = contrast(blend(m1.cand[dk].color, px1), disc ? disc.sc.bg.slice(0, 3) : px1);
   const pxDE = dE(px0, px1);
-  res.info = { colorDE: +colorDE.toFixed(1), pxDE: +pxDE.toFixed(1), labelContrast: +labelC.toFixed(1), tdChange: m0.td !== m1.td };
+  res.info = { ...res.info, colorDE: +colorDE.toFixed(1), pxDE: +pxDE.toFixed(1), labelContrast: +labelC.toFixed(1), tdChange: m0.td !== m1.td };
+  const light = /(^|\.)contact-line(\.|$)/.test(d.sig);
   if (d.kind === 'button') {
-    res.checks.visible = Math.max(colorDE, pxDE) >= 10 || (disc && dE(px0, disc.sc.bg.slice(0, 3)) >= 10);
+    // .contact-line (customer 2026-11-13): the fill is by design only a step LIGHTER than its surface (--surface-white on page/raised/sunken), so the threshold is dE >= 1 (still must be lighter), not 10
+    const minDE = light ? 1 : 10;
+    res.checks.visible = Math.max(colorDE, pxDE) >= minDE || (disc && dE(px0, disc.sc.bg.slice(0, 3)) >= minDE);
+    if (light) res.checks.lighter = !!disc && lum(disc.sc.bg.slice(0, 3)) > lum(px0) && m1.td === 'none' && m0.td === 'none';
     res.checks.label = labelC >= 3 || (!disc && Math.max(colorDE, pxDE) >= 10);
     res.checks.size = dim(m0.rect, m1.rect) <= 0.5;
+    /* FRAME (customer 2026-11-13 "Рамка на всіх"): header/pill-role controls get a 1px opaque frame on hover; it must visibly differ from rest (transparent at rest) or already be opaque at rest */
+    if (m1.frame) res.checks.frame = m1.bw >= 1 && m1.bc[3] > 0.9 && (m0.bc[3] > 0.9 || dE(blend(m0.bc, px0), blend(m1.bc, px1)) >= 10);
+  } else if (m1.tl || m0.tl) { // TEXT-LINK (text-link.css, customer 2026-11-13 \"нехай буде заливка фону кнопки\"): fill LIGHTER than the surface grows from the centre in --dur-hover-disc, no colour / text-decoration change, text does not move
+    const tok = await page.evaluate(`(${fnSrc})().token()`); const t0 = m0.tl, t1 = m1.tl; const dd = t1 && t1.dur;
+    res.info.disc = { token: tok, before: dd, fill: t1 && t1.hole };
+    res.checks.disc = !!t0 && !!t1 && t0.v < 0.05 && t1.v > 0.95;
+    res.checks.discDuration = !!dd && Math.abs(dd.dur - tok) <= 1 && dd.delay === 0;
+    res.checks.lighter = !!t1 && lum(t1.hole.slice(0, 3)) > lum(px0);
+    res.checks.visible = !!t1 && pxDE >= 1;
+    res.checks.noDecoChange = m0.td === m1.td; res.checks.colorSame = colorDE < 1;
+    res.checks.label = !!t1 && contrast(blend(m1.color, t1.hole), t1.hole.slice(0, 3)) >= 4.5;
+    res.checks.size = dim(m0.rect, m1.rect) <= 0.5;
   } else { // text link: visible hover needed, no disc required
-    res.checks.disc = true; res.checks.visible = Math.max(colorDE, pxDE) >= 10 || m0.td !== m1.td || Math.abs(m0.op - m1.op) > 0.2; res.checks.size = dim(m0.rect, m1.rect) <= 0.5;
+    res.checks.disc = !light || !!disc; res.checks.visible = Math.max(colorDE, pxDE) >= (light ? 1 : 10) || m0.td !== m1.td || Math.abs(m0.op - m1.op) > 0.2; res.checks.size = dim(m0.rect, m1.rect) <= 0.5;
+    if (light) res.checks.lighter = !!disc && lum(disc.sc.bg.slice(0, 3)) > lum(px0) && m1.td === 'none' && m0.td === 'none';
   }
   res.status = Object.values(res.checks).every(Boolean) ? 'PASS' : 'FAIL';
   if (res.status === 'FAIL') { const a = await allowFor(page, d, d.i, scope, key); if (a) { const rest = Object.entries(res.checks).filter(([k, v]) => !v && !(a.skip || []).includes(k)); if (!rest.length) { res.status = 'ALLOW'; res.allow = a.reason + ' [skipped: ' + (a.skip || []).join(',') + ']'; } } }
@@ -117,7 +173,7 @@ async function testElement(page, d, scope, key) {
 }
 
 /* Cards with one action button: hovering the card BODY (not the button) must put the button into the disc hover state. Keep in sync with the :is() list in buttons.css. */
-const CARDS = ['.text-card', '.help-card', '.catalog__empty', '.cta-block'];
+const CARDS = ['.text-card', '.catalog__empty', '.product-card', '.link-card'];
 async function testCards(page, key) {
   const out = [];
   const n = await page.evaluate((sel) => document.querySelectorAll(sel).length, CARDS.join(','));
@@ -129,10 +185,11 @@ async function testCards(page, key) {
     await page.mouse.move(1, 1); await new Promise((r) => setTimeout(r, 150));
     const before = await page.evaluate((sel, i) => { const b = document.querySelectorAll(sel)[i].querySelector('.btn,.round-btn'); const s = getComputedStyle(b, '::before'); return s.scale === 'none' ? 1 : parseFloat(s.scale); }, CARDS.join(','), i);
     await page.mouse.move(info.x, info.y); await settle(page);
-    const after = await page.evaluate((sel, i, x, y) => { const c = document.querySelectorAll(sel)[i]; const b = c.querySelector('.btn,.round-btn'); const t = document.elementFromPoint(x, y); const s = getComputedStyle(b, '::before'); return { scale: s.scale === 'none' ? 1 : parseFloat(s.scale), onBtn: b.contains(t), cursor: t ? getComputedStyle(c).cursor : '' }; }, CARDS.join(','), i, info.x, info.y);
+    const after = await page.evaluate((fnSrc, sel, i, x, y) => { const F = eval('(' + fnSrc + ')')(); const c = document.querySelectorAll(sel)[i]; const b = c.querySelector('.btn,.round-btn'); const t = document.elementFromPoint(x, y); const s = getComputedStyle(b, '::before'); return { scale: s.scale === 'none' ? 1 : parseFloat(s.scale), onBtn: b.contains(t), cursor: t ? getComputedStyle(c).cursor : '', dur: F.timing(s, 'scale'), own: F.timing(getComputedStyle(b), 'color'), tok: F.token() }; }, fnSrc, CARDS.join(','), i, info.x, info.y);
     await page.mouse.move(1, 1);
-    const pass = before < 0.05 && after.scale > 0.95 && !after.onBtn;
-    out.push({ page: key.page, w: key.w, scene: 'card-hover', el: info.sig + ' > button (hover on card body)', kind: 'card-btn', status: pass ? 'PASS' : 'FAIL', checks: { cardHoverDisc: pass }, info: { before, after: after.scale, pointOnButton: after.onBtn } });
+    const ctk = await page.evaluate(`(${fnSrc})().tokens()`); const colorMoves = !!after.own; const speedOK = !!after.dur && Math.abs(after.dur.dur - after.tok) <= 1 && after.dur.delay === 0 && !!after.own && Math.abs(after.own.dur - ctk.cdur) <= 1 && ctk.cdelays.some((d) => Math.abs(after.own.delay - d) <= 1); /* ONE speed: --dur-hover-disc, delay 0 */
+    const pass = before < 0.05 && after.scale > 0.95 && !after.onBtn && speedOK;
+    out.push({ page: key.page, w: key.w, scene: 'card-hover', el: info.sig + ' > button (hover on card body)', kind: 'card-btn', status: pass ? 'PASS' : 'FAIL', checks: { cardHoverDisc: before < 0.05 && after.scale > 0.95 && !after.onBtn, discDuration: speedOK }, info: { before, after: after.scale, pointOnButton: after.onBtn, disc: { token: after.tok, before: after.dur, color: after.own } } });
   }
   return out;
 }
@@ -163,6 +220,7 @@ async function testCards(page, key) {
         const row = { page: job.name, w: job.w, scene: sc.id, el: d.sig, text: d.text, kind: d.kind, ...r }; rows.push(row); if (opt('progress', false)) console.error(`[${rows.length}] ${row.status} ${job.name}@${job.w} ${row.el} ${row.note || ""}`);
         if (opt('verbose', false)) console.log(row.status, job.name, job.w, row.el, JSON.stringify(row.info || row.note || ''));
       }
+      if (sc.pre) rows.push(await testLangSequence(page, { page: job.name, w: job.w }, sc.id === 'burger-menu'));
       inv.push(...list.map((d) => ({ page: job.name, w: job.w, scene: sc.id, el: d.sig, kind: d.kind, text: d.text })));
       if (sc.pre) { await page.reload({ waitUntil: 'networkidle0' }); }
     }
@@ -185,6 +243,9 @@ async function testCards(page, key) {
   });
   await Promise.all(workers);
   if (srv) srv.stop();
+  // ---- coverage gate (rule B2b): every form of button reaches full coverage at the same time (+-10% of the run median per width)
+  { const byW = {}; for (const r of rows) if (r.coverMs) (byW[r.w] = byW[r.w] || []).push(r); for (const w of Object.keys(byW)) { const a = byW[w].map((r) => r.coverMs).sort((x, y) => x - y); const med = a[Math.floor(a.length / 2)];
+      for (const r of byW[w]) { r.info.coverMedian = med; r.checks.coverage = Math.abs(r.coverMs - med) <= med * 0.1; if (!r.checks.coverage && r.status !== 'FAIL') r.status = 'FAIL'; } console.log(`coverage @${w}: median ${med} ms, min ${a[0]}, max ${a[a.length - 1]} (${a.length} discs)`); } }
   // ---- report
   const pad = (s, n) => String(s).slice(0, n).padEnd(n);
   rows.sort((a, b) => (a.status === b.status ? 0 : a.status === 'FAIL' ? -1 : 1));

@@ -39,9 +39,6 @@
 .ds-sw--raw-mist-50 { background: var(--c-mist-50); }
 .ds-sw--raw-mist-25 { background: var(--c-mist-25); }
 .ds-sw--raw-teal-600 { background: var(--c-teal-600); }
-.ds-sw--raw-grey-500 { background: var(--c-grey-500); }
-.ds-sw--raw-grey-600 { background: var(--c-grey-600); }
-.ds-sw--raw-ink-900 { background: var(--c-ink-900); }
 .ds-sw--raw-white { background: var(--c-white); }
 .ds-sw--raw-red-700 { background: var(--c-red-700); }
 .ds-sw--sem-surface { background: var(--surface); }
@@ -57,7 +54,6 @@
 .ds-sw--sem-accent-active { background: var(--accent-active); }
 .ds-sw--sem-icon-teal { background: var(--icon-teal); }
 .ds-sw--sem-text { background: var(--text); }
-.ds-sw--sem-text-muted { background: var(--text-muted); }
 .ds-sw--sem-text-accent { background: var(--text-accent); }
 .ds-sw--sem-text-accent-soft { background: var(--text-accent-soft); }
 .ds-sw--sem-text-accent-subtle { background: var(--text-accent-subtle); }
