@@ -7,7 +7,7 @@
 .home-closing__body { text-align: left; max-width: calc(8 * var(--_col) + 7 * var(--grid-gap)); margin-inline: calc((100% - var(--_c)) / 2) auto; position: relative; } /* LEFT block: cols 1-8 of the page grid (--_c = container content box), left edge on the content ruler (x = --gutter on <= 1744, centred container above) */
 .home-closing__body h2, .home-closing__body p { margin: 0; }
 .home-closing__body h2, .home-closing__body p { color: var(--text-on-accent); }
-.home-closing__actions { display: flex; flex-wrap: wrap; justify-content: flex-start; column-gap: var(--space-4); row-gap: var(--space-3); }
+.home-closing__actions { display: flex; flex-wrap: wrap; justify-content: flex-start; column-gap: var(--space-2); row-gap: var(--space-2); }
 /* Scene (closing-lines.js, three.js converge lines + particles, VERTICAL funnel): transparent canvas on the blue band, strokes and dots --accent-contrast; RIGHT block, cols 7-12 of the grid, right edge = the band edge,
    full band height (800: lines run past the top / bottom edge and are clipped by overflow); the core sits at the middle of the band height.
    No WebGL -> the script hides it ([hidden]) and the band ends after the buttons */
@@ -29,7 +29,7 @@
   .home-closing__body { max-width: none; margin-inline: var(--gutter); }
   .home-closing__scene { position: relative; left: auto; right: auto; top: auto; bottom: auto; height: calc(4 * var(--space-8)); margin-top: var(--space-4); } /* full-width strip 256, funnel lies HORIZONTALLY (closing-lines.js, matchMedia <= 767) */
   /* two buttons in ONE row, equal width, one text line; the row wraps to a column only when two labels physically cannot fit side by side (min-width: auto) */
-  .home-closing__actions { flex-direction: row; flex-wrap: wrap; align-items: stretch; column-gap: var(--space-3); width: 100%; }
+  .home-closing__actions { flex-direction: row; flex-wrap: wrap; align-items: stretch; column-gap: var(--space-2); width: 100%; }
   .home-closing__actions .btn { flex: 1 1 0; width: auto; min-width: auto; height: var(--control-md); --_px: var(--space-4); --_fs: var(--type-label-size); --_lh: var(--type-label-lh); justify-content: center; }
   .home-closing__panel:has(.home-closing__scene[hidden]) { padding-bottom: var(--section-lg); }
 }

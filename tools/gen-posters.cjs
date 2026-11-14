@@ -8,7 +8,7 @@
  *   about     square, half-extent 1.2 world units around the globe centre (= 1.0625 * smaller side of the zone); ink = --accent on transparent => over the light hero surface
  *   services  the drawing's half-extent box (+2 %), ratio hx/hy printed below; ink = --accent on transparent. (ISO labels and the px-chosen markers are NOT in the poster: they fade in with the live scene.)
  * Usage: `node tools/gen-posters.cjs [--url http://localhost:5173] [--only home,about,services] [--widths 375,1440] [--dprs 1,2]` (without --widths/--dprs: every bucket; --only/--widths/--dprs rewrite the <picture> from ALL files present on disk). The dev server must be running. After a scene change re-run it; the CSS constants it prints must equal the ones in components/hero.css
- * (the script checks them and exits 1 on a mismatch). Output sizes are printed (budget <= 100 KB each: the ladder stops at the first file under it, so small posters stay far below).
+ * (the script checks them and exits 1 on a mismatch). Output sizes are printed (budget <= 160 KB each: the ladder stops at the first file under it, so small posters stay far below).
  */
 const fs = require('fs'), path = require('path'), os = require('os'), cp = require('child_process');
 const pngSize = (b) => ({ w: b.readUInt32BE(16), h: b.readUInt32BE(20) });
@@ -17,7 +17,7 @@ const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/M
 const arg = (k, d) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : d; };
 const URL = arg('--url', 'http://localhost:5173'), ONLY = arg('--only', 'home,about,services').split(',');
 const OUT = path.join(__dirname, '..', 'public', 'assets', 'img'), ROOT = path.join(__dirname, '..'), CSS = fs.readFileSync(path.join(ROOT, 'src', 'styles', 'components', 'hero.css'), 'utf8');
-const MAX_KB = 100, HOME_SPAN = 4.5, ABOUT_HALF = 1.2, SVC_MARGIN = 1.02, SVC_PAD = 0.07;
+const MAX_KB = 160, HOME_SPAN = 4.5, ABOUT_HALF = 1.2, SVC_MARGIN = 1.02, SVC_PAD = 0.07;
 /** viewport-width buckets: `w` = the width the poster is rendered at (bucket centre), [min, max] = the widths it is shown at; dprs = pixel-ratio classes (live scenes cap the canvas ratio at 2 on >= 1200 px and at 1.5 below, utils/dpr.js; below 1200 px the classes 2 and 3 are rendered at the real device ratio on purpose: the poster then contains the SAME browser up-scaling of the 1.5 canvas that the live canvas gets on such a screen) */
 const BUCKETS = [
   { w: 375, min: 0, max: 479, dprs: [1, 1.5, 2, 3] }, { w: 600, min: 480, max: 679, dprs: [1, 1.5, 2, 3] }, { w: 768, min: 680, max: 899, dprs: [1, 1.5, 2] }, { w: 1024, min: 900, max: 1199, dprs: [1, 1.5, 2] },
@@ -86,7 +86,7 @@ async function render(browser, name, w, dpr) {
   let res = null;
   try {
     fs.writeFileSync(tmpPng, png);
-    for (const [q, aq] of [[90, 100], [85, 100], [80, 100], [70, 100], [60, 100], [50, 100], [40, 100], [80, 80], [80, 60], [80, 50], [80, 40], [80, 30], [80, 20], [60, 20], [40, 20]]) {   // quality ladder: LOSSLESS alpha first (a lossy alpha moves the 1-device-pixel edge of the drawing = the geometry the swap gate measures), colour q90 down to q40; only then the alpha quality
+    for (const [q, aq] of [[90, 100], [85, 100], [80, 100], [70, 100], [60, 100], [50, 100], [40, 100], [30, 100], [20, 100]]) {   // quality ladder: LOSSLESS alpha first (a lossy alpha moves the 1-device-pixel edge of the drawing = the geometry the swap gate measures), colour q90 down to q40; only then the alpha quality
       cp.execFileSync('cwebp', ['-quiet', '-q', String(q), '-alpha_q', String(aq), '-m', '6', tmpPng, '-o', outFile]);
       const kb = fs.statSync(outFile).size / 1024; res = { kb, q: `cwebp q${q} alpha_q${aq}`, ...pngSize(png) };
       if (kb <= MAX_KB) break;

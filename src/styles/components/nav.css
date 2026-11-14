@@ -12,7 +12,7 @@
   padding-inline: var(--space-3); background: var(--surface-white);
   border-radius: var(--radius-lg);
 }
-.header__nav { display: flex; align-items: center; justify-content: flex-start; gap: var(--space-1); }
+.header__nav { display: flex; align-items: center; justify-content: flex-start; gap: var(--space-2); }
 .header__logo { display: block; }
 .header__logo img { height: var(--logo-header-h); width: auto; display: block; }
 .header__actions { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-1); }

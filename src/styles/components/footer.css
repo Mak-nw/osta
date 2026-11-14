@@ -4,7 +4,7 @@
 .footer__group { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); min-width: 0; }
 .footer__group--end { align-items: flex-end; text-align: right; }
 .footer__label { display: block; font-size: var(--type-label-size); line-height: var(--type-label-lh); letter-spacing: var(--type-label-ls); color: var(--text); }
-.footer__group > .footer__label { margin-bottom: var(--space-3); }
+.footer__group > .footer__label { margin-bottom: var(--space-2); }
 .footer a:not(.btn):not(.footer__label):not(.footer__logo) { color: var(--text-accent); }
 /* text-link hover (disc fill): components/text-link.css */
 .footer__menu { padding-top: var(--space-8); align-items: start; }
@@ -13,7 +13,7 @@
 .footer__logo { display: block; }
 .footer__logo img { display: block; height: var(--logo-footer-h); width: auto; }
 /* Tops aligned (mail, phone, fax, CTA): the phone group is two rows tall on all widths, so centring would drop the mail row. */
-.footer__reach { align-items: start; row-gap: var(--space-3); }
+.footer__reach { align-items: start; row-gap: var(--space-4); }
 .footer__reach-label { grid-column: 1 / -1; }
 .footer__reach > .footer__group { grid-column: span 4; }
 .footer__reach > .footer__group--cta { align-items: stretch; }
@@ -21,6 +21,8 @@
 .footer__cta { height: auto; min-height: var(--control-md); white-space: normal; text-align: left; }
 .footer__cta > span { min-width: 0; }
 /* Contact rows in the footer use the shared .contact-line component (cards.css); .footer__contact stays as a marker class only. */
+/* phone -> fax: contact-line -> contact-line = 16 visible (as .contact-lines on Contact); the 5/7 rhythm below (tablet/mobile) stays as it is */
+@media (min-width: 1200px) { .footer__group:has(> .contact-line + .contact-line) { gap: var(--space-4); } }
 /* Technical row exception: padding-top keeps the footer rhythm (--space-8); padding-bottom is halved on purpose (client request: technical links sit closer to the page edge). Desktop 64 -> 32. */
 .footer__bottom { align-items: baseline; padding-top: var(--space-8); padding-bottom: var(--space-6); font-size: var(--type-label-size); line-height: var(--type-label-lh); }
 .footer__bottom > * { grid-column: span 4; white-space: nowrap; }
@@ -36,7 +38,7 @@
   .footer__menu > .footer__group:nth-child(3) { grid-column: 6 / span 3; }
   .footer__mark { padding-block: var(--space-7); }
   .footer__reach > .footer__group { grid-column: span 4; }
-  .footer__reach > .footer__group--cta { grid-column: 1 / -1; margin-top: var(--space-4); }
+  .footer__reach > .footer__group--cta { grid-column: 1 / -1; margin-top: calc(var(--space-5) - var(--footer-gap-items)); } /* row-gap 5 above + margin = 24 total (same as mobile) */
   /* Exception (see above): tablet/mobile padding-top stays --space-6; padding-bottom --space-6 -> --space-5 (24, the minimum floor). */
   .footer__bottom { display: flex; flex-direction: column; align-items: center; padding-top: var(--space-6); padding-bottom: var(--space-5); }
   /* Responsive footer rhythm (customer rule): between link items --footer-gap-items (5), group label -> first item --footer-gap-label (7); same for menu, contacts and the technical links.

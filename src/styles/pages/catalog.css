@@ -14,6 +14,7 @@
    The category list opens with the "Filters" toggle (aria-expanded).
    ========================================================================== */
 .catalog__filters { display: contents; }
+.layout-catalog__sidebar > .stack > h1 { margin-bottom: var(--space-2); } /* h1 -> search = 24 (16 stack gap + 8): same as the 404 hero (heading group, --section-head-gap) */
 .catalog__filters-toggle { display: none; }
 @media (max-width: 1199px) {
   .layout-catalog { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-5); }

@@ -16,7 +16,7 @@
 .process-scroll__grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); align-items: center; height: 100%; }
 .process-scroll__frame { grid-column: 1 / -1; grid-row: 1; display: grid; grid-template-columns: subgrid; }
 .process-scroll__head { grid-column: 1 / span 4; hyphens: manual; grid-row: 1; align-self: start; margin-top: calc(-1 * (var(--type-label-lh) + var(--section-head-gap))); } /* .section-head; tag above, the h2 top = the line top */
-.process-steps { grid-column: 10 / span 3; grid-row: 1; position: relative; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: calc(var(--space-8) + var(--space-4)); }
+.process-steps { grid-column: 10 / span 3; grid-row: 1; position: relative; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-8); }
 .process-steps::before { content: ""; position: absolute; left: calc(var(--chip-lg) / 2); top: calc(var(--chip-lg) / 2); bottom: calc(var(--chip-lg) / 2); border-left: 1px solid var(--divider-on-accent); pointer-events: none; } /* the vertical stage line, through the circle centres */
 .process-steps__item { position: relative; }
 .process-steps__row { display: inline-flex; align-items: center; gap: var(--space-4); color: var(--text-on-accent-muted); transition: color var(--dur-base) var(--ease-out); } /* progress indicator, NOT a link: no hover / focus / pointer */
