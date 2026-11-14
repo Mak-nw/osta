@@ -4,7 +4,7 @@
      1. BBOX    the bounding box of the drawn content (alpha >= ALPHA) of the poster vs of the live canvas frame 0 (both rendered alone, transparent, reduced motion = the live scene shows exactly frame 0):
                 each of the four edges (left, top, right, bottom) differs <= TOL_PX (0.5 css px; = 1 device px at ratio 2, so width/height, which are two edges, may differ by up to 1 css px at ratio 2).
      2. SIZE    the poster bitmap is shown 1:1: naturalWidth/Height = the device size of the <img> layout box (+-1 device px), otherwise the browser resamples it and it differs from the canvas. (The <img> box itself is the scene's WORLD box and may be larger or smaller than the canvas box: only what is DRAWN has to coincide, rule 1.)
-     3. PIXELS  D = mean abs. RGB difference (0..255) of the poster alone vs the canvas frame 0 alone, both over mid-grey, over the canvas rectangle; D <= D_MAX. (D_MAX is measured, not guessed: the poster is a lossy webp, so even a perfect copy has D = the webp quantisation noise; D_MAX = 2 x the worst D of the correct posters, see README.)
+     3. PIXELS  D = mean abs. RGB difference (0..255) of the poster alone vs the canvas frame 0 alone, both over mid-grey, over the canvas rectangle; D <= D_MAX = 2.0. Measured: correct posters give 0.00-0.64 at ratio 1 and 0.00-1.7 at ratio 2 / phones (lossy webp colour + lossy alpha forced by the 100 KB budget, browser up-scaling of the 1.5-capped canvas below 1200 px); a poster scaled +3 % gives D = see README (> 2 on every page).
      4. INSTANT  no opacity / filter transition and no mix-blend-mode on the poster or the canvas, and the real revealLive() shows the canvas (computed opacity 1) and hides the poster in the SAME task.
    Text of a failure is plain Ukrainian ("статика більша за динаміку на N px").
    Matrix (default): pages home, about, services x widths 1920,1728,1440,1280,1024,768,600,375 x ratios 1,2 (= the centres of the poster buckets of tools/gen-posters.cjs; other widths: --widths 1512,1680 show the in-between bucket behaviour).
@@ -23,7 +23,7 @@ const WIDTHS = String(opt('widths', '1920,1728,1440,1280,1024,768,600,375')).spl
 const DPRS = String(opt('dprs', '1,2')).split(',').map(Number);
 const SCENES = { home: { page: 'index.html', host: '.hero--home [data-hero-scene]' }, about: { page: 'about.html', host: '[data-hero-media]' }, services: { page: 'services.html', host: '[data-hero-scene]' } };
 const vpHeight = (w) => (w >= 1200 ? 900 : w >= 768 ? 1024 : 812);   // same as tools/gen-posters.cjs
-const TOL_PX = 0.5, ALPHA = Number(process.env.POSTER_ALPHA || 24), D_MAX = Number(process.env.POSTER_D_MAX || 1.0);
+const TOL_PX = 0.5, ALPHA = Number(process.env.POSTER_ALPHA || 24), D_MAX = Number(process.env.POSTER_D_MAX || 2.0);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const others = (() => { try { return cp.execSync("pgrep -f '^node .*(hover-gate|style-gate)[.]cjs' || true", { encoding: 'utf8' }).split('\n').filter(Boolean).join(','); } catch (e) { return ''; } })();
