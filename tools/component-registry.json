@@ -135,7 +135,7 @@
     },
     "text-card": {
       "kind": "card",
-      "description": "Text card (eyebrow + h2 + p + one button). Surface by modifier: on-accent (blue) / on-light; compact (Catalog help + empty, no h2). Internal gaps = --text-card-gap 30.",
+      "description": "Text card (h2 + p + one button). Surface by modifier: on-accent (blue) / on-light; compact (Catalog help + empty, no h2). Internal gaps = --text-card-gap 30.",
       "file": "src/styles/components/cards.css",
       "classes": {
         "text-card": {
@@ -240,16 +240,13 @@
     },
     "heading-group": {
       "kind": "chrome",
-      "description": "Eyebrow > h2 > description > CTA = ONE wrapper .section-head (gap 24 between every pair). Local '*__head' wrappers are allowed ONLY together with .section-head (mustAlsoMatch).",
+      "description": "h2 > description > CTA = ONE wrapper .section-head (gap 24 between every pair). Local '*__head' wrappers are allowed ONLY together with .section-head (mustAlsoMatch).",
       "file": "src/styles/components/editorial.css",
       "classes": {
         "section-head": {
           "modifiers": [
             "section-head--center"
           ]
-        },
-        "section-label": {
-          "modifiers": []
         }
       },
       "tokens": {

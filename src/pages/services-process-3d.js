@@ -25,6 +25,7 @@ const BLK = { z0: 0.5, z1: 2.1, h: 3.1 };
 const DOCKS = [-3.7, -2.6, -1.5, -0.4];
 const ROAD_Z = DOCKS[2], SHELTER = 0.45, ROAD_END = 6;
 const SHIFT = { x: -1.5, z: 0 };
+const VIS_DX = 29.4;                            // screen-x shift in fit units (px / u): centres the SOLID ink (building + truck + floor line) on the box axis = page axis x = W/2 at every width (customer 2026-11-14)
 const FOOT = { x0: HALL.x0, x1: HALL.x1 + 0.02 + SHELTER, z0: HALL.z0, z1: OFF.z1 };
 const smooth = (t) => t * t * (3 - 2 * t);
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
@@ -48,7 +49,7 @@ const procCamera = ({ spanW = 455, spanH = 257 } = {}) => ({
   fit: (c, it) => {
     const u = Math.min(it.W / it.d / spanW, it.H / it.d / spanH);
     const hw = it.W / it.d / (2 * u), hh = it.H / it.d / (2 * u);
-    c.left = -hw; c.right = hw; c.top = hh; c.bottom = -hh; c.updateProjectionMatrix();
+    c.left = -hw - VIS_DX; c.right = hw - VIS_DX; c.top = hh; c.bottom = -hh; c.updateProjectionMatrix();
   },
 });
 

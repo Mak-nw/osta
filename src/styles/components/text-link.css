@@ -1,32 +1,34 @@
 /* ==========================================================================
-   TEXT-LINK: the ONE component for every plain text link (customer 2026-11-13: "нехай буде заливка фону кнопки"; rule B6, checked by `npm run audit:hover`).
-   Instances (one selector list, no per-page overrides): footer links incl. group titles (.footer a, except .btn / logo / .contact-line), breadcrumbs,
-   inline links in prose (a:not([class]) in p/li/dd/td: FAQ, legal, Impressum). Not text links: .contact-line (own row with ring, same disc, cards.css), logo links (own block at the end of this file), .btn / .nav-pill / cards.
-   Hover = the button mechanic: a fill LIGHTER than the surface (--surface-white; every host surface is page/raised/sunken, all darker) grows from the CENTRE as a disc (--dur-hover-disc, --ease-hover),
-   hover:hover only, same end state for :focus-visible / :active / .is-hover; reduced motion = instant. Text colour and text-decoration never change on hover (rule B1: only prose links are underlined, and they stay underlined at rest).
-   Implementation: a ::before plate (rounded --radius-md, scale 0 > 1 from the centre) for links that stay on one line (footer, breadcrumbs, contact); inline PROSE links wrap, so a scaled plate cannot follow their lines: they get the same fill as a background-color on the link itself (box-decoration-break: clone paints it per line) with the same token duration/easing (customer: "по рядках").
-   Horizontal padding is reserved at rest and cancelled by the negative margin, so text never moves and the box never changes size.
+   TEXT-LINK: the ONE component for every plain text link (rule U14, customer 2026-11-14: text-only links: no plate; on hover the text turns lighter and a DOT appears to the left; checked by `npm run audit:hover`).
+   Instances (one selector list, no per-page overrides): footer links incl. group titles (.footer a, except .btn / logo / .contact-line), breadcrumbs, inline links in prose (a:not([class]) in p/li/dd/td: FAQ, legal, Impressum).
+   NOT text links (own hover, unchanged): the whole header (nav pills, language switch, logo U11/U12), .btn, chips, .contact-line, cards, round buttons.
+   Hover = text colour rest > --text-hover-lighter (palette --c-blue-500, lighter than --accent / --text-accent) + a --hover-dot-size circle in the same colour left of the text (::before, scale 0 > 1 from its centre), both in --dur-hover-color / --ease-hover
+   (the single hover tempo), reduced motion = instant. No plate, fill, outline, border, shadow or size change; text-decoration never changes (rule B1: prose links stay underlined at rest); :focus-visible keeps the global ring (base.css).
+   Layout: one-line links reserve the dot gutter as left padding (--hover-dot-size + --space-2) cancelled by the same negative margin, so the text never moves and the box never changes size; the dot sits in that gutter.
+   Inline PROSE links wrap, so no padding: the dot is an inline box (net-zero advance, margin-left = -dot) at the start of the link's first line, centred on the text height (vertical-align: middle). Hover only under (hover: hover) plus the forced state .is-hover.
    ========================================================================== */
 :is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a, :where(main) :is(p, li, dd, td) > a:not([class])) {
-  --_hole: var(--surface-white); --_tl-px: var(--space-2);
-  width: fit-content; padding-inline: var(--_tl-px); margin-inline: calc(-1 * var(--_tl-px)); border-radius: var(--radius-md);
-  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  --_gut: calc(var(--hover-dot-size) + var(--space-2));
+  position: relative; width: fit-content; transition: color var(--dur-hover-color) var(--ease-hover);
 }
-/* one-line links: the plate */
-:is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a) { position: relative; isolation: isolate; }
-:is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a)::before {
-  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: var(--radius-md); background: var(--_hole); scale: 0; transition: scale var(--dur-hover-disc) var(--ease-hover);
+:is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a) { padding-left: var(--_gut); margin-left: calc(-1 * var(--_gut)); }
+/* prose links wrap: they stay underlined at rest (rule B1, 1px) */
+:where(main) :is(p, li, dd, td) > a:not([class]) { width: auto; color: var(--accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .25em; }
+:is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a, :where(main) :is(p, li, dd, td) > a:not([class]))::before {
+  content: ""; width: var(--hover-dot-size); aspect-ratio: 1; border-radius: var(--radius-full); background: var(--text-hover-lighter); pointer-events: none; scale: 0; transition: scale var(--dur-hover-color) var(--ease-hover);
 }
-:is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a):is(.is-hover, .is-focus, :focus-visible, :active)::before { scale: 1; }
-/* prose links wrap: no horizontal padding (clone would indent every wrapped line); the fill hugs the text, the 1px underline of rest stays (rule B1) */
-:where(main) :is(p, li, dd, td) > a:not([class]) { --_tl-px: 0px; width: auto; color: var(--accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .25em; background-color: transparent; transition: background-color var(--dur-hover-disc) var(--ease-hover); }
-:where(main) :is(p, li, dd, td) > a:not([class]):is(.is-hover, .is-focus, :focus-visible, :active) { background-color: var(--_hole); }
+/* one-line links: the dot sits in the reserved left gutter, centred on the line box */
+:is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a)::before { position: absolute; top: 50%; left: 0; translate: 0 -50%; }
+/* wrapped inline link: the dot is an inline box at the link's first line start with net-zero advance (hangs left of the text, never shifts it); vertical-align: middle = the x-height midline of the text (optical centre of lowercase) */
+:where(main) :is(p, li, dd, td) > a:not([class])::before { display: inline-block; vertical-align: middle; margin-left: calc(-1 * var(--hover-dot-size)); }
+:is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a, :where(main) :is(p, li, dd, td) > a:not([class])).is-hover { color: var(--text-hover-lighter); }
+:is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a, :where(main) :is(p, li, dd, td) > a:not([class])).is-hover::before { scale: 1; }
 @media (hover: hover) {
-  :is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a):hover::before { scale: 1; }
-  :where(main) :is(p, li, dd, td) > a:not([class]):hover { background-color: var(--_hole); }
+  :is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a, :where(main) :is(p, li, dd, td) > a:not([class])):hover { color: var(--text-hover-lighter); }
+  :is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a, :where(main) :is(p, li, dd, td) > a:not([class])):hover::before { scale: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
-  :is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a)::before, :where(main) :is(p, li, dd, td) > a:not([class]) { transition: none; }
+  :is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a, :where(main) :is(p, li, dd, td) > a:not([class])), :is(.footer a:not(.btn, .footer__logo, .contact-line), .breadcrumbs a, :where(main) :is(p, li, dd, td) > a:not([class]))::before { transition: none; }
 }
 
 /* Logo links (header, footer), rules U11 + U12 (customer 2026-11-14): hover recolours the logo ITSELF (--accent > --logo-hover, --dur-hover-color, --ease-hover); no plate, border, outline, shadow or pseudo-element.

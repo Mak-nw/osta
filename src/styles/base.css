@@ -41,7 +41,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
    dd that holds a contact-line control. Fallback: a browser without text-box keeps the legacy line-box measure (gaps = the same tokens, only the visible number differs). ---- */
 @supports (text-box: trim-both cap alphabetic) {
   :is(h1, h2, h3, h4, h5, h6, p, dt, dd:not(:has(.contact-line)), li, legend, figcaption, label.field__label,
-      .t-display, .t-h1, .t-h2, .t-h3, .t-lead, .t-body, .t-label, .section-label,
+      .t-display, .t-h1, .t-h2, .t-h3, .t-lead, .t-body, .t-label,
       .people-card__name, .people-card__role):not(a, button, .btn, .contact-line, [class*="word"]) { text-box: trim-both cap alphabetic; }
 }
 
@@ -67,7 +67,7 @@ main { flex: 1; }
 /* ---- Responsive typography (tablet <= 1199, mobile <= 767): hard <br> line breaks of desktop headings are dropped (i18n.js puts a space before every <br>, so words never glue together);
    long words break instead of overflowing; automatic hyphenation only for German (<html lang="de", set by i18n.js), manual (&shy;) elsewhere. ---- */
 @media (max-width: 1199px) {
-  :is(.t-display, .t-h1, .t-h2, .t-lead, .hero__sub, .section-label) br { display: none; }
+  :is(.t-display, .t-h1, .t-h2, .t-lead, .hero__sub) br { display: none; }
   h1, h2, h3, h4, p, dd, li, .t-display, .t-h1, .t-h2, .t-h3 { overflow-wrap: break-word; }
   :root { hyphens: manual; }
   :root:lang(de) { hyphens: auto; }

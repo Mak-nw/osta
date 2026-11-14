@@ -1,6 +1,6 @@
 /* Legal pages template (privacy / terms / data-processing): text container = the 6 central columns (4-9 of 12; L7), same span as the header/Contact 6-col block; hero and body share it. */
 .legal { padding-bottom: var(--section-md); }
-.legal__hero { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--section-head-gap); padding-block: var(--space-8) var(--section-sm); }
+.legal__hero { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--group-to-group-gap); padding-block: var(--space-8) var(--section-sm); }
 .legal__title, .legal__updated { grid-column: 4 / span 6; margin: 0; }
 .legal__updated { color: var(--text); }
 .legal__grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); align-items: start; }

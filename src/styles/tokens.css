@@ -38,7 +38,7 @@
   --surface-muted:    var(--c-mist-200);   /* people card, disabled fills */
   --surface-white:    var(--c-white);      /* nav-pills, raised-on-raised */
   --surface-accent:   var(--c-blue-700);
-  --surface-card-on-accent: color-mix(in srgb, var(--c-blue-700) 88%, var(--c-white)); /* cards on the BLUE section: LIGHTER than --surface-accent (U13: card edge must be visible, no outline; recommended variant of customer question eaf2a9; ONE line: raise the white share for a stronger edge, or set to --surface-accent + border for the 'thin border' variant) */
+  --surface-card-on-accent: color-mix(in srgb, var(--c-blue-700) 60%, var(--c-blue-800)); /* cards on the BLUE section: SLIGHTLY DARKER than --surface-accent (customer 2026-11-14: 'картка мала бути трохи темніше'), no outline; ONE line: lower the first % for a darker card */
   --hero-light-gradient: linear-gradient(to bottom, var(--surface-white) 0%, var(--surface) 100%);   /* LIGHT hero background (rule U1): top pure white, bottom = the page colour --surface (no seam with the next section); the ONLY light-hero gradient, used by .hero (About/Services), .legal__hero, .product-hero (hub, 404) */
   --surface-accent-deep: var(--c-blue-950);   /* ONLY the top stop of the Home hero vertical gradient (customer exception 2026-11-12); darker step of the same blue, not black */
   --surface-dark:     var(--c-blue-950);
@@ -52,7 +52,9 @@
   --accent:           var(--c-blue-700);
   --accent-hover:     var(--c-blue-800);
   --accent-active:    var(--c-blue-950);
-  --logo-hover:       var(--c-blue-600);   /* U12: logo fill on hover (rest = --accent); palette token, awaiting customer choice (questions/) */
+  --text-hover-lighter: var(--c-blue-500);   /* U14: hover colour of text-only links/buttons (no fill, no icon): visibly lighter than rest (--accent / --text-accent), 5.1:1 on --surface; same palette step as --logo-hover */
+  --hover-dot-size:   6px;                   /* U14: dot left of a text-only link on hover (colour = --text-hover-lighter) */
+  --logo-hover:       var(--c-blue-500);   /* U12: logo fill on hover (rest = --accent); palette token --c-blue-500 #3A64A0 = 'Світліший' (customer answer to question 905d78, 2026-11-14) */
   --accent-contrast:  var(--c-white);
   --border:           color-mix(in srgb, var(--c-blue-700) 14%, transparent);
   --border-strong:    var(--c-blue-400);   /* form/ghost borders, 3.8:1 on --surface */
@@ -82,15 +84,21 @@
   --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
   --space-9: 96px; --space-10: 128px;
   --section-head-gap: var(--space-5);  /* EVERY vertical gap of a heading group (.section-head): tag -> heading -> description -> CTA = 24 (customer 2026-11-13) */
+  --text-cta-gap: var(--card-padding);  /* LAST text (paragraph) -> CTA button in text groups of sections / blocks / hero = P (45 desktop, 32 mobile via --card-padding); customer 2026-11-14 "від тексту до кнопки гап 45". NOT in cards (CTA pinned to card bottom, G8) and NOT in forms. Heading -> text and other inner gaps keep --section-head-gap */
   --text-card-gap: 30px;               /* EXPLICIT EXCEPTION (customer 2026-11-13): eyebrow -> h2 -> paragraph inside .text-card (Products, Documentation) */
   /* footer rhythm in responsive (<= 1199), customer exception, off the 4/8/12 scale: gap between link items 5, group label -> first item 7 (same for menu, contacts, technical links) */
   --gap-small: 10px;                  /* gap between SMALL elements: chips / tags (API, Cas No., product-card tags, hub tags) = 10 (customer 2026-11-13); footer keeps its own 5/7 */
   --card-padding: 45px;                      /* U13: the ONE inner padding of EVERY card (card, info/text/link/svc/quality/feature/product/people-card, tile), all four sides = 45 (customer 2026-11-14); every inner gap <= ~0.7 x padding (gate A3.1 limit 0.72); content never closer than this to the card edge (gate card-padding) */
+  --card-block-gap: var(--space-6);          /* element -> element / heading -> first element inside a card = 32 (<= 0.72 x --card-padding); mobile override below (P 32 -> 16) */
   --text-group-gap: round(down, calc(var(--card-padding) * 0.27), 1px);   /* readable group (label + name): internal gap = 12 (0.27 x card padding) */
   --click-group-gap: var(--space-2);         /* clickable group (phone + email circles): visible gap circle -> circle = 8 (~0.67 x text-group) */
   --group-to-group-gap: var(--space-4);      /* between a text group and a click group (name -> first circle) = 16 (~1.33 x text-group; larger than the text gap) */
   --divider-gap: round(down, calc(var(--card-padding) / 2), 1px);    /* visible gap element <-> divider hairline, each side = 0.5 x card padding = 22 at 45 (customer 2026-11-14); margin = this - the 32 flex gap of the card */
   --footer-gap-items: 5px; --footer-gap-label: 7px;
+  /* U13 card size classes, all derived from P (--card-padding): large = P (45 desktop / 32 mobile), medium = 0.7 P (32 / 22), small = 0.5 P (22 / 16, never below 16). Applied by .card--pad-lg / -md / -sm (cards.css), which also rescale the inner gaps of the class (G6: inner gap <= 0.72 x the class padding). */
+  --card-padding-lg: var(--card-padding);
+  --card-padding-md: round(up, calc(var(--card-padding) * 0.7), 1px);
+  --card-padding-sm: max(16px, round(down, calc(var(--card-padding) * 0.5), 1px));
 
   /* ---------- 3b. Typography ---------- */
   --font-sans: 'Asta Sans', system-ui, sans-serif;
@@ -118,14 +126,11 @@
   --icon-gap: 2px;
   --icon-box-sm: calc(var(--icon-sm) + var(--icon-gap));   /* set "A": button / link / field glyphs (arrow, globe, chevron, search, warning, send) = 18 */
   --icon-box-lg: calc(var(--icon-lg) + var(--icon-gap));   /* set "B": glyphs in rings, chips, filters, burger = 26 */
-  /* set "T" (icons BESIDE TEXT: contact rows phone/mail, category chips, filters): the box FITS THE TEXT (ICON-C): box = ink height of the face of the row
-     (ascender top to descender bottom) = 1em x --ink-k, visible glyph = ink, box = glyph + gap. The em is the row's own font-size, so a 16 px row and a 12 px chip each get ONE box size per font size.
-     Ink metrics of Asta Sans in em (measured: 16 px -> ascender 11.47, descender 3.39; content area 15 + 4). */
-  --font-ink-asc: 0.717; --font-ink-desc: 0.212; --font-ascent: 0.9375; --font-descent: 0.25;
-  --ink-k: var(--font-ink-asc);                                                           /* text with NO descender (digits, "API", "Food Grade"): ink = ascender/cap top ... baseline */
-  --ink-k-d: calc(var(--font-ink-asc) + var(--font-ink-desc));                            /* text WITH a descender (g j p q y @ ,): ink = ascender top ... descender bottom (set T uses this one for every string: one glyph size per font size) */
-  --ink-shift-k: calc((var(--font-ascent) - var(--font-descent) - var(--font-ink-asc)) / 2);   /* ink centre below the line-box centre, em */
-  --ink-shift-k-d: calc((var(--font-ascent) - var(--font-descent) + var(--font-ink-desc) - var(--font-ink-asc)) / 2);
+  /* set "T" (icons BESIDE TEXT: contact rows phone/mail, category chips, filters): the visible glyph fits the CAP HEIGHT of the text (ICON-C): ink top = cap top, ink bottom = baseline
+     (descenders of g j p q y @ hang below, standard typography). Glyph = 1em x --font-cap, box = glyph + --icon-gap; one size per font size, the em is the row's own font-size.
+     Asta Sans in em (measured: cap 0.707, content area ascent 0.9375 + descent 0.25). */
+  --font-cap: 0.707; --font-ascent: 0.9375; --font-descent: 0.25;
+  --ink-k: var(--font-cap);
   --hit-min: 24px;   /* minimum click target (WCAG 2.5.8): the visual size of text links stays, the clickable box grows */
   --chip-sm: 24px; --chip-md: 32px; --chip-lg: 40px;   /* decorative icon chips */
   --btn-split-w: 176px;        /* Contact Us style button (label left, icon right) */
@@ -193,6 +198,8 @@
   :root {
     --gutter: 24px; --grid-cols: 4;
     --logo-footer-h: 72px;
+    --card-block-gap: var(--space-4);   /* 16 = 0.5 x P (limit 0.72 x 32 = 23: 24/32 would fail gate A3.1) */
+    --card-padding: 32px;   /* mobile: smaller side margins (customer 2026-11-14 'Поля по боках менші'): ONE token, dependent gaps scale (text-group 0.27P, divider 0.5P) */
     --type-display-size: 36px; --type-display-lh: 36px;
     --type-h1-size: 30px;      --type-h1-lh: 36px;
     --type-h2-size: 26px;      --type-h2-lh: 32px;

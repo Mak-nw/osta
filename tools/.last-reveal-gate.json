@@ -1,0 +1,792 @@
+[
+ {
+  "page": "about",
+  "w": 1440,
+  "total": 27,
+  "secs": [
+   {
+    "sec": ".hero",
+    "n": 3,
+    "rows": 3,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "sec": "#about.section--lg.about-intro",
+    "n": 7,
+    "rows": 3,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     100,
+     100,
+     100,
+     100,
+     100,
+     100,
+     100
+    ]
+   },
+   {
+    "sec": "#services.about-services",
+    "n": 11,
+    "rows": 8,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     1100,
+     1100,
+     1100,
+     1100,
+     1100,
+     1100,
+     1100,
+     1100,
+     1100,
+     1100,
+     1100
+    ]
+   },
+   {
+    "sec": "#team.section--lg",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     3800
+    ]
+   },
+   {
+    "sec": "#quality.quality-band",
+    "n": 3,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     5000,
+     5000,
+     5000
+    ]
+   },
+   {
+    "sec": ".home-closing",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     5600,
+     5600
+    ]
+   }
+  ],
+  "fail": []
+ },
+ {
+  "page": "about",
+  "w": 375,
+  "total": 27,
+  "secs": [
+   {
+    "sec": ".hero",
+    "n": 3,
+    "rows": 3,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "sec": "#about.section--lg.about-intro",
+    "n": 7,
+    "rows": 5,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "sec": "#services.about-services",
+    "n": 11,
+    "rows": 11,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     1000,
+     1000,
+     1000,
+     1000,
+     1000,
+     1000,
+     1000,
+     1000,
+     1000,
+     1000,
+     1000
+    ]
+   },
+   {
+    "sec": "#team.section--lg",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     4800
+    ]
+   },
+   {
+    "sec": "#quality.quality-band",
+    "n": 3,
+    "rows": 3,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     6200,
+     6200,
+     6200
+    ]
+   },
+   {
+    "sec": ".home-closing",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     7600,
+     7600
+    ]
+   }
+  ],
+  "fail": []
+ },
+ {
+  "page": "catalog",
+  "w": 1440,
+  "total": 15,
+  "secs": [
+   {
+    "sec": ".stack.stack--4<div>",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0
+    ]
+   },
+   {
+    "sec": ".layout-catalog__sidebar<aside>",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0
+    ]
+   },
+   {
+    "sec": ".catalog__results",
+    "n": 12,
+    "rows": 4,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "fail": []
+ },
+ {
+  "page": "catalog",
+  "w": 375,
+  "total": 15,
+  "secs": [
+   {
+    "sec": ".stack.stack--4<div>",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0
+    ]
+   },
+   {
+    "sec": ".layout-catalog__sidebar<aside>",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0
+    ]
+   },
+   {
+    "sec": ".catalog__results",
+    "n": 12,
+    "rows": 12,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "fail": []
+ },
+ {
+  "page": "contact",
+  "w": 1440,
+  "total": 4,
+  "secs": [
+   {
+    "sec": ".section-head<div>",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0
+    ]
+   },
+   {
+    "sec": ".section-head.contact-split__form-head<div>",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0
+    ]
+   },
+   {
+    "sec": ".contact-split__content.card<div>",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0
+    ]
+   }
+  ],
+  "fail": []
+ },
+ {
+  "page": "contact",
+  "w": 375,
+  "total": 4,
+  "secs": [
+   {
+    "sec": ".section-head<div>",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0
+    ]
+   },
+   {
+    "sec": ".section-head.contact-split__form-head<div>",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0
+    ]
+   },
+   {
+    "sec": ".contact-split__content.card<div>",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0
+    ]
+   }
+  ],
+  "fail": []
+ },
+ {
+  "page": "data-processing",
+  "w": 1440,
+  "total": 0,
+  "secs": [],
+  "fail": []
+ },
+ {
+  "page": "data-processing",
+  "w": 375,
+  "total": 0,
+  "secs": [],
+  "fail": []
+ },
+ {
+  "page": "faq",
+  "w": 1440,
+  "total": 0,
+  "secs": [],
+  "fail": []
+ },
+ {
+  "page": "faq",
+  "w": 375,
+  "total": 0,
+  "secs": [],
+  "fail": []
+ },
+ {
+  "page": "impressum",
+  "w": 1440,
+  "total": 0,
+  "secs": [],
+  "fail": []
+ },
+ {
+  "page": "impressum",
+  "w": 375,
+  "total": 0,
+  "secs": [],
+  "fail": []
+ },
+ {
+  "page": "index",
+  "w": 1440,
+  "total": 14,
+  "secs": [
+   {
+    "sec": ".hero.hero--home",
+    "n": 3,
+    "rows": 3,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "sec": "#products.home-section.home-section--accent",
+    "n": 4,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     600,
+     600,
+     600,
+     600
+    ]
+   },
+   {
+    "sec": "#services.home-section.home-services",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     1300
+    ]
+   },
+   {
+    "sec": "#supply.home-supply",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     2300
+    ]
+   },
+   {
+    "sec": "#quality.home-section.home-quality",
+    "n": 3,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     2900,
+     2900,
+     2900
+    ]
+   },
+   {
+    "sec": ".home-closing",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     3500,
+     3500
+    ]
+   }
+  ],
+  "fail": []
+ },
+ {
+  "page": "index",
+  "w": 375,
+  "total": 14,
+  "secs": [
+   {
+    "sec": ".hero.hero--home",
+    "n": 3,
+    "rows": 3,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "sec": "#products.home-section.home-section--accent",
+    "n": 4,
+    "rows": 4,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     700,
+     700,
+     700,
+     700
+    ]
+   },
+   {
+    "sec": "#services.home-section.home-services",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     2200
+    ]
+   },
+   {
+    "sec": "#supply.home-supply",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     3300
+    ]
+   },
+   {
+    "sec": "#quality.home-section.home-quality",
+    "n": 3,
+    "rows": 3,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     3900,
+     3900,
+     3900
+    ]
+   },
+   {
+    "sec": ".home-closing",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     5300,
+     5300
+    ]
+   }
+  ],
+  "fail": []
+ },
+ {
+  "page": "privacy",
+  "w": 1440,
+  "total": 0,
+  "secs": [],
+  "fail": []
+ },
+ {
+  "page": "privacy",
+  "w": 375,
+  "total": 0,
+  "secs": [],
+  "fail": []
+ },
+ {
+  "page": "services",
+  "w": 1440,
+  "total": 17,
+  "secs": [
+   {
+    "sec": ".hero",
+    "n": 3,
+    "rows": 3,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "sec": "#process.svc-process",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     100
+    ]
+   },
+   {
+    "sec": "#services.svc-services",
+    "n": 9,
+    "rows": 6,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     2000,
+     2000,
+     2000,
+     2000,
+     2000,
+     2000,
+     2000,
+     2000,
+     2000
+    ]
+   },
+   {
+    "sec": "#supply-logistics.svc-supply.photo-zoom",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     2900
+    ]
+   },
+   {
+    "sec": "#how-we-work.svc-how",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     3800
+    ]
+   },
+   {
+    "sec": ".home-closing",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     5000,
+     5000
+    ]
+   }
+  ],
+  "fail": []
+ },
+ {
+  "page": "services",
+  "w": 375,
+  "total": 17,
+  "secs": [
+   {
+    "sec": ".hero",
+    "n": 3,
+    "rows": 3,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "sec": "#process.svc-process",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0
+    ]
+   },
+   {
+    "sec": "#services.svc-services",
+    "n": 9,
+    "rows": 9,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     1800,
+     1800,
+     1800,
+     1800,
+     1800,
+     1800,
+     1800,
+     1800,
+     1800
+    ]
+   },
+   {
+    "sec": "#supply-logistics.svc-supply.photo-zoom",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     3700
+    ]
+   },
+   {
+    "sec": "#how-we-work.svc-how",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     4500
+    ]
+   },
+   {
+    "sec": ".home-closing",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     5700,
+     5700
+    ]
+   }
+  ],
+  "fail": []
+ },
+ {
+  "page": "terms",
+  "w": 1440,
+  "total": 0,
+  "secs": [],
+  "fail": []
+ },
+ {
+  "page": "terms",
+  "w": 375,
+  "total": 0,
+  "secs": [],
+  "fail": []
+ },
+ {
+  "page": "products/azithromycin/",
+  "w": 1440,
+  "total": 0,
+  "secs": [],
+  "fail": []
+ },
+ {
+  "page": "products/azithromycin/",
+  "w": 375,
+  "total": 0,
+  "secs": [],
+  "fail": []
+ },
+ {
+  "page": "products/category/api/",
+  "w": 1440,
+  "total": 3,
+  "secs": [
+   {
+    "sec": ".product-hero.section--sm",
+    "n": 3,
+    "rows": 3,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "fail": []
+ },
+ {
+  "page": "products/category/api/",
+  "w": 375,
+  "total": 3,
+  "secs": [
+   {
+    "sec": ".product-hero.section--sm",
+    "n": 3,
+    "rows": 3,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "fail": []
+ }
+]

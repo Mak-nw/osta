@@ -4,7 +4,7 @@
 .catalog__more { align-self: stretch; width: 100%; justify-content: center; }
 .catalog__more[hidden] { display: none; }
 
-/* Sidebar CTA "Chat with manager" (2 cols wide, 121-209 px): button fills the card, label wraps, arrow icon stays inside on the right. */
+/* Sidebar CTA "Chat with manager" (2 cols wide, 121-209 px): button fills the card, label wraps (one line needs a card >= 243 px at sm padding; the 2-col sidebar is 168-209 px, see report), arrow icon stays inside on the right. */
 .catalog__help .btn { width: 100%; height: auto; min-height: var(--control-md); white-space: normal; justify-content: space-between; text-align: left; padding-block: var(--space-2); }
 .catalog__help .btn span { min-width: 0; }
 .catalog__help .btn .icon { flex-shrink: 0; }

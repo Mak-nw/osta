@@ -18,7 +18,7 @@ try { const out = cp.execSync("pgrep -f '^node .*(measure-standard|card-padding|
   if (out.length) { console.error('another gate is running (pid ' + out.join(',') + '): not running two gates in parallel'); process.exit(3); } } catch (e) { /* no match */ }
 
 /* Text members of spacing groups (same list as the shared rule in src/styles/base.css). */
-const MEMBERS = 'h1,h2,h3,h4,h5,h6,p,dt,dd,li,legend,figcaption,label.field__label,.t-display,.t-h1,.t-h2,.t-h3,.t-lead,.t-body,.t-label,.section-label,.people-card__name,.people-card__role';
+const MEMBERS = 'h1,h2,h3,h4,h5,h6,p,dt,dd,li,legend,figcaption,label.field__label,.t-display,.t-h1,.t-h2,.t-h3,.t-lead,.t-body,.t-label,.people-card__name,.people-card__role';
 /* Documented exceptions: not trimmed on purpose. Each = selector (matches the member or an ancestor) + reason. */
 const EXC = [
   { sel: 'a, button, .btn, .contact-line, [role=button], summary, select, option, .chip, .filter-item, .lang-switch, .lang-menu, .nav-pill, .round-btn, .header__burger', reason: 'text inside a fixed-height control: the painted box (hit area) is the unit, gaps are measured to the box; label centred by the control height' },

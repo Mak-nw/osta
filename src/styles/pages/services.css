@@ -14,22 +14,20 @@
 .process-scroll { --process-screens: 2; height: calc(var(--process-screens) * 100vh); height: calc(var(--process-screens) * 100svh); }
 .process-scroll__stage { position: sticky; top: var(--header-h); height: calc(100vh - var(--header-h)); height: calc(100svh - var(--header-h)); }
 .process-scroll__grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); align-items: center; height: 100%; }
-.process-scroll__frame { grid-column: 1 / -1; grid-row: 1; display: grid; grid-template-columns: subgrid; }
-.process-scroll__head { grid-column: 1 / span 4; hyphens: manual; grid-row: 1; align-self: start; margin-top: calc(-1 * (var(--type-label-lh) + var(--section-head-gap))); } /* .section-head; tag above, the h2 top = the line top */
-.process-steps { grid-column: 10 / span 3; grid-row: 1; position: relative; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-8); }
+.process-scroll__frame { grid-column: 1 / -1; grid-row: 1; display: grid; grid-template-columns: subgrid; align-items: center; height: 100%; } /* the three parts (head / art / steps) share ONE horizontal centre line = the centre of the pinned stage (align-items: center, no margin hacks; customer 2026-11-14) */
+.process-scroll__head { grid-column: 1 / span 4; hyphens: manual; grid-row: 1; align-self: center; } /* .section-head; the h2 top = the line top (the tag hack was removed with the section tags) */
+.process-scroll__head > h2 { align-self: stretch; } /* heading = the full 4-column width of the head (not shrink-to-fit), so it wraps on 4 columns */
+.process-scroll__text { text-wrap: pretty; width: calc((100% - 3 * var(--grid-gap)) / 4 * 3 + 2 * var(--grid-gap)); } /* paragraph = 3 of the head's 4 columns, so it stays clear of the centred 3D art (cols 4-9) */
+.process-steps { grid-column: 10 / span 3; grid-row: 1; align-self: center; position: relative; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-8); }
 .process-steps::before { content: ""; position: absolute; left: calc(var(--chip-lg) / 2); top: calc(var(--chip-lg) / 2); bottom: calc(var(--chip-lg) / 2); border-left: 1px solid var(--divider-on-accent); pointer-events: none; } /* the vertical stage line, through the circle centres */
 .process-steps__item { position: relative; }
 .process-steps__row { display: inline-flex; align-items: center; gap: var(--space-4); color: var(--text-on-accent-muted); transition: color var(--dur-base) var(--ease-out); } /* progress indicator, NOT a link: no hover / focus / pointer */
 .process-steps__dot { display: grid; place-items: center; flex: none; width: var(--chip-lg); height: var(--chip-lg); border: 1px solid var(--text-on-accent-muted); border-radius: var(--radius-full); background: var(--surface-accent); font-size: var(--type-label-size); line-height: var(--type-label-lh); color: var(--text-on-accent); transition: background-color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out); }
 .process-steps__item.is-active .process-steps__row { color: var(--text-on-accent); }
 .process-steps__item.is-active .process-steps__dot { background: var(--accent-contrast); border-color: var(--accent-contrast); color: var(--accent); }
-.process-scroll__art { grid-column: 4 / span 6; grid-row: 1; position: relative; height: 80%; }
+.process-scroll__art { grid-column: 4 / span 6; grid-row: 1; align-self: center; position: relative; height: 80%; }
 /* 3D scene is a media block: no opacity fade-in. The WebGL canvas is transparent (alpha, clear 0) until its first frame, so it appears with its content and never fades from 0. */
 .process-scroll__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 1; }
-/* description after the scene: a .section-head on the left (cols 1-4), no line */
-.process-text { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); padding-block: 0; } /* vertical spacing is set by the section (.svc-process padding-bottom) */
-.process-text__body { grid-column: 1 / span 4; } /* .section-head (p + CTA, gap 24), left on the x of the Process tag / title */
-.process-text__head { text-wrap: pretty; }
 @media (prefers-reduced-motion: reduce) {
   .process-scroll { height: auto; }
   .process-scroll__stage { position: static; height: auto; padding-block: var(--section-md); }
@@ -50,7 +48,8 @@
 .svc-supply__bg { position: absolute; inset: auto 0 0 0; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; object-position: 50% 100%; z-index: -1; }
 .svc-supply__grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--section-head-gap); align-content: start; align-items: start; min-height: var(--supply-photo-h); padding-block: var(--section-md) calc(var(--section-md) / 2 + var(--supply-strip)); }
 .svc-supply__head { grid-column: 1 / span 8; grid-row: 1; } /* .section-head */
-.svc-supply__body { grid-column: 6 / span 6; grid-row: 2; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: var(--section-head-gap); } /* text group (text > text) + CTA: all gaps 24 */
+.svc-supply__body { grid-column: 6 / span 6; grid-row: 2; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: var(--section-head-gap); } /* text group (text > text) + CTA: gaps 24, last text -> CTA = --text-cta-gap (45 / 32) */
+.svc-supply__cta { margin-top: calc(var(--text-cta-gap) - var(--section-head-gap)); }
 .svc-supply__texts { align-self: stretch; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--section-head-gap); }
 .svc-supply__text { margin: 0; text-wrap: pretty; }
 
@@ -74,13 +73,14 @@
 @media (max-width: 1199px) {
   .process-scroll__grid { grid-template-rows: auto minmax(0, 1fr) auto; row-gap: var(--space-4); align-items: stretch; padding-block: var(--space-5); }
   .process-scroll__frame { display: contents; }
+  .process-scroll__head, .process-steps { align-self: start; } .process-scroll__art { align-self: auto; } /* tablet / mobile: unchanged (desktop centre line only) */
   .process-scroll__head { grid-column: 1 / -1; grid-row: 1; margin-top: 0; }
+  .process-scroll__text { width: auto; max-width: 560px; }
   .process-scroll__art { grid-column: 1 / -1; grid-row: 2; height: auto; min-height: 0; }
   .process-steps { grid-column: 1 / -1; grid-row: 3; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--grid-gap); }
   .process-steps::before { display: none; }
   .process-steps__row { gap: var(--space-3); align-items: center; }
   .process-steps__name { font-size: var(--type-body-size); line-height: var(--type-body-lh); letter-spacing: 0; } /* t-lead (24/32) does not fit the 4 / 2 stage columns ("Qualification" ~170px vs ~115px): documented in design-system.md, Adaptive */
-  .process-text__body { grid-column: 1 / span 6; }
   .svc-services__head { margin-bottom: var(--space-6); }
   .svc-supply__head { grid-column: 1 / -1; }
   .svc-supply__body { grid-column: 1 / span 6; }
@@ -104,7 +104,6 @@
   .process-steps__item { flex: none; scroll-snap-align: center; }
   .process-steps__row { white-space: nowrap; }
   .process-scroll__art { grid-row: 3; }
-  .process-text__body { grid-column: 1 / -1; }
   .svc-supply__body { grid-column: 1 / -1; align-self: stretch; }
   .svc-supply__cta { width: 100%; }
 }

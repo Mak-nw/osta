@@ -5,7 +5,7 @@
 .footer__group--end { align-items: flex-end; text-align: right; }
 .footer__label { display: block; font-size: var(--type-label-size); line-height: var(--type-label-lh); letter-spacing: var(--type-label-ls); color: var(--text); }
 .footer__group > .footer__label { margin-bottom: var(--space-2); }
-.footer a:not(.btn):not(.footer__label):not(.footer__logo) { color: var(--text-accent); }
+.footer a:where(:not(.btn, .footer__label, .footer__logo)) { color: var(--text-accent); } /* :where keeps specificity low so the text-link hover colour (text-link.css) wins */
 /* text-link hover (disc fill): components/text-link.css */
 .footer__menu { padding-top: var(--space-8); align-items: start; }
 .footer__menu > .footer__group { grid-column: span 4; }

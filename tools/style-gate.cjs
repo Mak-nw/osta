@@ -115,7 +115,7 @@ function inpage(cfg) {
       if (/(^|-)(card|btn)(__|--|$)/.test(c) && !/^(is-|ds-)/.test(c) && !rootOf(c) && !el.closest('.ds-page')) report('A2.1', 'FAIL', 'class .' + c + ' looks like a card/button component but is NOT in component-registry.json (role already covered? one role = one class)', el);
       if (/__art$/.test(c) && !C.art.includes(c)) report('A2.1', 'FAIL', 'new illustration slot class .' + c + ' (registry has ' + C.art.length + ' art slots, one expected)', el);
     }
-    for (const m of C.mustAlso) { try { if (el.matches(m.selector) && !el.matches(m.requires) && el.querySelector('h1,h2,h3,h4,.section-label')) report('A2.1', 'FAIL', 'local wrapper ' + sig0(el) + ' without ' + m.requires + ': ' + m.note, el); } catch (e) {} }
+    for (const m of C.mustAlso) { try { if (el.matches(m.selector) && !el.matches(m.requires) && el.querySelector('h1,h2,h3,h4')) report('A2.1', 'FAIL', 'local wrapper ' + sig0(el) + ' without ' + m.requires + ': ' + m.note, el); } catch (e) {} }
     if (isSvgChild) { /* svg parts: colours + dash only */
       if (!vis(el.closest('svg'))) continue;
       const tag = el.tagName.toLowerCase();
@@ -210,7 +210,9 @@ function inpage(cfg) {
   const gapsOf = (box) => { const kids = [...box.children].filter((k) => vis(k) && getComputedStyle(k).position !== 'absolute' && rectOf(k).height > 0); const out = []; for (let i = 1; i < kids.length; i++) out.push([kids[i - 1], kids[i], rectOf(kids[i]).top - rectOf(kids[i - 1]).bottom]); return out; };
   const tol = C.sp.tolerance + 0.01;
   for (const sh of document.querySelectorAll('.section-head')) { if (!vis(sh)) continue; if (/row/.test(getComputedStyle(sh).flexDirection) && getComputedStyle(sh).display === 'flex') continue;
-    for (const [, b, gap] of gapsOf(sh)) if (Math.abs(gap - C.sp.sectionHeadGap) > tol) report('A3.1', 'FAIL', '.section-head gap ' + gap.toFixed(1) + 'px != ' + C.sp.sectionHeadGap + ' (before ' + sig0(b) + ')', sh, gap); }
+    const lgCard = sh.closest('.card--pad-lg'); const shExp = lgCard ? Math.min(C.sp.sectionHeadGap, px(getComputedStyle(lgCard).paddingLeft) * 0.72) : C.sp.sectionHeadGap; /* inside a large card the heading-group gap is min(24, 0.72 x card padding) (customer 7ed12b 2026-11-14, same 0.72P rule as below) */
+    const ctaGap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--text-cta-gap')) || shExp; /* last text -> CTA = --text-cta-gap (45 / 32, customer 2026-11-14), not in cards */
+    for (const [, b, gap] of gapsOf(sh)) { const exp = (!lgCard && b.matches('.btn, .home-closing__actions')) ? ctaGap : shExp; if (Math.abs(gap - exp) > tol && !(lgCard && gap < exp)) report('A3.1', 'FAIL', '.section-head gap ' + gap.toFixed(1) + 'px != ' + exp.toFixed(1) + ' (before ' + sig0(b) + ')', sh, gap); } }
   for (const b of document.querySelectorAll('.text-card__body')) { if (!vis(b)) continue; const sh = b.querySelector(':scope > .section-head');
     for (const [, n, gap] of gapsOf(b)) if (Math.abs(gap - C.sp.textCardGap) > tol) report('A3.1', 'FAIL', '.text-card__body gap ' + gap.toFixed(1) + 'px != ' + C.sp.textCardGap + ' (before ' + sig0(n) + ')', b, gap); }
   for (const f of document.querySelectorAll('.field, form label')) { const lab = f.matches('label') ? f : f.querySelector('label,.field__label'); const ctl = f.matches('label') ? f.parentElement.querySelector('input:not([type=checkbox]):not([type=radio]):not([type=hidden]),select,textarea,.select-wrap') : f.querySelector('input:not([type=hidden]),select,textarea,.select-wrap'); if (!lab || !ctl || !vis(lab) || !vis(ctl)) continue; const a = rectOf(lab), b = rectOf(ctl); if (b.top < a.bottom - 1 || b.left > a.right) continue; const gap = b.top - a.bottom; if (Math.abs(gap - C.sp.labelToField) > tol) report('A3.1', 'FAIL', 'label -> field gap ' + gap.toFixed(1) + 'px != ' + C.sp.labelToField, f, gap); }

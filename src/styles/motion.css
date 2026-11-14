@@ -48,12 +48,13 @@ a:hover > .round-btn .icon { transform: scale(1.1); }
   html.js [data-reveal]:not([data-reveal="fade"]):not([data-reveal="scale-in"]):not(.is-revealed) { transform: translateY(var(--reveal-distance)); }
   html.js [data-reveal="scale-in"]:not(.is-revealed) { transform: scale(.97); }
 
-  [data-reveal].is-revealed, [data-reveal-load] {
+  [data-reveal].is-revealed {
     animation: motion-up var(--dur-slow) var(--ease-out) var(--reveal-delay, 0ms) backwards;
   }
   [data-reveal="fade"].is-revealed { animation-name: motion-fade; }
   [data-reveal="scale-in"].is-revealed { animation-name: motion-scale; }
-  [data-reveal-load] { animation-duration: var(--dur-slow); }
+  [data-reveal].is-revealed.is-instant { animation: none; }
+  [data-reveal].is-boot { transition: none; } /* on screen at load: visible from the first frame (U15) */
 
   /* ---------- Photo zoom-out (all photos): NO opacity/translate reveal; the clip mask (overflow hidden + radius) stays still,
      the img inside starts at scale(--photo-zoom-from) and settles to 1 over --dur-zoom once the mask enters the viewport.

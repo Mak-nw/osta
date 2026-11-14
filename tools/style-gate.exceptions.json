@@ -38,6 +38,35 @@
       "quote": "якщо ми написали правила для бейджиу контакту, де сказали який гап між контактом кнопкою та поштою, то чому у футері ми це правило не задіюєм, і відступ між телефоном та факсом якийсь інший",
       "source": "chat 2026-11-14 (orchestrator relay)",
       "value": 8
+    },
+    {
+      "selector": ".product-hero .section-head, .product-hero .section-head *",
+      "reason": "404 hero heading group gap = 16 px instead of the general 24 px: customer form answer ccb4b5 (option «Верх сторінки 404 і юридичних», 24 -> 16), 2026-11-14.",
+      "pages": [
+        "404"
+      ],
+      "rule": "A3.1",
+      "approvedBy": "customer",
+      "approvedAt": "2026-11-14",
+      "quote": "Верх сторінки 404 і юридичних",
+      "source": "questions/answers.json#ccb4b5 (form answer «Верх сторінки 404 і юридичних», 2026-11-14)",
+      "value": 16
+    },
+    {
+      "selector": ".legal__hero, .legal__hero *",
+      "reason": "Legal pages hero gap = 16 px instead of the general 24 px: customer form answer ccb4b5 (option «Верх сторінки 404 і юридичних», 24 -> 16), 2026-11-14.",
+      "pages": [
+        "privacy",
+        "terms",
+        "impressum",
+        "data-processing"
+      ],
+      "rule": "A3.1",
+      "approvedBy": "customer",
+      "approvedAt": "2026-11-14",
+      "quote": "Верх сторінки 404 і юридичних",
+      "source": "questions/answers.json#ccb4b5 (form answer «Верх сторінки 404 і юридичних», 2026-11-14)",
+      "value": 16
     }
   ]
 }

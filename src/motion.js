@@ -6,7 +6,6 @@ const root = document.documentElement;
 root.classList.add('js');
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
-const STAGGER_CAP = 8;
 const INDEX_MAX = 20; // data-reveal-delay <= 20 is a stagger index, larger is milliseconds
 const stagger = () => parseFloat(getComputedStyle(root).getPropertyValue('--stagger')) || 60;
 
@@ -173,39 +172,62 @@ let io = null;
 const seen = new WeakSet();
 const pending = new Set();
 
-function reveal(el, i) {
+const GROUP_MAX = 200; // rule U15: the whole stagger of one section fits into this many ms
+const groups = new Map(); // section container -> { els: Set of pending [data-reveal], done }
+const pendingGroups = new Set();
+const bootAt = performance.now();
+const INSTANT_WINDOW = 2500; // sections already on screen while the page is booting appear without animation
+
+// one reveal trigger per SECTION (outermost <section> of the element, else footer, else parent): all its cards/elements appear together
+function groupOf(el) {
+  let s = el.closest('section');
+  while (s && s.parentElement && s.parentElement.closest('section')) s = s.parentElement.closest('section');
+  let c = s || el.closest('footer') || el.parentElement;
+  while (c && c.parentElement && c.getClientRects().length === 0) c = c.parentElement; // display:contents / hidden wrappers have no box to observe
+  return c;
+}
+
+function reveal(el, i, step = stagger(), instant = false) {
   if (el.classList.contains('is-split') && !wordsReady) { // wait for the translated text, then play the words once
     deferredWords.push([el, i]);
     pending.delete(el);
-    io?.unobserve(el);
     return;
   }
   const d = el.dataset.revealDelay;
   let delay = 0;
   if (d !== undefined && d !== '') {
     const n = parseFloat(d);
-    delay = n <= INDEX_MAX ? n * stagger() : n;
+    delay = n <= INDEX_MAX ? n * step : n;
   } else if (i !== undefined) {
-    delay = i < STAGGER_CAP ? i * stagger() : 0;
+    delay = i * step;
   }
+  delay = instant ? 0 : Math.min(delay, GROUP_MAX);
   el.style.setProperty('--reveal-delay', `${delay}ms`);
+  if (instant) { // on screen at load: no animation and no transition from the hidden state, only until the first frames are painted
+    el.classList.add('is-boot', 'is-instant');
+    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove('is-boot')));
+  }
   el.classList.add('is-revealed');
   pending.delete(el);
-  io?.unobserve(el);
+}
+
+function revealGroup(c, instant = false) {
+  const g = groups.get(c);
+  if (!g) return;
+  g.done = true;
+  pendingGroups.delete(c);
+  io?.unobserve(c);
+  const els = [...g.els].sort((a, b) => (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1));
+  g.els.clear();
+  const step = els.length > 1 ? Math.min(stagger(), GROUP_MAX / (els.length - 1)) : 0;
+  els.forEach((el, i) => reveal(el, i, step, instant));
 }
 
 function onIntersect(entries) {
-  let i = 0;
-  const vh = innerHeight;
-  entries
-    .filter((e) => e.isIntersecting || e.boundingClientRect.top < 0)
-    .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top || a.boundingClientRect.left - b.boundingClientRect.left)
-    .forEach((e) => {
-      const passed = e.boundingClientRect.top < 0 && !e.isIntersecting; // scrolled past (anchor jump)
-      const enough = e.intersectionRatio >= 0.15 || e.intersectionRect.height >= vh * 0.3;
-      if (passed) reveal(e.target);
-      else if (e.isIntersecting && enough) reveal(e.target, i++);
-    });
+  entries.forEach((e) => {
+    const passed = e.boundingClientRect.top < 0 && !e.isIntersecting; // scrolled past (anchor jump)
+    if (passed || e.isIntersecting) revealGroup(e.target, performance.now() - bootAt < INSTANT_WINDOW && e.isIntersecting);
+  });
 }
 
 function refresh() {
@@ -213,20 +235,30 @@ function refresh() {
   document.querySelectorAll('[data-reveal-stagger]').forEach((c) => {
     [...c.children].forEach((k) => { if (!k.hasAttribute('data-reveal')) k.setAttribute('data-reveal', ''); });
   });
-  // hero entrance on load: CSS animation, never leaves anything hidden
+  // hero entrance on load: no animation, visible from the first frame (rule U15)
   document.querySelectorAll('[data-reveal-load]').forEach((el) => {
     if (seen.has(el)) return;
     seen.add(el);
-    el.style.setProperty('--reveal-delay', `${(parseFloat(el.dataset.revealLoad) || 0) * stagger() * 1.5}ms`);
     if (el.classList.contains('is-split')) reveal(el);
   });
+  let late = 0;
+  const booting = performance.now() - bootAt < INSTANT_WINDOW;
+  const onScreen = new Set();
   document.querySelectorAll('[data-reveal]').forEach((el) => {
     if (seen.has(el)) return;
     seen.add(el);
     if (!io) { el.classList.add('is-revealed'); return; }
+    const c = groupOf(el);
+    let g = groups.get(c);
+    if (!g) { g = { els: new Set(), done: false }; groups.set(c, g); }
+    if (booting && !g.done) { const r = el.getBoundingClientRect(); if (r.top < innerHeight && r.bottom > 0) onScreen.add(c); }
+    if (g.done) { reveal(el, late++); return; } // added to a section that is already revealed (catalog filter): short stagger
     pending.add(el);
-    io.observe(el);
+    g.els.add(el);
+    if (!pendingGroups.has(c)) { pendingGroups.add(c); io.observe(c); }
   });
+  // a section already on screen while the page boots: all its elements are visible from the first frame (U15), set in the same task so no transition from opacity 0 runs
+  onScreen.forEach((c) => revealGroup(c, true));
 }
 
 // ---------- Photo zoom-out: every photo sits in a clip mask; the img inside zooms scale(--photo-zoom-from) -> 1 once, on entering the viewport ----------
@@ -264,16 +296,16 @@ function initReveal() {
   if (reduced.matches) return;
   document.querySelectorAll('[data-scroll-fill]').forEach((el) => scrollFills.push(initScrollFill(el, reduced)));
   if ('IntersectionObserver' in window) {
-    io = new IntersectionObserver(onIntersect, { threshold: [0, 0.15], rootMargin: '0px 0px -10% 0px' });
+    io = new IntersectionObserver(onIntersect, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
   }
   // Jumps (End, anchors, fast scroll) can skip elements entirely: reveal everything already above the viewport
   let ticking = false;
   addEventListener('scroll', () => {
-    if (ticking || !pending.size) return;
+    if (ticking || !pendingGroups.size) return;
     ticking = true;
     requestAnimationFrame(() => {
       ticking = false;
-      pending.forEach((el) => { if (el.getBoundingClientRect().top < 0) reveal(el); });
+      pendingGroups.forEach((c) => { if (c.getBoundingClientRect().top < 0) revealGroup(c); });
     });
   }, { passive: true });
   window.__revealRefresh = refresh;

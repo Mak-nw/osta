@@ -12,20 +12,20 @@
   <main id="main">
     <section class="product-hero product-hero--bg section--sm">
       <div class="container product-hero__inner">
-        <nav data-reveal-load="0" class="breadcrumbs" aria-label="Breadcrumb">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
           <a href="/index.html" data-i18n="product.breadcrumb_home">Home</a><span class="breadcrumbs__sep"></span>
           <a href="/catalog.html" data-i18n="product.breadcrumb_products">Products</a><span class="breadcrumbs__sep"></span>
           <span class="breadcrumbs__current" aria-current="page">{{name}}</span>
         </nav>
         <div class="section-head product-hero__head">
           <div class="section-head">
-            <h1 data-reveal-load="1" class="t-h1 t-accent">{{name}}</h1>
-            <div class="row row--2" data-product-tags data-reveal-load="2"><!--@slot:tags--></div>
+            <h1 class="t-h1 t-accent">{{name}}</h1>
+            <div class="row row--2" data-product-tags><!--@slot:tags--></div>
             <p class="t-body product-answer"><!--@slot:answer--></p>
           </div>
           <!--@slot:cta-top-->
         </div>
-        <div class="product-info" data-reveal-stagger>
+        <div class="product-info">
           <!--@slot:cards-->
         </div>
         <!--@slot:cta-->

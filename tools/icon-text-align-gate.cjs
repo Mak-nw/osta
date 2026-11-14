@@ -2,7 +2,7 @@
 /* Icon-text-align gate (rules ICON-C / ICON-D, customer 2026-11-14).
    C. in a row with text the icon BOX aligns to the glyph height of the text (ink, not line-height): box top/bottom = text ink top/bottom within 1 px.
       The VISIBLE icon is measured (rendered ink of the glyph = bounding box of the <use> content + half the stroke), not the empty svg/box.
-      Text ink = actual string for rows outside set T; for set T (contact rows, chips, filters) the FACE ink (ascender ... descender of the font, reference glyphs) so all glyphs of the set are equal (ICON-A) (canvas measureText; baseline =
+      Text ink = actual string for rows outside set T; for set T (contact rows, chips, filters) the CAP HEIGHT of the face (cap top ... baseline; descenders hang below), so all glyphs of the set are equal (ICON-A), tolerance 0.5 px (canvas measureText; baseline =
       Range rect top + fontBoundingBoxAscent, so the result is what is painted). Also checked: the visible glyph is centred in its box (<= 1 px) and fills it minus the gap (ICON-B).
    D. the box may sit inside a ring / round button / chevron cell (the outer circle may be larger than the text): ICON-C applies to the INNER box; the box must be concentric
       with its circle (centre offset <= tolerance).
@@ -12,6 +12,7 @@
 const L = require('./icon-gate-lib.cjs');
 const cfg = L.parse(process.argv.slice(2)); L.guardParallel();
 const ENFORCED = ['contact-line', 'chip', 'filter-item'];
+const tolOf = (k) => (ENFORCED.includes(k) ? 0.5 : cfg.TOL);   /* set T: 0.5 px to cap top / baseline */
 const STRICT = process.argv.includes('--strict');
 function inpage({ TOL }) {
   const ctx = document.createElement('canvas').getContext('2d'), out = [];
@@ -32,7 +33,7 @@ function inpage({ TOL }) {
     ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
     const full = (txt.textContent || '').replace(/\s+/g, ' ').trim(), a = ctx.measureText(full), fa = a.fontBoundingBoxAscent;
     /* ink of the text: set T (contact rows, chips, filters) = ink of the FACE (reference glyphs Hdlb / gpqy), so every glyph of the set has the same size whatever the string; other rows = the actual string */
-    const face = ['contact-line', 'chip', 'filter-item'].includes(role(box)), asc = face ? ctx.measureText('Hdlb').actualBoundingBoxAscent : a.actualBoundingBoxAscent, desc = Math.max(0, face ? ctx.measureText('gpqy').actualBoundingBoxDescent : a.actualBoundingBoxDescent);
+    const face = ['contact-line', 'chip', 'filter-item'].includes(role(box)), asc = face ? ctx.measureText('H').actualBoundingBoxAscent : a.actualBoundingBoxAscent, desc = face ? 0 : Math.max(0, a.actualBoundingBoxDescent);
     const rg = document.createRange(); rg.selectNodeContents(txt); const rects = [...rg.getClientRects()].filter((q) => q.width > 0);
     if (!rects.length) continue;
     const bl0 = Math.min(...rects.map((q) => q.top)), bl1 = Math.max(...rects.map((q) => q.bottom));
@@ -49,10 +50,10 @@ function inpage({ TOL }) {
 (async () => {
   const res = await L.run(cfg, inpage, {}); const roles = {}; let fails = 0, warns = 0;
   const agg = (r, role, x) => { const k = role; const a = (roles[k] = roles[k] || { n: 0, dTop: 0, dBot: 0, dC: 0, boxH: new Set(), inkH: new Set(), glyph: new Set(), dCen: 0, fillMin: 1e9, fillMax: -1e9, bad: [], noText: 0 }); a.n++; if (x.noText || x.multi) { a.noText += x.noText ? 1 : 0; a.multi = (a.multi || 0) + (x.multi ? 1 : 0); } else { a.dTop = Math.max(a.dTop, Math.abs(x.dTop)); a.dBot = Math.max(a.dBot, Math.abs(x.dBot)); a.boxH.add(Math.round(x.boxH * 10) / 10); a.inkH.add(Math.round(x.inkH * 10) / 10); a.glyph.add(Math.round(x.glyphH * 10) / 10); a.dCen = Math.max(a.dCen, x.dBoxCentre); a.fillMin = Math.min(a.fillMin, x.fill); a.fillMax = Math.max(a.fillMax, x.fill); } if (x.dCircle != null) a.dC = Math.max(a.dC, x.dCircle); return a; };
-  for (const r of res) for (const x of r.rows) { const a = agg(r, x.role, x); if (!x.noText && !x.multi && (Math.abs(x.dTop) > cfg.TOL || Math.abs(x.dBot) > cfg.TOL) && a.bad.length < 3) a.bad.push(`${r.page}@${r.w} ${x.name} "${x.text}" box ${x.boxH} ink ${x.inkH} dTop ${x.dTop} dBot ${x.dBot}`); }
+  for (const r of res) for (const x of r.rows) { const a = agg(r, x.role, x); if (!x.noText && !x.multi && (Math.abs(x.dTop) > tolOf(x.role) || Math.abs(x.dBot) > tolOf(x.role)) && a.bad.length < 3) a.bad.push(`${r.page}@${r.w} ${x.name} "${x.text}" box ${x.boxH} ink ${x.inkH} dTop ${x.dTop} dBot ${x.dBot}`); }
   console.log('row role | icons | with text | max|dTop| | max|dBot| (visible glyph vs text ink) | box h | glyph h | text ink h | glyph centre off in box | box-glyph fill min..max | circle centre off | status');
   for (const k of Object.keys(roles).sort()) {
-    const a = roles[k], enforced = ENFORCED.includes(k) || STRICT, misC = a.dTop > cfg.TOL || a.dBot > cfg.TOL, misD = a.dC > cfg.TOL || a.dCen > cfg.TOL || (a.fillMin < 2 - cfg.TOL || a.fillMax > 4 + cfg.TOL); let st = 'PASS';
+    const a = roles[k], enforced = ENFORCED.includes(k) || STRICT, misC = a.dTop > tolOf(k) || a.dBot > tolOf(k), misD = a.dC > tolOf(k) || a.dCen > tolOf(k) || (a.fillMin < 2 - cfg.TOL || a.fillMax > 4 + cfg.TOL); let st = 'PASS';
     if (a.n - a.noText - (a.multi || 0) === 0) st = 'n/a (no text sibling)'; else if (misC || misD) st = enforced ? 'FAIL' : 'WARN (decision pending)';
     if (st === 'FAIL') fails++; if (st.startsWith('WARN')) warns++;
     console.log([k, a.n, (a.n - a.noText - (a.multi || 0)) + (a.multi ? ' (+' + a.multi + ' multi-line: not measured)' : ''), a.dTop.toFixed(2), a.dBot.toFixed(2), [...a.boxH].join('/'), [...a.glyph].join('/'), [...a.inkH].join('/'), a.dCen.toFixed(2), a.fillMin.toFixed(1) + '..' + a.fillMax.toFixed(1), a.dC.toFixed(2), st].join(' | '));

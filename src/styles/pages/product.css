@@ -2,6 +2,7 @@
 /* NARROW grid (customer 2026-11-13, as before the SEO template): hero, info cards, the action button and Similar sit in the 8 CENTRAL columns (3-10) of the 12-col grid (1104 / 912 px on 1728 / 1440); text LEFT-aligned inside that column. hero: breadcrumbs, then ONE .section-head (h1 > tags > answer, gap --section-head-gap), then the info cards */
 .product-hero__inner { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--section-head-gap); }
 .product-hero__inner > * { grid-column: 3 / span 8; min-width: 0; }
+[data-page="404"] .product-hero__inner > .section-head--center > .section-head { gap: var(--group-to-group-gap); } /* 404 hero: heading -> text = 16 (customer 2026-11-14); only body[data-page=404]; hub/product templates share the structure and keep 24 */
 .product-hero .breadcrumbs { justify-content: center; }
 .product-hero__head { align-items: center; text-align: center; }
 .product-hero__head > .section-head { align-items: center; }

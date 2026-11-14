@@ -94,16 +94,23 @@ const MEASURE = (scope, i) => `(() => { const F = (${fnSrc})(); const root = ${s
   const s = getComputedStyle(el); const cs = getComputedStyle(el);
   return { rect: r(el), color: F.toRGB(s.color), bc: F.toRGB(s.borderTopColor), bw: parseFloat(s.borderTopWidth), frame: el.matches('.btn--secondary,.btn--ghost,.nav-pill,.lang-switch,.header__burger,.filter-item,.catalog__filters-toggle,.lang-menu__option'), bg: F.toRGB(s.backgroundColor), td: s.textDecorationLine, op: +s.opacity,
     cand: cand.map((n) => ({ idx: cand.indexOf(n), sel: n.matches('[aria-selected=true]'), sc: sc(n), rect: r(n), bg: F.toRGB(getComputedStyle(n).backgroundColor), color: F.toRGB(getComputedStyle(n).color) })),
-    tl: el.matches('.footer a, .breadcrumbs a, main :is(p, li, dd, td) > a:not([class])') && !el.matches('.btn, .footer__logo, .contact-line') ? (() => { const ps = getComputedStyle(el, '::before'); if (ps.content !== 'none' && ps.content !== 'normal') return { v: ps.scale === 'none' ? 1 : parseFloat(ps.scale), hole: F.toRGB(ps.backgroundColor), dur: F.timing(ps, 'scale') }; const bg = F.toRGB(s.backgroundColor); return { v: bg[3], hole: bg, dur: F.timing(s, 'background-color') }; })() : null, /* TEXT-LINK fill (text-link.css): ::before plate scale 0>1, or (prose) background-color */
+    tl: (el.matches('.footer a, .breadcrumbs a, main :is(p, li, dd, td) > a:not([class])') && !el.matches('.btn, .footer__logo, .contact-line')) ? (() => { const ps = getComputedStyle(el, '::before'); const sd = (n) => { const q = getComputedStyle(n); return [q.backgroundColor, q.backgroundImage, ['Top', 'Right', 'Bottom', 'Left'].map((k) => q['border' + k + 'Width'] + q['border' + k + 'Style']).join(), q.outlineStyle, q.boxShadow, q.paddingLeft + q.paddingRight + q.marginLeft].join('|'); }; const cr = el.getClientRects()[0] || el.getBoundingClientRect(); const has = ps.content !== 'none' && ps.content !== 'normal' && ps.display !== 'none'; const sc = ps.scale === 'none' ? 1 : parseFloat(ps.scale); const w = parseFloat(ps.width) || 0, h = parseFloat(ps.height) || 0; const tys = (ps.translate || '').split(' ')[1] || '0'; const ty = /%$/.test(tys) ? parseFloat(tys) / 100 * h : parseFloat(tys) || 0; const textLeft = cr.x + (el.matches('.footer a, .breadcrumbs a') ? parseFloat(s.paddingLeft) : 0); const bx0 = el.matches('.footer a, .breadcrumbs a') ? cr.x : cr.x - (parseFloat(ps.width) || 0) - 1; /* prose: the inline dot hangs left of the first line box */ return { sig: sd(el), has, v: has ? sc : 0, dot: has ? { inline: !el.matches('.footer a, .breadcrumbs a'), w, h, bx: bx0, by: cr.y, bh: cr.height, bg: F.toRGB(ps.backgroundColor), textLeft, lineCy: cr.y + cr.height / 2, dur: F.timing(ps, 'scale'), rad: ps.borderTopLeftRadius } : null, dur: F.timing(s, 'color'), color: F.toRGB(s.color), vw: innerWidth }; })() : null, /* TEXT-LINK (U14): text-only link, hover = lighter text colour + dot left of the text */
     top: (() => { const b = el.getBoundingClientRect(); const t = document.elementFromPoint(b.x + b.width / 2, b.y + b.height / 2); return !!t && (el.contains(t) || t.contains(el)); })() }; })()`;
 
 /* wait until every short CSS transition (< 2 s) has finished (robust under CPU load, unlike a fixed sleep); min 150 ms so a transition has started */
 const settle = async (page) => { await new Promise((r) => setTimeout(r, 150)); await page.evaluate(() => Promise.race([Promise.all(document.getAnimations().filter((a) => { try { return a instanceof CSSTransition && a.effect.getComputedTiming().endTime < 2000; } catch (e) { return false; } }).map((a) => a.finished.catch(() => {}))), new Promise((r) => setTimeout(r, 2500))])); await new Promise((r) => setTimeout(r, 100)); };
-async function samplePx(page, rect) { // colour of the pixel 6px (or 15%) inside the left edge, vertical middle
+async function samplePx(page, rect, corner) { // colour of the pixel 6px (or 15%) inside the left edge, vertical middle
   const sc = await page.evaluate(() => [window.scrollX, window.scrollY]); // clip is in page coordinates
-  const x = rect.x + Math.min(6, rect.w * 0.15) + sc[0], y = rect.y + rect.h / 2 + sc[1];
+  const x = corner ? rect.x + 1 + sc[0] : rect.x + Math.min(6, rect.w * 0.15) + sc[0], y = corner ? rect.y + 1 + sc[1] : rect.y + rect.h / 2 + sc[1];
   const b64 = await page.screenshot({ clip: { x: Math.max(0, x), y: Math.max(0, y), width: 1, height: 1 }, encoding: 'base64', type: 'png' });
   return page.evaluate((d) => new Promise((res) => { const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = c.height = 1; const g = c.getContext('2d'); g.drawImage(im, 0, 0); res([...g.getImageData(0, 0, 1, 1).data].slice(0, 3)); }; im.src = 'data:image/png;base64,' + d; }), b64);
+}
+async function dotPx(page, x0, x1, y0, y1, col) { // centroid of the pixels in the box that match the hover colour (the dot), page coordinates -> viewport coordinates
+  const sc = await page.evaluate(() => [window.scrollX, window.scrollY]); const X = Math.floor(Math.max(0, x0 + sc[0])), Y = Math.floor(Math.max(0, y0 + sc[1])), Wd = Math.max(1, Math.ceil(x1 - x0) + 1), Hd = Math.max(1, Math.ceil(y1 - y0) + 1);
+  const b64 = await page.screenshot({ clip: { x: X, y: Y, width: Wd, height: Hd }, encoding: 'base64', type: 'png' });
+  const px = await page.evaluate((d) => new Promise((res) => { const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = im.width; c.height = im.height; const g = c.getContext('2d'); g.drawImage(im, 0, 0); res({ w: im.width, h: im.height, d: [...g.getImageData(0, 0, im.width, im.height).data] }); }; im.src = 'data:image/png;base64,' + d; }), b64);
+  let sw = 0, sx = 0, sy = 0; for (let j = 0; j < px.h; j++) for (let i = 0; i < px.w; i++) { const k = (j * px.w + i) * 4; const w = Math.max(0, 1 - dE([px.d[k], px.d[k + 1], px.d[k + 2]], col) / 8); if (w > 0.3) { sw += w; sx += w * (i + 0.5); sy += w * (j + 0.5); } }
+  return sw ? { cx: X - sc[0] + sx / sw, cy: Y - sc[1] + sy / sw, n: sw } : null;
 }
 const allowFor = async (page, desc, idx, scope, key) => { /* allowlist match by selector evaluated in page */
   for (const a of allow) { if (a.pages && !a.pages.includes(key.page)) continue; if (a.widths && !a.widths.includes(key.w)) continue;
@@ -127,10 +134,11 @@ async function testElement(page, d, scope, key) {
   if (d.kind === 'card') return { status: 'N/A', kind: 'card', note: 'card / media link (whole-block link, not button-like): hover owned by the component, listed in the inventory' };
   const m0 = await page.evaluate(MEASURE(scope, d.i));
   if (!m0.top) return { status: 'SKIP', note: 'occluded' };
-  const r0 = m0.rect; const px0 = await samplePx(page, r0);
+  const r0 = m0.rect; const px0 = await samplePx(page, r0, !!m0.tl);
   await page.mouse.move(r0.x + r0.w / 2, r0.y + r0.h / 2); await settle(page);
   const m1 = await page.evaluate(MEASURE(scope, d.i));
-  const px1 = await samplePx(page, m1.rect);
+  const px1 = await samplePx(page, m1.rect, !!m0.tl);
+  let dotC = null; if (m1.tl && m1.tl.dot) { const q = m1.tl.dot; dotC = await dotPx(page, q.bx, q.textLeft - 0.5, q.by, q.by + q.bh - 3, m1.color.slice(0, 3)); }
   await page.mouse.move(1, 1); await new Promise((r) => setTimeout(r, 120));
   const res = { kind: d.kind, checks: {}, info: {} };
   // disc: any candidate (element or its ring/btn child) whose ::before scale goes 0 -> 1
@@ -155,7 +163,7 @@ async function testElement(page, d, scope, key) {
   const pxDE = dE(px0, px1);
   res.info = { ...res.info, colorDE: +colorDE.toFixed(1), pxDE: +pxDE.toFixed(1), labelContrast: +labelC.toFixed(1), tdChange: m0.td !== m1.td };
   const light = /(^|\.)contact-line(\.|$)/.test(d.sig);
-  if (d.kind === 'button') {
+  if (d.kind === 'button' && !(m1.tl || m0.tl)) {
     // .contact-line (customer 2026-11-13): the fill is by design only a step LIGHTER than its surface (--surface-white on page/raised/sunken), so the threshold is dE >= 1 (still must be lighter), not 10
     const minDE = light ? 1 : 10;
     res.checks.visible = Math.max(colorDE, pxDE) >= minDE || (disc && dE(px0, disc.sc.bg.slice(0, 3)) >= minDE);
@@ -164,16 +172,14 @@ async function testElement(page, d, scope, key) {
     res.checks.size = dim(m0.rect, m1.rect) <= 0.5;
     /* FRAME (customer 2026-11-13 "Рамка на всіх"): header/pill-role controls get a 1px opaque frame on hover; it must visibly differ from rest (transparent at rest) or already be opaque at rest */
     if (m1.frame) res.checks.frame = m1.bw >= 1 && m1.bc[3] > 0.9 && (m0.bc[3] > 0.9 || dE(blend(m0.bc, px0), blend(m1.bc, px1)) >= 10);
-  } else if (m1.tl || m0.tl) { // TEXT-LINK (text-link.css, customer 2026-11-13 \"нехай буде заливка фону кнопки\"): fill LIGHTER than the surface grows from the centre in --dur-hover-disc, no colour / text-decoration change, text does not move
-    const tok = await page.evaluate(`(${fnSrc})().token()`); const t0 = m0.tl, t1 = m1.tl; const dd = t1 && t1.dur;
-    res.info.disc = { token: tok, before: dd, fill: t1 && t1.hole };
-    res.checks.disc = !!t0 && !!t1 && t0.v < 0.05 && t1.v > 0.95;
-    res.checks.discDuration = !!dd && Math.abs(dd.dur - tok) <= 1 && dd.delay === 0;
-    res.checks.lighter = !!t1 && lum(t1.hole.slice(0, 3)) > lum(px0);
-    res.checks.visible = !!t1 && pxDE >= 1;
-    res.checks.noDecoChange = m0.td === m1.td; res.checks.colorSame = colorDE < 1;
-    res.checks.label = !!t1 && contrast(blend(m1.color, t1.hole), t1.hole.slice(0, 3)) >= 4.5;
-    res.checks.size = dim(m0.rect, m1.rect) <= 0.5;
+  } else if (m1.tl || m0.tl) { // TEXT-LINK (rule U14, customer 2026-11-14): text-only link (no fill, no icon): hover = LIGHTER text colour (--text-hover-lighter) + a dot LEFT of the text (::before, scale 0>1), both in --dur-hover-color; no plate / fill / border / outline / shadow / padding change, same bbox
+    const tok = await page.evaluate(`(${fnSrc})().tokens()`); const t0 = m0.tl, t1 = m1.tl; const dd = t1 && t1.dur, dt = t1 && t1.dot && t1.dot.dur; const dot = t1 && t1.dot;
+    const L0 = lum(m0.color.slice(0, 3)), L1 = lum(m1.color.slice(0, 3));
+    const same = (a, b) => Math.abs(a - b) <= 1; const col = m1.color.slice(0, 3);
+    res.checks = { colorLighter: L1 > L0 && dE(m0.color.slice(0, 3), col) >= 8, dotAppears: !!t0 && !!t1 && t0.has && t0.v < 0.05 && t1.v > 0.95, dotLeft: !!dot && !!dotC && dotC.cx + dot.w / 2 <= dot.textLeft + 0.5 && dotC.cx - dot.w / 2 >= -0.5, dotCentred: !!dot && !!dotC && Math.abs(dotC.cy - dot.lineCy) <= (dot.inline ? 3.5 : 0.5), /* one-line links: dot on the line-box centre +-0.5 px; wrapped inline prose links: dot on the x-height midline (optical centre), within 3.5 px of the line-box centre */ dotSize: !!dot && Math.abs(dot.w - 6) <= 1 && Math.abs(dot.h - dot.w) <= 0.5 && dot.rad !== '0px', dotColour: !!dot && dE(dot.bg.slice(0, 3), col) < 1,
+      noBoxChange: !!t0 && !!t1 && t0.sig === t1.sig, noDecoChange: m0.td === m1.td, size: dim(m0.rect, m1.rect) <= 0.5 && Math.abs(m0.rect.x - m1.rect.x) <= 0.5 && Math.abs(m0.rect.y - m1.rect.y) <= 0.5,
+      duration: !!dd && !!dt && Math.abs(dd.dur - tok.cdur) <= 1 && Math.abs(dt.dur - tok.cdur) <= 1 && tok.cdelays.some((x) => Math.abs(dd.delay - x) <= 1), label: contrast(col, px1) >= 4.5 };
+    res.info.textColor = [m0.color.slice(0, 3).join(','), col.join(','), 'lum ' + L0.toFixed(3) + '>' + L1.toFixed(3), 'contrast ' + contrast(col, px1).toFixed(1)].join(' '); if (dot && dotC) res.info.dot = ['w' + dot.w, 'cx' + dotC.cx.toFixed(1), 'cy' + dotC.cy.toFixed(1), 'lineCy' + dot.lineCy.toFixed(1)].join(' ');
   } else { // text link: visible hover needed, no disc required
     res.checks.disc = !light || !!disc; res.checks.visible = Math.max(colorDE, pxDE) >= (light ? 1 : 10) || m0.td !== m1.td || Math.abs(m0.op - m1.op) > 0.2; res.checks.size = dim(m0.rect, m1.rect) <= 0.5;
     if (light) res.checks.lighter = !!disc && lum(disc.sc.bg.slice(0, 3)) > lum(px0) && m1.td === 'none' && m0.td === 'none';

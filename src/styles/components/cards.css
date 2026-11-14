@@ -1,7 +1,11 @@
 /* CARD ROW RULE (customer 2026-11-14): cards in one row are equal height (grid align-items: stretch) and every card is a flex column with justify-content: space-between: the TOP group (icon + title) sits at the top padding, the BOTTOM group (body text / CTA) sits on the bottom padding (= padding-top), whatever the text length. Gate: npm run audit:card-row. */
 /* card: .card + surface (--surface|--white|--accent|--dark|--muted|--outline) + padding (--pad-md|--pad-lg) ; radius lg. Customer 2026-11-13 (reverts W1-4/Q3): cards on LIGHT pages are FILLED tiles (--surface-raised; white on hover), never transparent+outline. Hover never moves a card (no translate): the card's hover = disc of its button (buttons.css). Transparent+outline stays ONLY for .text-card--on-light / .quality-card (Home, Quality) and .link-card. */
 .card { --_pad: var(--card-padding); position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: var(--_pad); border: 0; border-radius: var(--radius-lg); background: var(--surface-raised); color: var(--text); }
-.card--pad-md, .card--pad-lg { --_pad: var(--card-padding); } /* U13: ONE card padding (--card-padding); the modifiers are kept only as aliases (no second value) */
+/* U13 size classes (REAL mechanism): the class re-points --card-padding for the card and its content, and re-derives the inner gaps from the class padding (G6: gap <= 0.72 x padding). lg = P (tokens.css default, nothing to override); .text-card--compact (narrow sidebar / empty state) = sm. Every `padding: var(--card-padding)` of a card follows the class automatically. */
+.card--pad-lg { --card-padding: var(--card-padding-lg); --_pad: var(--card-padding); }
+.card--pad-md, .card--pad-sm, .text-card--compact { --card-block-gap: round(down, calc(var(--card-padding) * 0.7), 1px); --text-card-gap: var(--card-block-gap); --text-group-gap: round(down, calc(var(--card-padding) * 0.27), 1px); --divider-gap: round(down, calc(var(--card-padding) / 2), 1px); --_pad: var(--card-padding); }
+.card--pad-md { --card-padding: var(--card-padding-md); }
+.card--pad-sm, .text-card--compact { --card-padding: var(--card-padding-sm); }
 .card--white { background: var(--surface-white); }
 .card--muted { background: var(--surface-muted); }
 .card--outline { background: transparent; border: 0; }
@@ -65,23 +69,22 @@
 
 /* hero */
 
-/* TEXT CARD: ONE component for every card with text (eyebrow .section-label + h2 + paragraph, button pinned to the bottom). Used in Home Products and Home Documentation.
-   Inner spacing is defined ONCE here: eyebrow -> h2 = h2 -> paragraph = --text-card-gap (30px, customer 2026-11-13). Changing it changes every instance.
-   Modifiers = surface only (--on-accent / --on-light) + the COMPACT layout (--compact: no h2, optional label + p + button, gap --text-card-gap; catalog help card and empty state); the aspect ratio is set by the row that holds the card (:where(.link-cards--3) .text-card, :where(.home-quality__cards) .text-card). */
+/* TEXT CARD: ONE component for every card with text (h2 + paragraph, button pinned to the bottom). Used in Home Products and Home Documentation.
+   Inner spacing is defined ONCE here: h2 -> paragraph = --text-card-gap (30px, customer 2026-11-13). Changing it changes every instance.
+   Modifiers = surface only (--on-accent / --on-light) + the COMPACT layout (--compact: no h2, p + button, gap --text-card-gap; catalog help card and empty state); the aspect ratio is set by the row that holds the card (:where(.link-cards--3) .text-card, :where(.home-quality__cards) .text-card). */
 .text-card { flex: 1; min-width: 0; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; gap: var(--space-5); padding: var(--card-padding); background: var(--surface-raised); border: 0; border-radius: var(--radius-lg); }
 .text-card__body { display: flex; flex-direction: column; gap: var(--text-card-gap); min-width: 0; }
 .text-card .section-head { gap: var(--text-card-gap); }
 .text-card__body > p { margin: 0; }
-/* text-card tag / h2 / p are trimmed by the shared M1 rule (base.css): the visible (ink) gap equals the token whatever the line-height (14/20, 36/40, 16/24) */
+/* text-card h2 / p are trimmed by the shared M1 rule (base.css): the visible (ink) gap equals the token whatever the line-height (36/40, 16/24) */
 .text-card--on-accent { background: var(--surface-card-on-accent); color: var(--accent-contrast); } /* card on BLUE: fill --surface-card-on-accent, no outline (customer 2026-11-13); button discs take the card colour */
-.text-card--on-accent .section-label, .text-card--on-accent h2 { color: var(--accent-contrast); }
+.text-card--on-accent h2 { color: var(--accent-contrast); }
 /* cards on BLUE (fill --surface-card-on-accent): light buttons / ring-actions inside take the CARD colour for the hover disc (not the section blue) */
 :is(.text-card--on-accent, .link-cards--3 .link-card, .card--accent, .card--dark) :is(.btn--light, .round-btn--light, .icon-ring--on-accent) { --_hole: var(--surface-card-on-accent); }
 .text-card--on-light { background: var(--surface-raised); color: var(--text); } /* card on LIGHT: --surface-raised fill, no outline (customer 2026-11-13) */
-.text-card--on-light .section-label { color: var(--text); }
 .text-card--on-light h2 { color: var(--text-accent); }
-/* COMPACT variant (no h2): .text-card.text-card--compact > .text-card__body (p; .section-label OPTIONAL) + .btn; label -> body = --text-card-gap (30, customer exception); body -> button = --space-5 (24, as every body-text -> button). Content-height (does not stretch in a flex/aside column). Replaces the former .help-card and .catalog__empty. */
-.text-card--compact { flex: none; justify-content: flex-start; gap: var(--space-5); background: var(--surface-raised); color: var(--text-accent); } /* filled white tile (customer 2026-11-13); the label is OPTIONAL (catalog help + empty state have none) */
+/* COMPACT variant (no h2): .text-card.text-card--compact > .text-card__body (p) + .btn; body -> button = --space-5 (24, as every body-text -> button). Content-height (does not stretch in a flex/aside column). Replaces the former .help-card and .catalog__empty. */
+.text-card--compact { flex: none; justify-content: flex-start; gap: var(--card-block-gap); background: var(--surface-raised); color: var(--text-accent); } /* filled white tile (customer 2026-11-13); (catalog help + empty state have none) */
 .text-card--compact .text-card__body > p { color: var(--text-accent); font-size: var(--type-body-size); line-height: var(--type-body-lh); }
 @media (max-width: 767px) {
   .text-card.text-card { aspect-ratio: auto; min-height: 0; flex-direction: column; align-items: flex-start; } /* doubled class beats the zero-specificity row contexts */

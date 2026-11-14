@@ -17,7 +17,7 @@ exports.pairsInPage = function pairsInPage(arg) {
     const first = Math.min(...rs.map((q) => q.top)), last = Math.max(...rs.map((q) => q.top)), r = el.getBoundingClientRect();
     return { top: first + fa - cap, bottom: last + fa, left: r.left, right: r.right, painted: false };
   };
-  const LEAF = 'h1,h2,h3,h4,h5,h6,p,.section-label,dt,dd,label,legend,.btn,figcaption';
+  const LEAF = 'h1,h2,h3,h4,h5,h6,p,dt,dd,label,legend,.btn,figcaption';
   const root = document.querySelector(arg.root); if (!root) return { err: 'no root ' + arg.root };
   const leaves = [];
   for (const el of [root, ...root.querySelectorAll('*')]) {

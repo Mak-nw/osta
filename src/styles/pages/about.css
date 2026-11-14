@@ -18,8 +18,7 @@
 .about-services { padding-top: var(--section-lg); background: var(--surface-accent); color: var(--text-on-accent); }
 .about-services__top { padding-bottom: var(--space-9); } /* texts to the first divider; title-to-texts gap = About grid logic (row-gap 32 + title margin 16 = 48) */
 .about-services__texts { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--section-head-gap); align-items: start; }
-.about-services__head { grid-column: 1 / span 6; grid-row: 1; margin: 0; } /* tag above the title (.section-head), white on the blue block */
-.about-services__head .section-label { color: var(--text-on-accent); }
+.about-services__head { grid-column: 1 / span 6; grid-row: 1; margin: 0; } /* title group (.section-head), white on the blue block */
 .about-services__texts > p:first-of-type { grid-column: 6 / span 3; grid-row: 2; }
 .about-services__texts > p:last-of-type { grid-column: 9 / span 3; grid-row: 2; }
 .about-services__texts p { margin: 0; }
