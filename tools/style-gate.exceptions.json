@@ -67,6 +67,15 @@
       "quote": "Верх сторінки 404 і юридичних",
       "source": "questions/answers.json#ccb4b5 (form answer «Верх сторінки 404 і юридичних», 2026-11-14)",
       "value": 16
+    },
+    {
+      "selector": ".contact-people",
+      "rule": "A3.1",
+      "reason": "Contact people/rows grids: BETWEEN groups gap = --card-padding (45 desktop / 32 mobile, the existing card-padding value) instead of 12 / 16; exceeds 0.72 x P limit.",
+      "approvedBy": "customer",
+      "approvedAt": "2026-11-18",
+      "quote": "гап між групами на сторінці Contact 45 (замість 12)",
+      "source": "chat 2026-11-18 (orchestrator relay; 50 snapped to 45 by P25)"
     }
   ]
 }

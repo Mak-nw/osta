@@ -5,7 +5,7 @@
 .legal__updated { color: var(--text); }
 .legal__grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); align-items: start; }
 .legal__body { grid-column: 4 / span 6; min-width: 0; overflow-wrap: anywhere; display: flex; flex-direction: column; gap: var(--section-sm); }
-.legal__section { display: flex; flex-direction: column; gap: var(--space-4); }
+.legal__section { display: flex; flex-direction: column; gap: var(--text-gap); }
 .legal__heading { margin: 0; }
 .legal__text, .legal__section > p { margin: 0; color: var(--text); }
 /* Lists inside a section: <ul class="legal__list t-body"> / <ol class="legal__list legal__list--numbered t-body"> */

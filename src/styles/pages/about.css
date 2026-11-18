@@ -57,7 +57,7 @@
   .about-services__texts > p:last-of-type { grid-column: 5 / span 4; grid-row: 2; }
 }
 @media (max-width: 767px) {
-  .about-intro__text { row-gap: var(--space-4); } /* two paragraphs stacked: 16 like every body-text -> body-text (was 0, flush) */
+  .about-intro__text { row-gap: var(--text-gap); } /* two paragraphs stacked: 16 like every body-text -> body-text (was 0, flush) */
   .about-intro__text > p:first-child { grid-column: 1 / -1; grid-row: 1; }
   .about-intro__text > p + p { grid-column: 1 / -1; grid-row: 2; }
   .about-intro__figure { grid-row: 3; }

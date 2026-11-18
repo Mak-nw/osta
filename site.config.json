@@ -13,13 +13,13 @@
   "productGate": { "minWords": 40, "minFacts": 2 },
   "company": {
     "legalName": "OSTA Trading GmbH",
-    "streetAddress": "Senefelder Ring 83",
+    "streetAddress": "Senefelder Ring 34",
     "postalCode": "21465",
     "addressLocality": "Reinbek",
     "addressCountry": "DE",
     "email": "info@osta-trading.com",
-    "telephone": "+49 40 731 281-76",
-    "fax": "+49 40 736 762-90",
+    "telephone": "+49 40 881 94 506",
+    "fax": "+49 40 736 76 290",
     "sameAs": []
   },
   "credentials": {

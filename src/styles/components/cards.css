@@ -3,14 +3,14 @@
 .card { --_pad: var(--card-padding); position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: var(--_pad); border: 0; border-radius: var(--radius-lg); background: var(--surface-raised); color: var(--text); }
 /* U13 size classes (REAL mechanism): the class re-points --card-padding for the card and its content, and re-derives the inner gaps from the class padding (G6: gap <= 0.72 x padding). lg = P (tokens.css default, nothing to override); .text-card--compact (narrow sidebar / empty state) = sm. Every `padding: var(--card-padding)` of a card follows the class automatically. */
 .card--pad-lg { --card-padding: var(--card-padding-lg); --_pad: var(--card-padding); }
-.card--pad-md, .card--pad-sm, .text-card--compact { --card-block-gap: round(down, calc(var(--card-padding) * 0.7), 1px); --text-card-gap: var(--card-block-gap); --text-group-gap: round(down, calc(var(--card-padding) * 0.27), 1px); --divider-gap: round(down, calc(var(--card-padding) / 2), 1px); --_pad: var(--card-padding); }
+.card--pad-md, .card--pad-sm, .text-card--compact { --card-text-gap: min(var(--text-gap), round(down, calc(var(--card-padding) * 0.7), 1px)); --card-block-gap: round(down, calc(var(--card-padding) * 0.7), 1px); --text-card-gap: var(--card-block-gap); --text-group-gap: round(down, calc(var(--card-padding) * 0.27), 1px); --divider-gap: round(down, calc(var(--card-padding) / 2), 1px); --_pad: var(--card-padding); }
 .card--pad-md { --card-padding: var(--card-padding-md); }
 .card--pad-sm, .text-card--compact { --card-padding: var(--card-padding-sm); }
 .card--white { background: var(--surface-white); }
 .card--muted { background: var(--surface-muted); }
 .card--outline { background: transparent; border: 0; }
-.card--accent { background: var(--surface-card-on-accent); color: var(--text-on-accent); }
-.card--dark { background: var(--surface-card-on-accent); color: var(--text-on-accent); }
+.card--accent { --on-accent-bg: var(--surface-card-on-accent); background: var(--surface-card-on-accent); color: var(--text-on-accent); }
+.card--dark { --on-accent-bg: var(--surface-card-on-accent); background: var(--surface-card-on-accent); color: var(--text-on-accent); }
 .card--light { background: var(--surface-raised); }   /* service card: light card on accent background */
 .card--link { transition: background var(--dur-hover-disc) var(--ease-hover); }
 .card--link:hover,
@@ -20,7 +20,7 @@
 .card.is-disabled { opacity: .5; pointer-events: none; }
 
 /* product-card: <a class="card card--link product-card"> */
-.product-card { gap: var(--space-4); padding: var(--card-padding); border-radius: var(--radius-lg); }
+.product-card { gap: var(--card-text-gap); padding: var(--card-padding); border-radius: var(--radius-lg); }
 .product-card__tags { display: flex; align-items: center; }
 .product-card__title { /* item-title role: compact title of a dense list item = --type-h3 (24/32) */ color: var(--text-accent); font-size: var(--type-h3-size); line-height: var(--type-h3-lh); font-weight: var(--font-weight-medium); letter-spacing: var(--type-h3-ls); }
 .product-card__footer { margin-top: auto; display: flex; align-items: center; justify-content: space-between; color: var(--accent); font-size: var(--type-body-size); }
@@ -32,7 +32,7 @@
 
 
 /* manager contact card */
-.contact-card { gap: var(--space-4); }
+.contact-card { gap: var(--card-text-gap); }
 .contact-card__avatar { width: var(--avatar-sm); height: var(--avatar-sm); border-radius: var(--radius-full); object-fit: cover; }
 .contact-card__name { font-size: var(--type-body-size); }
 .contact-card__role { font-size: var(--type-label-size); color: var(--text); letter-spacing: var(--type-label-ls); }
@@ -56,8 +56,8 @@
 .people-card__contacts { grid-column: 10 / span 3; margin-top: auto; display: flex; flex-direction: column; gap: var(--click-group-gap); font-size: var(--type-body-size); } /* contact-line -> contact-line: ONE gap --click-group-gap 8 (as .contact-lines on Contact and the footer) */
 
 /* info card (Description / Usage / Specs / FAQ): white tile */
-/* gap head (icon-ring + label) -> text = --card-inner-gap (12), the same token as art <-> text in svc/quality/link cards; padding = .card --_pad (--space-5, all sides) */
-.info-card { gap: var(--card-inner-gap); border-radius: var(--radius-lg); background: var(--surface-raised); }
+/* gap head (icon-ring + label) -> text = --card-text-gap (30, customer 2026-11-18; equal for Usage/Description/Specs/FAQ); padding = .card --_pad (--space-5, all sides) */
+.info-card { gap: var(--card-text-gap); border-radius: var(--radius-lg); background: var(--surface-raised); }
 .info-card__head { display: flex; align-items: center; gap: var(--space-4); min-width: 0; }
 .info-card__label { min-width: 0; color: var(--text-accent); font-size: var(--type-h3-size); line-height: var(--type-h3-lh); letter-spacing: var(--type-h3-ls); font-weight: 500; } /* item-title role (h3 24/32/500, as link-card__title), NOT body */
 .info-card__value { font-size: var(--type-lead-size); line-height: var(--type-lead-lh); letter-spacing: var(--type-lead-ls); color: var(--text-accent); }
@@ -77,7 +77,7 @@
 .text-card .section-head { gap: var(--text-card-gap); }
 .text-card__body > p { margin: 0; }
 /* text-card h2 / p are trimmed by the shared M1 rule (base.css): the visible (ink) gap equals the token whatever the line-height (36/40, 16/24) */
-.text-card--on-accent { background: var(--surface-card-on-accent); color: var(--accent-contrast); } /* card on BLUE: fill --surface-card-on-accent, no outline (customer 2026-11-13); button discs take the card colour */
+.text-card--on-accent { --on-accent-bg: var(--surface-card-on-accent); background: var(--surface-card-on-accent); color: var(--accent-contrast); } /* card on BLUE: fill --surface-card-on-accent, no outline (customer 2026-11-13); button discs take the card colour */
 .text-card--on-accent h2 { color: var(--accent-contrast); }
 /* cards on BLUE (fill --surface-card-on-accent): light buttons / ring-actions inside take the CARD colour for the hover disc (not the section blue) */
 :is(.text-card--on-accent, .link-cards--3 .link-card, .card--accent, .card--dark) :is(.btn--light, .round-btn--light, .icon-ring--on-accent) { --_hole: var(--surface-card-on-accent); }
@@ -108,16 +108,24 @@ html :is(.text-card) a.btn:is(:active, .is-pressed) { transform: none; position:
 /* text card = 1:1 (the row of three squares) */
 :where(.quality-cards) .text-card { aspect-ratio: 1 / 1; }
 .quality-cards > li { grid-column: span 4; display: flex; min-width: 0; }
+/* Desktop (>= 1200): the 4 rows of the card (icon, art, title, text) are rows of the .quality-cards grid; every li and card is a SUBGRID of them, so icon / art / title / text line up across the row for ANY text length (EN, DE): no fixed line reservations. */
+@media (min-width: 1200px) {
+  .quality-cards { grid-template-rows: auto minmax(0, 1fr) auto auto; }
+  .quality-cards > li { grid-row: span 4; display: grid; grid-template-rows: subgrid; }
+  .quality-cards > li > :is(.text-card, .quality-card) { grid-row: 1 / -1; }
+}
 .quality-card { flex: 1; min-width: 0; box-sizing: border-box; aspect-ratio: 1 / 1; padding: var(--card-padding); border: 0; border-radius: var(--radius-lg); background: var(--surface-raised); color: var(--text); }
 .quality-card > * { margin: 0; }
 .quality-card__title { color: var(--text-accent); }
 .quality-card { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto auto; row-gap: var(--card-inner-gap); align-items: start; }
+@media (min-width: 1200px) { .quality-card { grid-template-rows: subgrid; align-items: stretch; } } /* title / text boxes fill their shared row: equal heights across the row, text starts at one line */
 .quality-card > .icon-ring { grid-row: 1; justify-self: start; color: var(--accent); }
 .quality-card__art { --il-fill: var(--surface-white); --il-soft: var(--accent); --il-bg: var(--surface-raised); grid-row: 2; align-self: stretch; position: relative; min-height: 0; min-width: 0; width: 100%; color: var(--accent); }
 .quality-card__canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
 .quality-card__canvas.is-ready { opacity: 1; }
 .quality-card__title { grid-row: 3; overflow-wrap: break-word; hyphens: auto; }
-.quality-card__text { grid-row: 4; margin-top: calc(var(--space-4) - var(--card-inner-gap)); /* row-gap 12 above + this = title -> text 16 (as every heading -> body-text) */ overflow-wrap: break-word; hyphens: auto; }
+.quality-card__text { grid-row: 4; margin-top: calc(var(--card-text-gap) - var(--card-inner-gap)); /* row-gap 12 above + this = title -> text = --card-text-gap (30) */ overflow-wrap: break-word; hyphens: auto; }
+@media (max-width: 1199px) { .quality-card__text { min-height: 4lh; } .quality-card__title { min-height: 2lh; } } /* tablet (cards not in the shared row grid): reserve the longer title/text lines so the art zones match */
 /* Tablet: text card full width (row layout), the two fact cards under it, 4 cols each. Mobile: stacked, art zones keep one shared height. */
 @media (max-width: 1199px) {
   .quality-cards { row-gap: var(--grid-gap); }

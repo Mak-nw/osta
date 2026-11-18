@@ -12,14 +12,17 @@
     <!-- 1. Hero (Attention), V4 "centre composition" (.hero--home, >=1200): H1 = two spans (left phrase cols 1-4 left-aligned, right phrase cols 9-12 right-aligned) and the 3D scene (home-hero-scene.js) share ONE horizontal axis and the page centre; the search group (.hero__find: label > search control 56 > category row) is centred (cols 4-9) at the bottom of the hero. <=1199: stack (scene > title > search). -->
     <section class="hero hero--home" aria-labelledby="home-hero-title">
       <div class="container hero__content">
-        <h1 class="t-display hero__title" id="home-hero-title" data-reveal-load="0"><span class="hero__title-part hero__title-part--l" data-i18n-html="home.hero_title_l">One partner to settle <br>your supply</span> <span class="hero__title-part hero__title-part--r" data-i18n-html="home.hero_title_r">of APIs, excipients <br>and specialty <br>ingredients</span></h1>
+        <h1 class="t-display hero__title" id="home-hero-title" data-reveal-load="0"><span class="hero__title-part hero__title-part--l" data-i18n-html="home.hero_title_l">OSTA Trading is<br>your trusted choice</span> <span class="hero__title-part hero__title-part--r" data-i18n-html="home.hero_title_r">for APIs, excipients<br>and expertise</span></h1>
         <div class="hero__find">
+          <div class="hero__lead" data-reveal-load="1">
+            <p class="t-body" data-i18n="home.hero_lead_1">OSTA Trading GmbH is a specialised distributor of active pharmaceutical ingredients (APIs), excipients and specialty ingredients for the pharmaceutical, food and cosmetics industries.</p>
+            <p class="t-body" data-i18n="home.hero_lead_2">From the first bright idea to the finalised dosage form, we are to support you.</p>
+          </div>
           <form class="hero-search field field--on-accent" role="search" action="/catalog.html" method="get" data-reveal-load="1" aria-label="Search products" data-i18n-attr="aria-label:home.hero_search_label">
-            <label class="field__label" for="hero-search-q" data-i18n="home.hero_search_field_label">Find a product by name</label>
             <div class="hero-search__bar">
               <div class="search">
                 <span class="icon-box"><svg class="icon" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#search"/></svg></span>
-                <input class="input" id="hero-search-q" type="search" name="q" autocomplete="off" placeholder="Search products" data-i18n-attr="placeholder:home.hero_search_label"><span class="hero-type" aria-hidden="true" data-hero-type><span class="hero-type__text"></span><span class="hero-type__caret"></span></span>
+                <input class="input" id="hero-search-q" type="search" name="q" autocomplete="off" placeholder="Search products" data-i18n-attr="placeholder:home.hero_search_label;aria-label:home.hero_search_label"><span class="hero-type" aria-hidden="true" data-hero-type><span class="hero-type__text"></span><span class="hero-type__caret"></span></span>
               </div>
               <button class="btn btn--light btn--md" type="submit"><span data-i18n="home.hero_search_btn">Search</span></button>
             </div>
@@ -35,20 +38,11 @@
       </div>
     </section>
 
-    <!-- 2. About (Interest: who we are): blue panel, tag + two-sentence title cols 1-8, no photo, no button -->
-    <section class="home-section home-section--accent home-about" id="about" aria-labelledby="home-about-title">
-      <div class="container home-grid">
-        <div class="section-head home-about__head">
-          <h2 class="t-display" id="home-about-title" data-scroll-fill data-i18n-html="home.about_title"><span class="home-about__sentence">OSTA Trading GmbH supplies the pharmaceutical, food and cosmetics industries across Europe and worldwide.</span><span class="home-about__sentence">Our warehouse is in Reinbek, in the Hamburg metropolitan&nbsp;area</span></h2>
-        </div>
-      </div>
-    </section>
-
-    <!-- 3. Products (Interest: what we offer), blue: summary + button left, text card + 3 category link cards row -->
+    <!-- 2. Products (Interest: what we offer), blue: summary + button left, text card + 3 category link cards row -->
     <section class="home-section home-section--accent home-products" id="products" aria-labelledby="home-products-title">
       <div class="container home-grid">
         <ul class="link-cards link-cards--3 home-products__cards" aria-label="Product categories" data-i18n-attr="aria-label:home.products_categories" data-reveal-stagger>
-          <li data-reveal><div class="text-card text-card--on-accent"><div class="text-card__body"><div class="section-head"><h2 class="t-h2" id="home-products-title" data-i18n-html="home.products_title">Find the ingredient<br>you need in<br>our portfolio</h2></div><p class="t-body" data-i18n="home.products_text">Our catalog covers APIs, excipients and food grade ingredients. Search by name, filter by category and send your request for any position.</p></div><a class="btn btn--light btn--md btn--split" href="/catalog.html"><span data-i18n="home.products_cta">View all</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a></div></li>
+          <li data-reveal><div class="text-card text-card--on-accent"><div class="text-card__body"><div class="section-head"><h2 class="t-h2" id="home-products-title" data-i18n-html="home.products_title">Find the product<br>you need in<br>our portfolio</h2></div><p class="t-body" data-i18n="home.products_text">Our catalog covers APIs, excipients and food grade ingredients. Search by name, filter by category and send your request for your required product.</p></div><a class="btn btn--light btn--md btn--split" href="/catalog.html"><span data-i18n="home.products_cta">View all</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a></div></li>
           <li data-reveal><a class="link-card" href="/catalog.html?category=api"><span class="icon-ring"><span class="icon-box icon-box--lg"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#molecule"/></svg></span></span><span class="link-card__art" data-scene="api" aria-hidden="true"></span><h3 class="t-h3 link-card__title" data-i18n="catalog.cat_api">API</h3><span class="round-btn round-btn--light round-btn--md" aria-hidden="true"><span class="icon-box"><svg class="icon" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></span></a></li>
           <li data-reveal><a class="link-card" href="/catalog.html?category=excipients"><span class="icon-ring"><span class="icon-box icon-box--lg"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#puzzle"/></svg></span></span><span class="link-card__art" data-scene="excipients" aria-hidden="true"></span><h3 class="t-h3 link-card__title" data-i18n="catalog.cat_excipients">Excipients</h3><span class="round-btn round-btn--light round-btn--md" aria-hidden="true"><span class="icon-box"><svg class="icon" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></span></a></li>
           <li data-reveal><a class="link-card" href="/catalog.html?category=food-grade"><span class="icon-ring"><span class="icon-box icon-box--lg"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#leaf"/></svg></span></span><span class="link-card__art" data-scene="food" aria-hidden="true"></span><h3 class="t-h3 link-card__title" data-i18n="catalog.cat_food">Food Grade</h3><span class="round-btn round-btn--light round-btn--md" aria-hidden="true"><span class="icon-box"><svg class="icon" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></span></a></li>
@@ -56,53 +50,53 @@
       </div>
     </section>
 
-    <!-- 4. Services (Interest: what we do): the shared How-we-work split (sticky summary + button left, 4 step rows right, active row highlighted on scroll) -->
+    <!-- 3. Services (Interest: what we do): the shared How-we-work split (sticky summary + button left, 4 step rows right, active row highlighted on scroll) -->
     <section class="home-section home-services" id="services" aria-labelledby="home-services-title">
       <div class="container how-split">
         <div class="how-split__sticky section-head">
           <div class="section-head">
-            <h2 class="t-display t-accent" id="home-services-title" data-i18n-html="home.services_title">We support<br>your project<br>from first inquiry<br>to regular supply</h2>
-            <p class="t-body" data-i18n="home.services_text">We search for manufacturers, coordinate regulatory documents, collect samples and agree specifications and quality with you. Logistics is part of the same service.</p>
+            <h2 class="t-h2 t-accent" id="home-services-title" data-i18n-html="home.services_title">At OSTA Trading GmbH we aim to provide our customers with a dependable supply solution from the first product inquiry through to continuous commercial deliveries</h2>
+            <p class="t-body" data-i18n="home.services_text">We provide end-to-end supply services, covering sourcing, logistics, regulatory queries and storage, tailored for your project. Your requirements are our priority.</p>
           </div>
-          <a class="btn btn--primary btn--lg btn--split" href="/services.html"><span data-i18n="home.services_cta">Learn more</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a>
+          <a class="btn btn--primary btn--lg btn--split" href="/services.html"><span data-i18n="home.services_cta">Explore our services</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a>
         </div>
         <ol class="how-list" data-how-list>
-          <li class="how-step" data-step="1"><span class="icon-ring how-step__icon" aria-hidden="true"><span class="icon-box icon-box--lg"><svg class="icon icon-text"><use href="/assets/icons/sprite.svg#search-check"/></svg></span></span><span class="how-step__num t-label" aria-hidden="true">01</span><h3 class="t-h2 how-step__title" data-i18n-html="home.service_manufacturer_title">Manufacturer search</h3><p class="t-body how-step__text" data-i18n="home.service_manufacturer_text">Sources matched to your technical, quality, regulatory and commercial requirements.</p></li>
-          <li class="how-step" data-step="2"><span class="icon-ring how-step__icon" aria-hidden="true"><span class="icon-box icon-box--lg"><svg class="icon icon-text"><use href="/assets/icons/sprite.svg#file"/></svg></span></span><span class="how-step__num t-label" aria-hidden="true">02</span><h3 class="t-h2 how-step__title" data-i18n-html="home.service_regulatory_title">Regulatory documents</h3><p class="t-body how-step__text" data-i18n="home.service_regulatory_text">One point of contact for the documentation your project requires.</p></li>
-          <li class="how-step" data-step="3"><span class="icon-ring how-step__icon" aria-hidden="true"><span class="icon-box icon-box--lg"><svg class="icon icon-text"><use href="/assets/icons/sprite.svg#box-arrow"/></svg></span></span><span class="how-step__num t-label" aria-hidden="true">03</span><h3 class="t-h2 how-step__title" data-i18n-html="home.service_samples_title">Samples</h3><p class="t-body how-step__text" data-i18n="home.service_samples_text">Samples for your evaluation and qualification procedures.</p></li>
-          <li class="how-step" data-step="4"><span class="icon-ring how-step__icon" aria-hidden="true"><span class="icon-box icon-box--lg"><svg class="icon icon-text"><use href="/assets/icons/sprite.svg#check"/></svg></span></span><span class="how-step__num t-label" aria-hidden="true">04</span><h3 class="t-h2 how-step__title" data-i18n-html="home.service_specs_title">Specs &amp; quality</h3><p class="t-body how-step__text" data-i18n="home.service_specs_text">Specifications and quality requirements agreed before supply starts.</p></li>
+          <li class="how-step" data-step="1"><span class="icon-ring how-step__icon" aria-hidden="true"><span class="icon-box icon-box--lg"><svg class="icon icon-text"><use href="/assets/icons/sprite.svg#search-check"/></svg></span></span><span class="how-step__num t-label" aria-hidden="true">01</span><h3 class="t-h2 how-step__title" data-i18n-html="home.service_manufacturer_title">Sourcing and supplier selection</h3><p class="t-body how-step__text" data-i18n="home.service_manufacturer_text">We will identify necessary sources based on your specific technical, quality, regulatory and commercial requirements</p></li>
+          <li class="how-step" data-step="2"><span class="icon-ring how-step__icon" aria-hidden="true"><span class="icon-box icon-box--lg"><svg class="icon icon-text"><use href="/assets/icons/sprite.svg#file"/></svg></span></span><span class="how-step__num t-label" aria-hidden="true">02</span><h3 class="t-h2 how-step__title" data-i18n-html="home.service_regulatory_title">Storage and Handling</h3><p class="t-body how-step__text" data-i18n="home.service_regulatory_text">We are here to provide specialised services for the storage of temperature-sensitive products.</p></li>
+          <li class="how-step" data-step="3"><span class="icon-ring how-step__icon" aria-hidden="true"><span class="icon-box icon-box--lg"><svg class="icon icon-text"><use href="/assets/icons/sprite.svg#box-arrow"/></svg></span></span><span class="how-step__num t-label" aria-hidden="true">03</span><h3 class="t-h2 how-step__title" data-i18n-html="home.service_samples_title">Logistics and Deliveries</h3><p class="t-body how-step__text" data-i18n="home.service_samples_text">From arranging transport to coordinating shipping and customs documentation for your products.</p></li>
+          <li class="how-step" data-step="4"><span class="icon-ring how-step__icon" aria-hidden="true"><span class="icon-box icon-box--lg"><svg class="icon icon-text"><use href="/assets/icons/sprite.svg#check"/></svg></span></span><span class="how-step__num t-label" aria-hidden="true">04</span><h3 class="t-h2 how-step__title" data-i18n-html="home.service_specs_title">Quality and Compliance</h3><p class="t-body how-step__text" data-i18n="home.service_specs_text">Offering support for your project from obtaining all the required documents to support registration and manufacturer evaluation.</p></li>
         </ol>
       </div>
     </section>
 
-    <!-- 5. Supply & logistics (Desire): rounded photo panel (inset like the blue panels), white text directly on the photo (no overlay) -->
+    <!-- 4. Supply & logistics (Desire): rounded photo panel (inset like the blue panels), white text directly on the photo (no overlay) -->
     <section class="home-supply" id="supply" aria-labelledby="home-supply-title">
       <div class="photo-panel">
         <!-- AI-generated photo (home-supply-drone.jpg): client must confirm its use -->
         <img class="photo-panel__bg" src="/assets/img/home-supply-drone.jpg" alt="" width="2560" height="1280" loading="lazy" decoding="async">
         <div class="container home-grid photo-panel__grid">
           <div class="section-head photo-panel__head">
-            <h2 class="t-display" id="home-supply-title" data-i18n-html="home.logistics_title">We organise<br>supply from the<br>manufacturer to<br>your destination</h2>
+            <h2 class="t-display" id="home-supply-title" data-i18n-html="home.logistics_title">We at Osta Trading pride ourselves on offering support to our clients throughout the entire supply process</h2>
           </div>
           <div class="photo-panel__aside">
-            <p class="t-body" data-i18n="home.logistics_text">Our warehouse in Reinbek lets us consolidate supplies and keep stock for selected products. We coordinate international transport, import and export procedures and shipping documents with experienced logistics partners.</p>
+            <p class="t-body" data-i18n="home.logistics_text">Our offer is to coordinate the supply chain from the manufacturer to your destination, taking into consideration your product's specific handling requirements, as well as handling the documentation and transport requirements applicable to your specific product.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 6. Quality & documentation (Desire: trust), LIGHT band: row of 3 cards (4 cols each): text card + EudraGMDP and GDP cards with looping point-line scenes (src/pages/home-quality-scenes.js) -->
+    <!-- 5. Quality & documentation (Desire: trust), LIGHT band: row of 3 cards (4 cols each): text card + EudraGMDP and GDP cards with looping point-line scenes (src/pages/home-quality-scenes.js) -->
     <section class="home-section home-quality" id="quality" aria-labelledby="home-quality-title">
       <div class="container home-grid">
         <ul class="quality-cards home-quality__cards" data-reveal-stagger>
-          <li data-reveal><div class="text-card text-card--on-light"><div class="text-card__body"><div class="section-head"><h2 class="t-h2" id="home-quality-title" data-i18n-html="home.quality_title">Quality and compliance<br>are fundamental<br>to our operations</h2></div><p class="t-body" data-i18n="home.quality_text">OSTA Trading GmbH is registered in EudraGMDP as an API distributor. Our warehouse operates in compliance with GDP requirements, so we handle, store and distribute pharmaceutical ingredients appropriately.</p></div><a class="btn btn--primary btn--md btn--split" href="/contact.html"><span data-i18n="home.quality_cta">Request documentation</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a></div></li>
-          <li data-reveal><article class="quality-card"><span class="icon-ring"><span class="icon-box icon-box--lg"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#shield-check"/></svg></span></span><span class="quality-card__art" data-scene="eudra" aria-hidden="true"></span><h3 class="t-h2 quality-card__title" data-i18n="home.quality_eudra_title">EudraGMDP</h3><p class="t-body quality-card__text" data-i18n="home.quality_eudra_text">Registered as API distributor.</p></article></li>
-          <li data-reveal><article class="quality-card"><span class="icon-ring"><span class="icon-box icon-box--lg"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#home"/></svg></span></span><span class="quality-card__art" data-scene="gdp" aria-hidden="true"></span><h3 class="t-h2 quality-card__title" data-i18n="home.quality_gdp_title">GDP</h3><p class="t-body quality-card__text" data-i18n="home.quality_gdp_text">Warehouse compliant with GDP requirements.</p></article></li>
+          <li data-reveal><div class="text-card text-card--on-light"><div class="text-card__body"><div class="section-head"><h2 class="t-h2" id="home-quality-title" data-i18n-html="home.quality_title">Quality and compliance<br>are fundamental<br>to our operations</h2></div><p class="t-body" data-i18n="home.quality_text">We guarantee you the consistently high quality services, reliable order management, transparent supply chain and internal system of quality control. All designed to simplify procurement and add value to your business.</p></div><a class="btn btn--primary btn--md btn--split" href="/contact.html"><span data-i18n="home.quality_cta">Request documentation</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a></div></li>
+          <li data-reveal><article class="quality-card"><span class="icon-ring"><span class="icon-box icon-box--lg"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#shield-check"/></svg></span></span><span class="quality-card__art" data-scene="eudra" aria-hidden="true"></span><h3 class="t-h2 quality-card__title" data-i18n="home.quality_eudra_title">EudraGMDP listed</h3><p class="t-body quality-card__text" data-i18n="home.quality_eudra_text">We are a registered distributor of APIs and excipients</p></article></li>
+          <li data-reveal><article class="quality-card"><span class="icon-ring"><span class="icon-box icon-box--lg"><svg class="icon icon-text" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#home"/></svg></span></span><span class="quality-card__art" data-scene="gdp" aria-hidden="true"></span><h3 class="t-h2 quality-card__title" data-i18n="home.quality_gdp_title">GDP Certificate</h3><p class="t-body quality-card__text" data-i18n="home.quality_gdp_text">Fully qualified GDP warehouse based in Reinbek</p></article></li>
         </ul>
       </div>
     </section>
 
-    <!-- 7. Closing CTA (Action): shared .home-closing component -->
+    <!-- 6. Closing CTA (Action): shared .home-closing component -->
     <section class="home-closing">
       <div class="container">
        <div class="home-closing__panel">
@@ -112,8 +106,8 @@
             <p class="t-body home-closing__desc" data-i18n="home.closing_desc">Our knowledgeable and resourceful team will help you find the answer you are looking for.</p>
           </div>
           <div class="home-closing__actions">
-            <a class="btn btn--light btn--lg btn--split" href="/contact.html"><span data-i18n="home.closing_cta">Contact us</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a>
-            <a class="btn btn--outline-on-accent btn--lg btn--split" href="/catalog.html"><span data-i18n="home.closing_cta_products">View products</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a>
+            <a class="btn btn--light btn--lg btn--split" href="/contact.html"><span data-i18n="home.closing_cta">Contact Us</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a>
+            <a class="btn btn--outline-on-accent btn--lg btn--split" href="/catalog.html"><span data-i18n="home.closing_cta_products">Our Product List</span><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="/assets/icons/sprite.svg#arrow-up-right"/></svg></span></a>
           </div>
         </div>
         <!-- closing scene: three.js converge lines (closing-lines.js), transparent canvas on the blue panel -->

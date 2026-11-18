@@ -29,6 +29,8 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .t-accent { color: var(--text-accent); }
 .t-subtle { color: var(--text); }
 .t-on-accent { color: var(--text-on-accent); }
+/* C3 (customer 2026-11-18): descriptive text on BLUE = --text-on-accent-soft (white 80% over the local blue); headings keep --text-on-accent. ONE rule for every blue surface (sections, cards, supply, hero, closing, photo panel); controls (a, button) keep their own colour. */
+:is(.hero--home, .home-section--accent, .about-services, .svc-process, .svc-supply, .home-closing, .photo-panel, .text-card--on-accent, .link-cards--3 .link-card, .svc-card--on-accent, .card--accent, .card--dark, .feature-card--accent, .slide__panel) :is(p, .t-lead, .t-body, li, dd, figcaption):not(a *, button *, .home-closing__title) { color: var(--text-on-accent-soft); }
 .t-center { text-align: center; }
 .t-soft { color: var(--text-accent-soft); }
 /* Перенос рядків: заголовки — balance, абзаци — pretty (лише розташування слів, ширини блоків не міняються) */

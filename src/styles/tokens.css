@@ -48,6 +48,7 @@
   --text-accent-soft: var(--c-blue-400);   /* large text only (>=24px, 3:1+): second half of lead sentences */
   --text-accent-subtle: var(--c-blue-500); /* small text on light surfaces (>=4.5:1): placeholders and disabled only (labels use --text-accent) */
   --text-on-accent:   var(--c-white);
+  --text-on-accent-soft: color-mix(in srgb, var(--c-white) 80%, var(--on-accent-bg, var(--surface-accent))); /* C3 (customer 2026-11-18): DESCRIPTIVE text (paragraph, lead, caption) on BLUE = white 80% over the LOCAL blue (on #163172 = #D0D6E3); headings stay --text-on-accent. ONE definition: re-resolved per element (rule `:where(*)` below), the blue surface announces itself with --on-accent-bg (default --surface-accent; cards: --surface-card-on-accent; supply: --c-sky-supply) */
   --text-on-accent-muted: color-mix(in srgb, var(--c-white) 62%, transparent);
   --accent:           var(--c-blue-700);
   --accent-hover:     var(--c-blue-800);
@@ -83,13 +84,15 @@
   --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
   --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
   --space-9: 96px; --space-10: 128px;
-  --section-head-gap: var(--space-5);  /* EVERY vertical gap of a heading group (.section-head): tag -> heading -> description -> CTA = 24 (customer 2026-11-13) */
+  --section-head-gap: var(--card-padding);  /* EVERY vertical gap of a heading group (.section-head): heading -> description (-> CTA) = 45 desktop / 32 mobile = the --card-padding value (customer 2026-11-18, was 24); inside a large card the group is capped at 0.72 x P (editorial.css) */
+  --text-gap: 30px;                    /* text element -> text element outside headings groups (hero lead paragraphs, legal paragraphs, slide texts, how-steps, about-intro) = 30 (customer 2026-11-18, was 16); cards use --card-text-gap (same 30, capped by card padding) */
   --text-cta-gap: var(--card-padding);  /* LAST text (paragraph) -> CTA button in text groups of sections / blocks / hero = P (45 desktop, 32 mobile via --card-padding); customer 2026-11-14 "від тексту до кнопки гап 45". NOT in cards (CTA pinned to card bottom, G8) and NOT in forms. Heading -> text and other inner gaps keep --section-head-gap */
   --text-card-gap: 30px;               /* EXPLICIT EXCEPTION (customer 2026-11-13): eyebrow -> h2 -> paragraph inside .text-card (Products, Documentation) */
   /* footer rhythm in responsive (<= 1199), customer exception, off the 4/8/12 scale: gap between link items 5, group label -> first item 7 (same for menu, contacts, technical links) */
   --gap-small: 10px;                  /* gap between SMALL elements: chips / tags (API, Cas No., product-card tags, hub tags) = 10 (customer 2026-11-13); footer keeps its own 5/7 */
   --card-padding: 45px;                      /* U13: the ONE inner padding of EVERY card (card, info/text/link/svc/quality/feature/product/people-card, tile), all four sides = 45 (customer 2026-11-14); every inner gap <= ~0.7 x padding (gate A3.1 limit 0.72); content never closer than this to the card edge (gate card-padding) */
   --card-block-gap: var(--space-6);          /* element -> element / heading -> first element inside a card = 32 (<= 0.72 x --card-padding); mobile override below (P 32 -> 16) */
+  --card-text-gap: min(var(--text-gap), round(down, calc(var(--card-padding) * 0.7), 1px));   /* ONE gap between text elements/groups inside every card (title/header -> text, name -> text) = 30 desktop (customer 2026-11-18, form 5c2b8f: 16 -> 30); capped at 0.7 x card padding (gate A3.1): 22 on mobile (P 32), re-derived by .card--pad-md/-sm. NOT the art<->text --card-inner-gap, NOT the icon<->label gap in a header */
   --text-group-gap: round(down, calc(var(--card-padding) * 0.27), 1px);   /* readable group (label + name): internal gap = 12 (0.27 x card padding) */
   --click-group-gap: var(--space-2);         /* clickable group (phone + email circles): visible gap circle -> circle = 8 (~0.67 x text-group) */
   --group-to-group-gap: var(--space-4);      /* between a text group and a click group (name -> first circle) = 16 (~1.33 x text-group; larger than the text gap) */
@@ -208,3 +211,4 @@
     --section-lg: var(--space-8);   /* 64 */
   }
 }
+:where(*) { --text-on-accent-soft: color-mix(in srgb, var(--c-white) 80%, var(--on-accent-bg, var(--surface-accent))); } /* C3: re-evaluate the token per element so it follows the nearest --on-accent-bg (same expression as in :root, one value) */

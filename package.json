@@ -21,11 +21,14 @@
     "audit:scroll-trap": "node tools/scroll-trap-gate.cjs",
     "audit:seo": "node tools/seo-audit.cjs",
     "audit:links": "node tools/link-targets-gate.cjs",
+    "audit:spacing-scale": "node tools/spacing-scale-gate.cjs",
+    "audit:colour-token": "node tools/colour-token-gate.cjs",
     "audit:measure": "node tools/measure-standard-gate.cjs",
     "audit:reveal": "node tools/reveal-group-gate.cjs",
+    "audit:no-heading-period": "node tools/no-heading-period-gate.cjs",
     "seo:demo": "node tools/seo-demo.cjs",
     "seo:assets": "node tools/og.cjs",
-    "audit": "npm run audit:hover && npm run audit:style && npm run audit:grid-snap && npm run audit:hero-fit && npm run audit:header && npm run audit:icon-box && npm run audit:icon-text && npm run audit:card-row && npm run audit:card-padding && npm run audit:scroll-trap && npm run audit:links && npm run audit:measure && npm run audit:reveal",
+    "audit": "npm run audit:hover && npm run audit:style && npm run audit:grid-snap && npm run audit:hero-fit && npm run audit:header && npm run audit:icon-box && npm run audit:icon-text && npm run audit:card-row && npm run audit:card-padding && npm run audit:scroll-trap && npm run audit:links && npm run audit:spacing-scale && npm run audit:measure && npm run audit:colour-token && npm run audit:reveal && npm run audit:no-heading-period",
     "poster": "node tools/gen-posters.cjs"
   },
   "devDependencies": {

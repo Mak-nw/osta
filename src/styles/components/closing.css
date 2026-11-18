@@ -6,7 +6,7 @@
 .home-closing__panel { --_c: min(calc(100% - 2 * var(--gutter)), var(--container)); --_col: calc((var(--_c) - (var(--grid-cols) - 1) * var(--grid-gap)) / var(--grid-cols)); position: relative; background: var(--surface-accent); color: var(--text-on-accent); border-radius: 0; overflow: hidden; padding-block: var(--section-lg); min-height: calc(6 * var(--space-10) + var(--space-6)); display: flex; align-items: center; } /* band height 800 = 6 x 128 + 32 (>= 1200), text block centred vertically */
 .home-closing__body { text-align: left; max-width: calc(8 * var(--_col) + 7 * var(--grid-gap)); margin-inline: calc((100% - var(--_c)) / 2) auto; position: relative; } /* LEFT block: cols 1-8 of the page grid (--_c = container content box), left edge on the content ruler (x = --gutter on <= 1744, centred container above) */
 .home-closing__body h2, .home-closing__body p { margin: 0; }
-.home-closing__body h2, .home-closing__body p { color: var(--text-on-accent); }
+.home-closing__body h2, .home-closing__body p, .home-closing__body .home-closing__title { color: var(--text-on-accent); } /* title = class-based: heading colour (not the --soft descriptive colour of base.css p rule) whatever the tag */
 .home-closing__actions { display: flex; flex-wrap: wrap; justify-content: flex-start; column-gap: var(--space-2); row-gap: var(--space-2); }
 /* Scene (closing-lines.js, three.js converge lines + particles, VERTICAL funnel): transparent canvas on the blue band, strokes and dots --accent-contrast; RIGHT block, cols 7-12 of the grid, right edge = the band edge,
    full band height (800: lines run past the top / bottom edge and are clipped by overflow); the core sits at the middle of the band height.

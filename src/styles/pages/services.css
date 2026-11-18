@@ -44,7 +44,7 @@
 
 /* ---------- Supply & logistics: separate wide block under the row; the photo of the warehouse interior is the FULL-BLEED background (no overlay, no dimming, text white
    on top, readability is the customer's accepted trade-off); heading 80px cols 1-8, text in TWO parts of 3 columns (cols 6-8 and 9-11), the button under the first. ---------- */
-.svc-supply { position: relative; isolation: isolate; overflow: clip; background: var(--c-sky-supply); color: var(--text-on-accent); min-height: calc(100vh - var(--header-h)); min-height: calc(100svh - var(--header-h)); container-type: inline-size; --supply-photo-h: 56.25cqw; --supply-strip: calc(var(--supply-photo-h) * 0.3); display: flex; }
+.svc-supply { position: relative; isolation: isolate; overflow: clip; --on-accent-bg: var(--c-sky-supply); background: var(--c-sky-supply); color: var(--text-on-accent); min-height: calc(100vh - var(--header-h)); min-height: calc(100svh - var(--header-h)); container-type: inline-size; --supply-photo-h: 56.25cqw; --supply-strip: calc(var(--supply-photo-h) * 0.3); display: flex; }
 .svc-supply__bg { position: absolute; inset: auto 0 0 0; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; object-position: 50% 100%; z-index: -1; }
 .svc-supply__grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--section-head-gap); align-content: start; align-items: start; min-height: var(--supply-photo-h); padding-block: var(--section-md) calc(var(--section-md) / 2 + var(--supply-strip)); }
 .svc-supply__head { grid-column: 1 / span 8; grid-row: 1; } /* .section-head */

@@ -1,28 +1,17 @@
 /* Home (index.html): page layout only, every block comes from components (hero--home, link-cards, photo-panel, quality-cards, chips, buttons, closing).
    One 12-col grid per section (.home-grid), heads above (.section-head: tag over the t-display heading), the "air" = empty columns.
    Compact rhythm: every Home section uses --section-md (96) top/bottom; head -> content row gap --space-7 (48).
-   Rhythm: hero (blue band) > About (blue) > Products (blue) > Services (light) > Supply (photo band) > Quality (light) > closing (blue band); all headings flush left (col 1). */
+   Rhythm: hero (blue band) > Products (blue) > Services (light) > Supply (photo band) > Quality (light) > closing (blue band); all headings flush left (col 1). */
 .home-section { padding-block: var(--section-md); background: var(--surface); }
 .home-section--accent { background: var(--surface-accent); color: var(--text-on-accent); }
 .home-grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--space-7); align-items: start; }
-
-/* About (blue band, white text): tag + title (two sentences) cols 1-8, no photo, no button (customer decisions 0de4082e, 2026-11-12) */
-.home-about__head { grid-column: 1 / span 8; grid-row: 1; }
-.home-about { padding-block: var(--space-8); } /* customer 2026-11-12: text sits higher (96 -> --space-8) */
-.home-about__sentence { display: block; }
-.home-about__sentence + .home-about__sentence { margin-top: var(--space-6); } /* bigger gap between the two sentences */
-.home-about__head h2 { text-wrap: wrap; } /* greedy fill: lines run to the right edge of col 8 (the .t-display balance would narrow them); the hard <br> splits the two sentences, a no-break space keeps the last two words together (no orphan) */
-/* Scroll-scrubbed fill (motion.js + utils/scroll-fill.js): words are muted (--text-on-accent at 40%) and go to full white as --p (0..1, set per word on scroll) grows. Inline spans: line breaks are identical to plain text. Without JS / reduced motion the .is-fill class is never set, so the text is plain white. */
-.home-about__head h2.is-fill { --fill-base: 40%; }
-.home-about__head h2.is-fill-active .fill-word { will-change: color; }
-.home-about__head h2.is-fill .fill-word { color: color-mix(in srgb, var(--text-on-accent) calc(var(--fill-base) + (100% - var(--fill-base)) * var(--p, 0)), transparent); }
 
 /* Products (blue): row 1: title block (tag + h2) cols 1-7, left edge (customer 2026-11-12: all headings flush left); row 2: 4 portrait cards (4 x 3 cols = full width): 3 category link cards + a white text card (summary + View all, customer df7f1d78) */
 .home-products { padding-block-start: var(--space-8); padding-block-end: var(--space-10); } /* top 64 unchanged; bottom 2x (64 -> 128 = --space-10), customer 2026-11-12. No tablet/mobile override exists: 128 on all breakpoints. Earlier: no separate head block; like About (96 -> --space-8) */
 .home-products__cards { grid-column: 1 / -1; grid-row: 1; }
 
 /* Sequential bands (customer decision 2026-11-12, variant B): EVERY section is a full-width band (edge to edge, radius 0, no gaps between bands); only cards, tiles and controls inside are rounded.
-   Bands never repeat a colour: hero (blue) > About (blue, customer decision: no photo) > Products (blue) > Services (light) > Supply (photo) > Quality (light) > closing (blue band, components/closing.css, shared) > footer. */
+   Bands never repeat a colour: hero (blue) > Products (blue) > Services (light) > Supply (photo) > Quality (light) > closing (blue band, components/closing.css, shared) > footer. */
 
 /* Services: the shared How-we-work split (components/how-split.css): sticky tag + title + text + button left, 4 step rows right; the section padding (--section-md) comes from .home-section */
 
@@ -37,7 +26,6 @@
    ========================================================================== */
 @media (max-width: 1199px) {
   .home-grid { row-gap: var(--space-6); }
-  .home-about__head { grid-column: 1 / -1; } /* tablet / mobile: headings full width, left */
   .link-cards { row-gap: var(--grid-gap); }
   .link-cards > li, .link-cards--3 > li { grid-column: span 4; }
 }

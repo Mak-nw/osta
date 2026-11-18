@@ -33,6 +33,8 @@ export function computeHeroFit(host, W, Hh) {
       title = title ? { top: Math.min(title.top, pr.top), bottom: Math.max(title.bottom, pr.bottom) } : { top: pr.top, bottom: pr.bottom };
     });
   }
+  const lead = hero.querySelector('.hero__lead');     // paragraphs between the sphere and the search: the scene never touches them
+  if (lead) blocks.push(rel(lead.getBoundingClientRect(), 32));
   const search = hero.querySelector('.hero-search');
   if (search) blocks.push(rel(search.getBoundingClientRect(), 32));
   const cats = hero.querySelector('.hero-cats');     // the row container is wider than its chips: use the chips' union

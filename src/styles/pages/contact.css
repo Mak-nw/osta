@@ -28,7 +28,7 @@
 .contact-rows > .contact-row:first-child { grid-column: 1 / -1; } /* General: full width above the Phone | Fax columns (same 2-col grid as the managers) */
 
 /* Managers: plain text blocks, no cards */
-.contact-people { display: grid; grid-template-columns: minmax(0, 1fr); column-gap: var(--grid-gap); row-gap: var(--card-block-gap); }
+.contact-people { display: grid; grid-template-columns: minmax(0, 1fr); column-gap: var(--grid-gap); row-gap: var(--card-padding); } /* BETWEEN groups: ROW gap (groups stacked: 1200-1439 and mobile) = 45 / 32 = --card-padding (customer 2026-11-18, was 16; signed A3.1 exception); COLUMN gap stays --grid-gap so the columns sit on the page grid lines (L10, grid-snap); inside a group gaps unchanged */
 .contact-person { display: flex; flex-direction: column; gap: var(--text-group-gap); min-width: 0; }
 .contact-lines { display: flex; flex-direction: column; gap: var(--click-group-gap); margin-top: calc(var(--group-to-group-gap) - var(--text-group-gap)); align-items: flex-start; } /* round rows of one person: visible control -> control 8 (--space-2) < outer gaps 12 (label->name, name->first row; footprint 40 = ring, the 4px hit padding is cancelled by the negative margin) */
 
@@ -49,12 +49,21 @@
    Responsive contact. Tablet / mobile (<= 1199): the container is full width minus the gutter, the photo stays behind.
    Tablet: contact people 2 columns, name fields side by side. Mobile: everything stacked, the send button full width.
    ========================================================================== */
+/* Managers row (2 columns): each person spans the SAME 4 shared rows (role / name / phone / email) via subgrid, so the rows of both columns line up whatever the name length (a wrapped name makes its row taller for both). Visible gaps stay the role tokens: role->name --text-group-gap, name->phone --group-to-group-gap, phone->email --click-group-gap (the line's own -padding margin is accounted for). */
 @media (min-width: 1440px) {
   .contact-people { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 1199px) {
   .contact-split__content { width: calc(100% - 2 * var(--gutter)); }
   .contact-people { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1440px), (min-width: 768px) and (max-width: 1199px) {
+  .contact-people { row-gap: var(--text-group-gap); } /* rows of the subgrid persons (inside a group) */
+  .contact-person { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: var(--text-group-gap); }
+  .contact-lines { display: contents; }
+  .contact-lines > .contact-line { align-self: start; justify-self: start; }
+  .contact-lines > .contact-line:first-child { margin-top: calc(var(--group-to-group-gap) - var(--text-group-gap) - var(--space-1)); }
+  .contact-lines > .contact-line:last-child { margin-top: calc(var(--click-group-gap) - var(--text-group-gap) - var(--space-1)); }
 }
 @media (max-width: 767px) {
   .contact-split__content .section-head { gap: var(--card-block-gap); } /* heading group inside the card: 16 (24 > 0.72 x 32) */

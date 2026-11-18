@@ -457,7 +457,7 @@
     ]
   },
   "spacing": {
-    "sectionHeadGap": 24,
+    "sectionHeadGap": 45,
     "textCardGap": 30,
     "labelToField": 16,
     "footerItems": 5,

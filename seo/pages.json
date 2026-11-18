@@ -141,12 +141,12 @@
     "type": "ContactPage",
     "en": {
       "title": "Contact & Quotation Request | OSTA Trading",
-      "description": "Contact the OSTA Trading team in Reinbek near Hamburg: request a quote, samples or regulatory documents. Phone +49 40 731 281-76, info@osta-trading.com.",
+      "description": "Contact the OSTA Trading team in Reinbek near Hamburg: request a quote, samples or regulatory documents. Phone +49 (0) 40 881 94 506, info@osta-trading.com.",
       "name": "Contact"
     },
     "de": {
       "title": "Kontakt & Angebotsanfrage | OSTA Trading",
-      "description": "Kontaktieren Sie das Team von OSTA Trading in Reinbek bei Hamburg: Angebot, Muster oder Zulassungsdokumente anfragen. Tel. +49 40 731 281-76.",
+      "description": "Kontaktieren Sie das Team von OSTA Trading in Reinbek bei Hamburg: Angebot, Muster oder Zulassungsdokumente anfragen. Tel. +49 (0) 40 881 94 506.",
       "name": "Kontakt"
     }
   },
@@ -162,12 +162,12 @@
     "note": "Placeholder Impressum: fill in HRB, USt-IdNr, Geschaeftsfuehrer with legal counsel, then remove robots:noindex and contentPlaceholder.",
     "en": {
       "title": "Imprint and Legal Notice | OSTA Trading GmbH",
-      "description": "Legal notice of OSTA Trading GmbH, Senefelder Ring 83, 21465 Reinbek, Germany: company details, registration data and contact.",
+      "description": "Legal notice of OSTA Trading GmbH, Senefelder Ring 34, 21465 Reinbek, Germany: company details, registration data and contact.",
       "name": "Imprint"
     },
     "de": {
       "title": "Impressum und Anbieterkennzeichnung | OSTA Trading",
-      "description": "Impressum der OSTA Trading GmbH, Senefelder Ring 83, 21465 Reinbek: Angaben zum Unternehmen, Registerdaten und Kontakt.",
+      "description": "Impressum der OSTA Trading GmbH, Senefelder Ring 34, 21465 Reinbek: Angaben zum Unternehmen, Registerdaten und Kontakt.",
       "name": "Impressum"
     }
   },

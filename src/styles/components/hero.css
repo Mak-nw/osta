@@ -51,6 +51,8 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
 .hero--home .hero__title { color: var(--text-on-accent); position: relative; z-index: 1; }
 .hero__title-part { display: block; }
 .hero__find { position: relative; z-index: 1; }
+.hero__lead { display: flex; flex-direction: column; gap: var(--text-gap); margin-bottom: var(--text-cta-gap); } /* two t-body paragraphs between the title/scene and the search (customer 2026-11-18); colour inherited (--text-on-accent) */
+.hero__lead > p { margin: 0; }
 .hero__scene3d { position: relative; z-index: 0; pointer-events: none; overflow: clip; container-type: size; }   /* size container: the poster default size uses cq units */
 .hero__scene3d canvas { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; display: block; opacity: 0; }
 .hero__scene3d canvas.is-ready { opacity: 1; }
@@ -82,6 +84,7 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
   .hero__title-part--r { grid-column: 9 / span 4; text-align: right; justify-self: end; }
   .hero__find { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: subgrid; }
   .hero__find > * { grid-column: 5 / span 4; } /* search panel = 4 central columns (customer 2026-11-13) */
+  .hero__find > .hero__lead { grid-column: 4 / span 6; text-align: center; }
   .hero__find > .hero-cats { grid-column: 3 / span 8; justify-content: center; } /* chips on one line also in DE at 1200 */
   .hero__find .hero-search { margin-top: 0; width: auto; }
   .hero__find .field__label { text-align: center; }
@@ -112,7 +115,8 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
   .hero--home .hero__title { --hero-fs: var(--type-display-size); --hero-lh: var(--type-display-lh); --hero-ls: var(--type-display-ls); }
   .hero__title-part br { display: none; } /* stack: each phrase wraps by width */
   .hero__scene3d { order: -1; flex: 1 1 auto; min-height: 0; margin: 0 0 var(--space-6); }
-  .hero-search { margin-top: clamp(var(--space-4), calc(100svh - 552px), var(--space-7)); } /* fit-to-screen: the gap above the search shrinks only on screens shorter than 600 (normal look unchanged) */
+  .hero__lead { margin-bottom: var(--text-cta-gap); } /* <=1199: gap lead -> search = --text-cta-gap (45 / 32 mobile), the one token shared with lead -> CTA */
+  .hero-search { margin-top: 0; } /* fit-to-screen: the gap above the search shrinks only on screens shorter than ~750 (the lead paragraphs sit above the search since 2026-11-18, so the threshold moved 552 -> 700) */
 }
 @media (max-width: 767px) {
   .hero__aside { text-align: left; align-items: stretch; } /* mobile: description left like the title, button full width (btn--block pattern) */
@@ -121,7 +125,7 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
   @media (max-width: 479px) { .hero:not(.hero--home) { --hero-text: 330px; } }
   .hero .hero__media { aspect-ratio: 4 / 3; --media-a: 0.75; }
 
-  .hero--home { padding-bottom: var(--space-6); }
+  .hero--home { padding-bottom: clamp(var(--space-4), calc(100svh - 700px), var(--space-6)); } /* fit-to-screen on short phones (lead paragraphs added 2026-11-18); normal look unchanged */
   .hero--home .hero__title { --hero-fs: var(--type-h1-size); --hero-lh: var(--type-h1-lh); --hero-ls: var(--type-h1-ls); }
   .hero-cats__label { flex-basis: 100%; }
   .hero-search { width: 100%; }
@@ -131,3 +135,4 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
 @media (max-width: 414px) { .hero:not(.hero--home) .hero__title { font-size: var(--type-h2-size); line-height: var(--type-h2-lh); letter-spacing: var(--type-h2-ls); } }
 /* inner-page h1 (.t-h1, 44) does not fit 5 columns in DE at 1200-1599: one step down (same step as the Home hero), so EN and DE stay on 2 lines */
 @media (min-width: 1200px) and (max-width: 1439px) { .hero:not(.hero--home) .hero__title { font-size: var(--type-h2-size); line-height: var(--type-h2-lh); letter-spacing: var(--type-h2-ls); } }
+@media (max-width: 767px) { .hero--home { --text-gap: var(--space-4); } } /* Home hero on mobile only: lead paragraph gap 16 (instead of 30) so the hero still fits a 375x667 screen (hero-fit gate); every other place keeps 30 */

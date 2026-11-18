@@ -6,7 +6,7 @@
 .svc-card { grid-column: span 3; grid-row: span 2; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: subgrid; row-gap: 0; box-sizing: border-box; min-width: 0; padding: var(--card-padding); background: var(--surface-raised); color: var(--text); border: 0; border-radius: var(--radius-lg); }
 .svc-card > * { margin: 0; }
 .svc-card__art { position: relative; display: grid; place-items: center; min-width: 0; min-height: 0; aspect-ratio: 8 / 7; overflow: hidden; } /* decorative, aria-hidden */
-.svc-card__text { display: flex; flex-direction: column; gap: var(--space-4); justify-content: flex-end; min-width: 0; min-height: 0; padding-top: var(--card-inner-gap); }
+.svc-card__text { display: flex; flex-direction: column; gap: var(--card-text-gap); justify-content: flex-end; min-width: 0; min-height: 0; padding-top: var(--card-inner-gap); }
 .svc-card__title { color: var(--text-accent); text-wrap: balance; min-width: 0; overflow-wrap: break-word; hyphens: manual; }
 .svc-card__desc { text-wrap: pretty; }
 /* illustrations: the same four 3D scenes everywhere (src/pages/service-scenes.js), one shared WebGL renderer per row (services-card-scenes.js), canvas fills the art zone, NO floor dot field.
@@ -14,7 +14,7 @@
 .svc-card__art { --il-fill: var(--accent); --il-soft: var(--accent); --il-bg: var(--surface-raised); }
 .svc-card__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
 /* card on the blue section: white text and scene lines */
-.svc-card--on-accent { background: var(--surface-card-on-accent); color: var(--text-on-accent); }
+.svc-card--on-accent { --on-accent-bg: var(--surface-card-on-accent); background: var(--surface-card-on-accent); color: var(--text-on-accent); }
 .svc-card--on-accent .svc-card__title { color: var(--text-on-accent); }
 .svc-card--on-accent .svc-card__art { --il-fill: var(--text-on-accent); --il-soft: var(--text-on-accent); --il-bg: var(--surface-card-on-accent); }
 @media (max-width: 1199px) {

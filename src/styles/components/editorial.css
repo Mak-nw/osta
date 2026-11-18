@@ -3,6 +3,7 @@
 /* Section head = the heading GROUP: heading > description (p) > CTA (the section tag / eyebrow was removed, customer 2026-11-14) (.btn / .home-closing__actions). ONE wrapper, ONE gap --section-head-gap (24) between every neighbouring pair; no margins on the members. A nested .section-head (text group) + CTA keeps the same 24.
    Used by every section after the hero (also closing, how-split left column, About Quality intro). --center = centred heading (Services row). Where the description / CTA sit in other grid columns (About intro / Services, Services Supply) the grid row-gap = --section-head-gap. */
 .section-head { display: flex; flex-direction: column; align-items: flex-start; gap: var(--section-head-gap); }
+.card--pad-lg .section-head { gap: min(var(--section-head-gap), round(down, calc(var(--card-padding) * 0.72), 1px)); } /* inside a large card: capped at 0.72 x P = 32 (gate A3.1) */
 .section-head > .section-head { align-self: stretch; } /* the nested text group fills the width of the head (CTA below it keeps its own size) */
 .section-head > * { margin: 0; }
 .section-head > :is(.btn, .home-closing__actions) { margin-top: calc(var(--text-cta-gap) - var(--section-head-gap)); } /* last text -> CTA = --text-cta-gap (45), the flex gap supplies the remaining 24 */

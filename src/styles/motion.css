@@ -67,7 +67,7 @@ a:hover > .round-btn .icon { transform: scale(1.1); }
      The block itself does not animate (no double motion): hidden until motion.js has split it into words,
      then .is-revealed plays each .word__inner (translateY + opacity) with a per-word stagger. */
   html.js .t-display[data-reveal], html.js .t-display[data-reveal-load] { transform: none; animation: none; }
-  html.js :is(h1, h2, h3).t-display:not(.is-split):not([data-scroll-fill]) { opacity: 0; }
+  html.js :is(h1, h2, h3, p.slide__headline, p.home-closing__title).t-display:not(.is-split):not([data-scroll-fill]) { opacity: 0; }
   .t-display.is-split { --word-stagger: calc(var(--stagger) * 1.2); }
   .t-display .word {
     display: inline-block; overflow: clip;

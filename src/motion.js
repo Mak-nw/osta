@@ -123,7 +123,7 @@ function initHashLanding() {
 }
 
 // ---------- Word-by-word reveal of big headings (.t-display with data-reveal / data-reveal-load) ----------
-const HEADINGS = 'h1.t-display:not([data-scroll-fill]), h2.t-display:not([data-scroll-fill]), h3.t-display:not([data-scroll-fill])'; // [data-scroll-fill] (Home About) has its own scroll-scrubbed fill instead of the word reveal
+const HEADINGS = 'h1.t-display:not([data-scroll-fill]), h2.t-display:not([data-scroll-fill]), h3.t-display:not([data-scroll-fill]), p.t-display.slide__headline, p.t-display.home-closing__title:not([data-scroll-fill])'; // [data-scroll-fill] (Home About) has its own scroll-scrubbed fill instead of the word reveal
 const WORD_SEL = `${HEADINGS}`; // every big heading; those without data-reveal get one (own IntersectionObserver trigger)
 let wordsReady = false; // true after i18n has written the final text (or after a fallback timeout)
 const deferredWords = [];
