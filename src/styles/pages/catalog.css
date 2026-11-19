@@ -40,7 +40,7 @@
 }
 
 /* Customer 2026-11-13: sidebar text/icons are ACCENT blue, never black or grey: search value + placeholder (the icon is already --accent), category list, counter. */
-.layout-catalog .search .input { color: var(--text-accent); }
+.layout-catalog .search .input { color: var(--text-accent); padding-right: var(--space-2); } /* the 182 px sidebar field: full placeholder fits (right padding 16 -> 8; the icon sits on the left) */
 .layout-catalog .search .input::placeholder { color: var(--text-accent); }
 
 /* Product hubs (/products/category/*): the product-card grid follows the product-related rule (2 columns tablet, 1 mobile: no 3 narrow columns, no horizontal scroll at 375/320); */

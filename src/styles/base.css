@@ -44,7 +44,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 @supports (text-box: trim-both cap alphabetic) {
   :is(h1, h2, h3, h4, h5, h6, p, dt, dd:not(:has(.contact-line)), li, legend, figcaption, label.field__label,
       .t-display, .t-h1, .t-h2, .t-h3, .t-lead, .t-body, .t-label,
-      .people-card__name, .people-card__role):not(a, button, .btn, .contact-line, [class*="word"]) { text-box: trim-both cap alphabetic; }
+      .people-card__name, .people-card__role, .how-step__num):not(a, button, .btn, .contact-line, [class*="word"]) { text-box: trim-both cap alphabetic; }
 }
 
 /* ---- Icons ---- */
@@ -74,4 +74,5 @@ main { flex: 1; }
   :root { hyphens: manual; }
   :root:lang(de) { hyphens: auto; }
   :root:not(:lang(de)) :is(.link-card__title, .link-card__text) { hyphens: manual; }
+  :root:lang(de) .product-card__title { hyphens: manual; } /* drug names stay whole in DE (no automatic hyphenation of product names) */
 }

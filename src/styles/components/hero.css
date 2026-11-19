@@ -100,12 +100,12 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
    ========================================================================== */
 @media (max-width: 1199px) {
   /* FIT-TO-SCREEN (customer 2026-11-14): the stacked hero (header + media + head + aside) is at most ONE screen (100svh, CTA included) at every tablet / phone size and orientation. Paddings and gaps shrink with the viewport height (svh clamp); the media slot keeps its aspect ratio (poster geometry = live scene geometry, --media-a) and only its WIDTH is capped by the height left after the text blocks: --hero-text = reserved height of head + aside (measured EN: 192-236 tablet, 232-320 phone; the rest is slack; integer px via round() so the slot sits on whole pixels like the poster). Desktop >=1200: the same cap (see the media rule above), which only bites on short screens, the normal look is unchanged. */
-  .hero:not(.hero--home) { --hero-pad: round(down, clamp(var(--space-4), 4svh, var(--space-7)), 1px); --hero-gap: round(down, clamp(var(--space-4), 3svh, var(--space-6)), 1px); --hero-text: 240px; --hero-ratio: 16 / 9; --hero-media-h: calc(100svh - var(--header-h) - 2 * var(--hero-pad) - 2 * var(--hero-gap) - var(--hero-text)); padding-block: calc(var(--header-h) + var(--hero-pad)) var(--hero-pad); }
+  .hero:not(.hero--home) { --hero-pad: round(down, clamp(var(--space-4), 4svh, var(--space-7)), 1px); --hero-gap: round(down, clamp(var(--space-4), 3svh, var(--space-6)), 1px); --hero-text: 240px; --hero-ratio: 16 / 9; --hero-head-extra: max(0px, calc(var(--section-head-gap) - var(--hero-gap))); --hero-media-h: calc(100svh - var(--header-h) - 2 * var(--hero-pad) - 2 * var(--hero-gap) - var(--hero-head-extra) - var(--hero-text)); padding-block: calc(var(--header-h) + var(--hero-pad)) var(--hero-pad); }
   .hero__inner { row-gap: var(--hero-gap); }
   .hero__inner > .hero__title, .hero__aside, .hero .hero__media { grid-column: 1 / -1; }
   .hero__inner > .hero__title { grid-row: auto; display: block; pointer-events: auto; }
   .hero__inner > .hero__title .hero__title-part--r { text-align: left; justify-self: auto; }
-  .hero__aside { grid-row: auto; }
+  .hero__aside { grid-row: auto; text-align: left; align-items: flex-start; margin-top: var(--hero-head-extra); } /* stack: the description is left-aligned like the h1 (one axis at every width <= 1199); h1 -> description = the heading -> description role (45 / 32 mobile) */
   .hero__inner > .hero__title .hero__title-part { white-space: normal; }
   .hero .hero__media { grid-row: 1; aspect-ratio: 16 / 9; --media-a: 0.5625; justify-self: center; width: min(100%, max(calc(var(--space-8) * 2), calc(var(--hero-media-h) * var(--hero-ratio)))); } /* stack: illustration on top, then head, then aside; width capped by the screen height, aspect kept */
 
@@ -114,6 +114,7 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
   .hero__title-part { display: block; } /* each phrase is its own block (<= 2 lines each, see the HERO TITLE RULE) */
   .hero--home .hero__title { --hero-fs: var(--type-display-size); --hero-lh: var(--type-display-lh); --hero-ls: var(--type-display-ls); }
   .hero__title-part br { display: none; } /* stack: each phrase wraps by width */
+  .hero--home .hero__title { margin-bottom: var(--section-head-gap); } /* H1 -> lead = the heading -> description role (45 / 32 mobile); the title is trimmed to its cap box, so without this it touched the lead */
   .hero__scene3d { order: -1; flex: 1 1 auto; min-height: 0; margin: 0 0 var(--space-6); }
   .hero__lead { margin-bottom: var(--text-cta-gap); } /* <=1199: gap lead -> search = --text-cta-gap (45 / 32 mobile), the one token shared with lead -> CTA */
   .hero-search { margin-top: 0; } /* fit-to-screen: the gap above the search shrinks only on screens shorter than ~750 (the lead paragraphs sit above the search since 2026-11-18, so the threshold moved 552 -> 700) */
@@ -125,6 +126,8 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
   @media (max-width: 479px) { .hero:not(.hero--home) { --hero-text: 330px; } }
   .hero .hero__media { aspect-ratio: 4 / 3; --media-a: 0.75; }
 
+  .hero--home .hero__title { margin-bottom: clamp(var(--space-4), calc(100svh - 651px), var(--section-head-gap)); } /* H1 -> lead = 32 on normal phones, shrinks to 16 only on screens shorter than ~683 (hero-fit, 375x667) */
+  .hero__scene3d { margin-bottom: clamp(var(--space-2), calc(100svh - 659px), var(--space-6)); } /* same: the dead margin under a collapsed scene gives way on short phones */
   .hero--home { padding-bottom: clamp(var(--space-4), calc(100svh - 700px), var(--space-6)); } /* fit-to-screen on short phones (lead paragraphs added 2026-11-18); normal look unchanged */
   .hero--home .hero__title { --hero-fs: var(--type-h1-size); --hero-lh: var(--type-h1-lh); --hero-ls: var(--type-h1-ls); }
   .hero-cats__label { flex-basis: 100%; }
@@ -135,4 +138,4 @@ html:not(.js) .hero__image, .hero--no3d .hero__image { display: block; }
 @media (max-width: 414px) { .hero:not(.hero--home) .hero__title { font-size: var(--type-h2-size); line-height: var(--type-h2-lh); letter-spacing: var(--type-h2-ls); } }
 /* inner-page h1 (.t-h1, 44) does not fit 5 columns in DE at 1200-1599: one step down (same step as the Home hero), so EN and DE stay on 2 lines */
 @media (min-width: 1200px) and (max-width: 1439px) { .hero:not(.hero--home) .hero__title { font-size: var(--type-h2-size); line-height: var(--type-h2-lh); letter-spacing: var(--type-h2-ls); } }
-@media (max-width: 767px) { .hero--home { --text-gap: var(--space-4); } } /* Home hero on mobile only: lead paragraph gap 16 (instead of 30) so the hero still fits a 375x667 screen (hero-fit gate); every other place keeps 30 */
+@media (max-width: 767px) { .hero--home { --text-gap: var(--card-text-gap); } } /* Home hero on mobile only: lead paragraph gap 16 (instead of 30) so the hero still fits a 375x667 screen (hero-fit gate); every other place keeps 30 */

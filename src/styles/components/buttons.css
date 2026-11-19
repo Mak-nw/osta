@@ -14,6 +14,8 @@
   white-space: nowrap; cursor: pointer;
   transition: color var(--dur-hover-disc) var(--ease-hover), background-color var(--dur-hover-disc) var(--ease-hover), border-color var(--dur-hover-disc) var(--ease-hover), transform var(--dur-hover-disc) var(--ease-hover);
 }
+/* .btn may wrap its label (DE labels at 320): height follows the content (min = the control height; the vertical padding makes one line exactly --_h), so arrows and text always stay inside the padding. The other forms (nav, lang, filters) keep the fixed height + nowrap. */
+.btn { height: auto; min-height: var(--_h); padding-block: calc((var(--_h) - var(--_lh) - 2px) / 2); white-space: normal; text-align: center; hyphens: none; } /* labels wrap at spaces only, never hyphenated */
 .btn--sm, .nav-pill--sm { --_h: var(--control-sm); --_fs: var(--type-label-size); --_lh: var(--type-label-lh); }
 .btn--md, .nav-pill--md { --_h: var(--control-md); }
 .btn--lg, .nav-pill--lg { --_h: var(--control-lg); --_px: var(--space-5); }

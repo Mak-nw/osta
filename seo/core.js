@@ -4,6 +4,7 @@ import { readFileSync, existsSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { esc, escAttr, applyI18n, getAttr, stripTags } from './html.js';
+import { softHyphen } from '../src/utils/soft-hyphen.js';
 
 export const ROOT = resolve(import.meta.dirname, '..');
 const readJson = (p) => JSON.parse(readFileSync(p, 'utf8'));
@@ -209,7 +210,7 @@ export function jsonLd(ctx, e, meta) {
 
 export function faqItems(ctx, lang) {
   const out = [];
-  for (let i = 1; i <= 30 && ctx.get(`faq.q${i}`, 'en'); i++) out.push({ q: ctx.get(`faq.q${i}`, lang), a: stripTags(ctx.get(`faq.a${i}`, lang)) });
+  for (let i = 1; i <= 30 && ctx.get(`faq.q${i}`, 'en'); i++) out.push({ q: stripTags(ctx.get(`faq.q${i}`, lang)), a: stripTags(ctx.get(`faq.a${i}`, lang)) });
   return out;
 }
 
@@ -276,7 +277,7 @@ const chip = (ctx, cat, lang, cls = 'chip--tag') => `<span class="chip ${cls}">$
 export function productCard(ctx, p, lang, { level = 2 } = {}) {
   return `<a class="card card--link product-card" href="/products/${p.slug}/" data-slug="${p.slug}"${lang === 'de' ? ' hreflang="en"' : ''}>
     <div class="product-card__tags">${p.categories.map((c) => chip(ctx, c, lang)).join('')}</div>
-    <h${level} class="product-card__title">${esc(p.name)}</h${level}>
+    <h${level} class="product-card__title">${esc(lang === 'de' ? p.name : softHyphen(p.name))}</h${level}>
     <div class="product-card__footer"><span data-i18n="common.know_more">${esc(ctx.get('common.know_more', lang))}</span><span class="round-btn round-btn--outline">${icon('arrow-up-right', 'icon')}</span></div>
   </a>`;
 }

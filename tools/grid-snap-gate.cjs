@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* Grid-snap gate (rule L7 / G2, customer 2026-11-14): the text container of text pages (.legal: Terms, Privacy, Data processing, Impressum, FAQ)
-   must be EXACTLY the 6 central columns of the 12-col grid (cols 4-9, edges on the column lines) from 1200 px; below 1200 it is the full grid
-   (all 8 / 4 columns). No text block inside (h1, h2, p, ul/ol/li, links, long words/URLs, text ink) may exceed it, at any width.
+   must be EXACTLY the 6 central columns at EVERY width (edges on the column lines): 4-9 of 12 from 1200 px, 2-7 of 8 on tablet 768-1199 (fixed 2026-11-19: it used to
+   expect cols 1-8, which contradicted the customer rule), mobile (4 cols) = full width. No text block inside (h1, h2, p, ul/ol/li, links, long words/URLs, text ink) may exceed it, at any width.
    Column lines are computed like the dev grid overlay (G key): container box + --gutter padding, --grid-cols, --grid-gap read from the page.
    Rule L10 (every section/block on the 12-col grid): for EVERY page the gate lists each section / container / block / card / media with its column span and the
    deviation of its edges from the nearest column lines. FAIL only for blocks in L10_ENFORCED (below); everything else is INFO (coverage). --md <file> writes
@@ -100,7 +100,7 @@ function inpage(cfg) {
   const hero = document.querySelector('.legal__hero'), body = document.querySelector('.legal__body');
   if (hero && body) {
     const desktop = cols === 12;
-    const a = desktop ? 4 : 1, b = desktop ? 9 : cols;
+    const a = desktop ? 4 : (cols === 8 ? 2 : 1), b = desktop ? 9 : (cols === 8 ? 7 : cols); /* L7: 6 central columns at every width: 4-9 of 12, 2-7 of 8 (tablet), mobile 4 cols = full width (1-4) */
     const eL = colL(a), eR = colR(b);
     const blocks = [...document.querySelectorAll('.legal__title, .legal__updated, .legal__body')];
     const edges = blocks.map((el) => { const q = el.getBoundingClientRect(); return { cls: el.className.split(' ').pop(), l: q.left, r: q.right }; });

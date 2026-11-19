@@ -101,7 +101,7 @@
   .process-scroll__grid { grid-template-rows: auto auto minmax(0, 1fr); }
   .process-steps { grid-row: 2; display: flex; flex-direction: row; align-items: center; gap: var(--space-5); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-inline: calc(50% - var(--space-6)); }
   .process-steps::-webkit-scrollbar { display: none; }
-  .process-steps__item { flex: none; scroll-snap-align: center; }
+  .process-steps__item { flex: none; display: flex; align-items: center; scroll-snap-align: center; } /* flex (not block): a block li is trimmed to the 11px cap box of its text, which clipped the 40px dots in the scroll strip */
   .process-steps__row { white-space: nowrap; }
   .process-scroll__art { grid-row: 3; }
   .svc-supply__body { grid-column: 1 / -1; align-self: stretch; }

@@ -3,24 +3,26 @@
 .legal__hero { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); row-gap: var(--group-to-group-gap); padding-block: var(--space-8) var(--section-sm); }
 .legal__title, .legal__updated { grid-column: 4 / span 6; margin: 0; }
 .legal__updated { color: var(--text); }
+.legal__updated.t-lead { margin-top: calc(var(--section-head-gap) - var(--group-to-group-gap)); } /* FAQ intro = a description under the heading: heading -> description role (45 / 32 mobile); the 16 row gap stays only for the signed 'last updated' label (t-label) of legal pages / 404 */
 .legal__grid { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); align-items: start; }
 .legal__body { grid-column: 4 / span 6; min-width: 0; overflow-wrap: anywhere; display: flex; flex-direction: column; gap: var(--section-sm); }
 .legal__section { display: flex; flex-direction: column; gap: var(--text-gap); }
 .legal__heading { margin: 0; }
 .legal__text, .legal__section > p { margin: 0; color: var(--text); }
 /* Lists inside a section: <ul class="legal__list t-body"> / <ol class="legal__list legal__list--numbered t-body"> */
-.legal__list { display: flex; flex-direction: column; gap: var(--space-2); margin: 0; padding-left: var(--space-5); color: var(--text); list-style: disc; }
+.legal__list { display: flex; flex-direction: column; gap: var(--space-4); margin: 0; padding-left: var(--space-5); color: var(--text); list-style: disc; }
 .legal__list--numbered { list-style: decimal; }
 
-/* Responsive legal pages: tablet / mobile = one column from the container's left edge (the 3 empty desktop columns are dropped), tighter vertical rhythm from tokens */
+/* Responsive legal pages: tablet = 6 central columns of 8 (2-7), mobile (4 cols) = full width; tighter vertical rhythm from tokens */
 @media (max-width: 1199px) {
   .legal__hero { padding-block: var(--space-7) var(--section-sm); }
-  .legal__title, .legal__updated, .legal__body { grid-column: 1 / -1; }
+  .legal__title, .legal__updated, .legal__body { grid-column: 2 / span 6; } /* tablet (8-col grid): the 6 CENTRAL columns 2-7 (customer rule L7: legal text on 6 central columns at every width) */
   .legal__body { gap: var(--space-7); }
 }
 @media (max-width: 767px) {
-  .legal__hero { padding-block: var(--space-6) var(--section-sm); }
-  .legal__body { gap: var(--space-6); }
+  .legal__hero { padding-block: var(--space-6) var(--space-7); } /* 'Last updated' -> first section = 48 = section -> section */
+  .legal__title, .legal__updated, .legal__body { grid-column: 1 / -1; }
+  .legal__body { gap: var(--space-7); } /* section -> next section heading (48) clearly larger than paragraph -> paragraph (30) */
   .legal__list { padding-left: var(--space-5); }
 }
 

@@ -24,3 +24,4 @@
 .link-cards--3 .link-card > .round-btn { grid-column: 2; grid-row: 3; align-self: end; }
 /* 1st (left) card of --3 is the shared .text-card (components/cards.css, modifier --on-accent); only its proportion is set by this row. */
 :where(.link-cards--3) .text-card { aspect-ratio: 3 / 4; }
+@media (min-width: 1200px) { .link-cards--3 .text-card { aspect-ratio: auto; justify-content: flex-start; gap: var(--text-cta-gap); } } /* >= 1200 the row height comes from the scene cards (3:4); the text card follows its content: text -> button = --text-cta-gap (45), spare height under the button (rule L11) */

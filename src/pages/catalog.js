@@ -1,4 +1,5 @@
 import { url } from '../utils/url.js';
+import { softHyphen } from '../utils/soft-hyphen.js';
 import allProducts from '../data/products.json';
 import { applyLang } from '../i18n.js';
 
@@ -29,7 +30,7 @@ const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>'
 const card = (p, isNew) => `
   <a ${isNew ? 'data-reveal' : ''} class="card card--link product-card" href="${url('/products/')}${encodeURIComponent(p.slug)}/" data-slug="${p.slug}">
     <div class="product-card__tags">${p.categories.map((c) => `<span class="chip chip--tag"><span class="icon-box icon-box--ink"><svg class="icon icon-text" aria-hidden="true"><use href="${url('/assets/icons/sprite.svg')}#${ICONS[c]}"/></svg></span><span data-i18n="${LABELS[c]}">${FALLBACK[c]}</span></span>`).join('')}</div>
-    <h2 class="product-card__title">${esc(p.name)}</h2>
+    <h2 class="product-card__title">${esc(document.documentElement.lang === 'de' ? p.name : softHyphen(p.name))}</h2>
     <div class="product-card__footer"><span data-i18n="common.know_more">Know more</span><span class="round-btn round-btn--outline"><span class="icon-box"><svg class="icon" aria-hidden="true"><use href="${url('/assets/icons/sprite.svg')}#arrow-up-right"/></svg></span></span></div>
   </a>`;
 

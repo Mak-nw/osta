@@ -2,43 +2,357 @@
  {
   "page": "about",
   "w": 1440,
-  "total": 0,
-  "secs": [],
+  "total": 27,
+  "secs": [
+   {
+    "sec": ".hero",
+    "n": 3,
+    "rows": 3,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "sec": "#about.section--lg.about-intro",
+    "n": 7,
+    "rows": 5,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     100,
+     100,
+     100,
+     100,
+     100,
+     100,
+     100
+    ]
+   },
+   {
+    "sec": "#services.about-services",
+    "n": 11,
+    "rows": 8,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     1300,
+     1300,
+     1300,
+     1300,
+     1300,
+     1300,
+     1300,
+     1300,
+     1300,
+     1300,
+     1300
+    ]
+   },
+   {
+    "sec": "#team.section--lg",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     4500
+    ]
+   },
+   {
+    "sec": "#quality.quality-band",
+    "n": 3,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     5600,
+     5600,
+     5600
+    ]
+   },
+   {
+    "sec": ".home-closing",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     6200,
+     6200
+    ]
+   }
+  ],
   "fail": []
  },
  {
   "page": "about",
   "w": 375,
-  "total": 0,
-  "secs": [],
+  "total": 27,
+  "secs": [
+   {
+    "sec": ".hero",
+    "n": 3,
+    "rows": 3,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "sec": "#about.section--lg.about-intro",
+    "n": 7,
+    "rows": 7,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "sec": "#services.about-services",
+    "n": 11,
+    "rows": 11,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     1500,
+     1500,
+     1500,
+     1500,
+     1500,
+     1500,
+     1500,
+     1500,
+     1500,
+     1500,
+     1500
+    ]
+   },
+   {
+    "sec": "#team.section--lg",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     6100
+    ]
+   },
+   {
+    "sec": "#quality.quality-band",
+    "n": 3,
+    "rows": 3,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     7300,
+     7300,
+     7300
+    ]
+   },
+   {
+    "sec": ".home-closing",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     8700,
+     8700
+    ]
+   }
+  ],
   "fail": []
  },
  {
   "page": "catalog",
   "w": 1440,
-  "total": 0,
-  "secs": [],
+  "total": 15,
+  "secs": [
+   {
+    "sec": ".stack.stack--4<div>",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0
+    ]
+   },
+   {
+    "sec": ".layout-catalog__sidebar<aside>",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0
+    ]
+   },
+   {
+    "sec": ".catalog__results",
+    "n": 12,
+    "rows": 4,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
   "fail": []
  },
  {
   "page": "catalog",
   "w": 375,
-  "total": 0,
-  "secs": [],
+  "total": 15,
+  "secs": [
+   {
+    "sec": ".stack.stack--4<div>",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0
+    ]
+   },
+   {
+    "sec": ".layout-catalog__sidebar<aside>",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0
+    ]
+   },
+   {
+    "sec": ".catalog__results",
+    "n": 12,
+    "rows": 12,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
   "fail": []
  },
  {
   "page": "contact",
   "w": 1440,
-  "total": 0,
-  "secs": [],
+  "total": 4,
+  "secs": [
+   {
+    "sec": ".section-head<div>",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0
+    ]
+   },
+   {
+    "sec": ".section-head.contact-split__form-head<div>",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0
+    ]
+   },
+   {
+    "sec": ".contact-split__content.card<div>",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0
+    ]
+   }
+  ],
   "fail": []
  },
  {
   "page": "contact",
   "w": 375,
-  "total": 0,
-  "secs": [],
+  "total": 4,
+  "secs": [
+   {
+    "sec": ".section-head<div>",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0
+    ]
+   },
+   {
+    "sec": ".section-head.contact-split__form-head<div>",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0
+    ]
+   },
+   {
+    "sec": ".contact-split__content.card<div>",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0
+    ]
+   }
+  ],
   "fail": []
  },
  {
@@ -86,15 +400,135 @@
  {
   "page": "index",
   "w": 1440,
-  "total": 0,
-  "secs": [],
+  "total": 14,
+  "secs": [
+   {
+    "sec": ".hero.hero--home",
+    "n": 4,
+    "rows": 4,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "sec": "#products.home-section.home-section--accent",
+    "n": 4,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     100,
+     100,
+     100,
+     100
+    ]
+   },
+   {
+    "sec": "#supply.home-supply",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     1700
+    ]
+   },
+   {
+    "sec": "#quality.home-section.home-quality",
+    "n": 3,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     2300,
+     2300,
+     2300
+    ]
+   },
+   {
+    "sec": ".home-closing",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     2900,
+     2900
+    ]
+   }
+  ],
   "fail": []
  },
  {
   "page": "index",
   "w": 375,
-  "total": 0,
-  "secs": [],
+  "total": 14,
+  "secs": [
+   {
+    "sec": ".hero.hero--home",
+    "n": 4,
+    "rows": 4,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "sec": "#products.home-section.home-section--accent",
+    "n": 4,
+    "rows": 4,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     100,
+     100,
+     100,
+     100
+    ]
+   },
+   {
+    "sec": "#supply.home-supply",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     3100
+    ]
+   },
+   {
+    "sec": "#quality.home-section.home-quality",
+    "n": 3,
+    "rows": 3,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     3700,
+     3700,
+     3700
+    ]
+   },
+   {
+    "sec": ".home-closing",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     5000,
+     5000
+    ]
+   }
+  ],
   "fail": []
  },
  {
@@ -114,15 +548,139 @@
  {
   "page": "services",
   "w": 1440,
-  "total": 0,
-  "secs": [],
+  "total": 16,
+  "secs": [
+   {
+    "sec": ".hero",
+    "n": 3,
+    "rows": 3,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "sec": "#services.svc-services",
+    "n": 9,
+    "rows": 6,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     2000,
+     2000,
+     2000,
+     2000,
+     2000,
+     2000,
+     2000,
+     2000,
+     2000
+    ]
+   },
+   {
+    "sec": "#supply-logistics.svc-supply.photo-zoom",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     3200
+    ]
+   },
+   {
+    "sec": "#how-we-work.svc-how",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     4100
+    ]
+   },
+   {
+    "sec": ".home-closing",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     5700,
+     5700
+    ]
+   }
+  ],
   "fail": []
  },
  {
   "page": "services",
   "w": 375,
-  "total": 0,
-  "secs": [],
+  "total": 16,
+  "secs": [
+   {
+    "sec": ".hero",
+    "n": 3,
+    "rows": 3,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "sec": "#services.svc-services",
+    "n": 9,
+    "rows": 9,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     1800,
+     1800,
+     1800,
+     1800,
+     1800,
+     1800,
+     1800,
+     1800,
+     1800
+    ]
+   },
+   {
+    "sec": "#supply-logistics.svc-supply.photo-zoom",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     4400
+    ]
+   },
+   {
+    "sec": "#how-we-work.svc-how",
+    "n": 1,
+    "rows": 1,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     5400
+    ]
+   },
+   {
+    "sec": ".home-closing",
+    "n": 2,
+    "rows": 2,
+    "spread": 0,
+    "rowSpread": 0,
+    "ys": [
+     7500,
+     7500
+    ]
+   }
+  ],
   "fail": []
  },
  {

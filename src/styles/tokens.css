@@ -152,6 +152,7 @@
   --gutter: 64px;               /* side padding of container (1728: content x=64..1664, width 1600) */
   --grid-cols: 12;
   --grid-gap: var(--space-3);          /* gap between grid columns / cards in a row = 12 (customer 2026-11-13; was 16); ONE token for every breakpoint */
+  --svc-card-text-gap: 22px;           /* service card (.svc-card, Services / About): title -> description = 22 on desktop AND mobile (customer 2026-11-19, form 4e0687 'відступ не 30, а 22'; 22 is on the spacing scale); other card roles keep --card-text-gap */
   --card-inner-gap: var(--space-3);    /* art <-> text gap inside a card (svc-card, quality-card, link-card--3) = 12; ONE token */
   --sidebar-w: 240px;
   --header-top: var(--space-3);                                   /* gap above the floating panel */

@@ -20,10 +20,10 @@
 .card.is-disabled { opacity: .5; pointer-events: none; }
 
 /* product-card: <a class="card card--link product-card"> */
-.product-card { gap: var(--card-text-gap); padding: var(--card-padding); border-radius: var(--radius-lg); }
+.product-card { gap: var(--card-text-gap); justify-content: flex-start; padding: var(--card-padding); border-radius: var(--radius-lg); } /* equal-height rows, content on TOP: the footer follows the text with the card gap (30), spare height stays at the bottom of the shorter cards */
 .product-card__tags { display: flex; align-items: center; }
 .product-card__title { /* item-title role: compact title of a dense list item = --type-h3 (24/32) */ color: var(--text-accent); font-size: var(--type-h3-size); line-height: var(--type-h3-lh); font-weight: var(--font-weight-medium); letter-spacing: var(--type-h3-ls); }
-.product-card__footer { margin-top: auto; display: flex; align-items: center; justify-content: space-between; color: var(--accent); font-size: var(--type-body-size); }
+.product-card__footer { display: flex; align-items: center; justify-content: space-between; color: var(--accent); font-size: var(--type-body-size); }
 
 /* tile (accent plate with icon rings top and caption bottom): Pharma/Food/Cosmetics */
 .tile { min-height: var(--card-tall-min-h); justify-content: space-between; border-radius: var(--radius-lg); padding: var(--card-padding); }
@@ -38,6 +38,11 @@
 .contact-card__role { font-size: var(--type-label-size); color: var(--text); letter-spacing: var(--type-label-ls); }
 .contact-line { --_p: var(--space-1); --_h: var(--space-7); --_px: var(--_p); --_hole: var(--surface-white); position: relative; display: flex; width: fit-content; max-width: calc(100% + 2 * var(--_p)); height: auto; min-height: var(--_h); isolation: isolate; overflow: hidden; justify-content: flex-start; border-width: 0; padding: var(--_p); margin: calc(-1 * var(--_p)); color: var(--text-accent); white-space: normal; overflow-wrap: anywhere; }
 /* ONE component for every contact row (About people-card, Contact managers, footer mail/phone/fax): filled .icon-ring--action + text. Hover (customer 2026-11-13: no underline): a fill LIGHTER than the surface (--surface-white; every host surface is page/raised/sunken, all darker) grows from the centre as the system disc (::before, --dur-hover-disc, hover:hover only). EQUAL padding --_p (--space-1 = 4) on all four sides of the ring/text (plate --_h = --space-7 = 48 = chip-lg 40 + 2 x --_p, a plain length so the hover-gate can read it; >= 44 hit target, radius --radius-md like Button base), cancelled by the same negative margin on all sides, so the ring stays on the column line and the row footprint (40) never changes; plates of neighbours (gap >= 12) cannot touch. */
+/* a phone / email value is never broken: it stays on one line; where it does not fit beside the ring (320 px in a card) the whole value drops under the ring */
+.contact-line { flex-wrap: wrap; align-content: center; row-gap: var(--space-2); }
+.contact-line > span:not(.icon-ring) { white-space: nowrap; overflow-wrap: normal; }
+.contact-line[href^="http"] { flex-wrap: nowrap; } /* a website URL is not a phone / email: it may wrap at any character and stays beside its ring (320 px) */
+.contact-line[href^="http"] > span:not(.icon-ring) { flex: 1 1 0; min-width: 0; white-space: normal; overflow-wrap: anywhere; }
 .contact-line:is(.is-hover, .is-focus, :focus-visible, :active)::before { scale: 1; }
 @media (hover: hover) { .contact-line:hover::before { scale: 1; } }
 
@@ -45,7 +50,7 @@
 .people-card { position: relative; isolation: isolate; display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); padding: var(--card-padding); border-radius: var(--radius-lg); background: var(--surface-raised); color: var(--accent); } /* U13: the card has the shared padding (--card-padding) and its own 12-col inner grid: photo cols 1-3, quote+name+role 6-8 (col 9 empty), contacts 10-12 */
 .people-card__media { grid-column: 1 / span 3; width: 100%; aspect-ratio: 1 / 1; border-radius: var(--radius-lg); overflow: hidden; isolation: isolate; } /* zoom mask */
 .people-card__photo { display: block; width: 100%; height: 100%; object-fit: cover; }
-.people-card__body { grid-column: 6 / span 3; display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-5); }
+.people-card__body { grid-column: 6 / span 3; display: flex; flex-direction: column; justify-content: flex-start; gap: var(--card-text-gap); } /* quote -> name/role = the card text role (30 / 22 mobile), content top-aligned: the gap never follows the photo height */
 /* hanging quote mark: the opening mark sits left of column 6, the first letter aligns to it (text-indent = mark advance, EN “ 0.395em, DE „ 0.374em; font metric, not a token) */
 .people-card__body > .t-lead { text-indent: -0.395em; }
 :lang(de) .people-card__body > .t-lead { text-indent: -0.374em; }
@@ -57,8 +62,8 @@
 
 /* info card (Description / Usage / Specs / FAQ): white tile */
 /* gap head (icon-ring + label) -> text = --card-text-gap (30, customer 2026-11-18; equal for Usage/Description/Specs/FAQ); padding = .card --_pad (--space-5, all sides) */
-.info-card { gap: var(--card-text-gap); border-radius: var(--radius-lg); background: var(--surface-raised); }
-.info-card__head { display: flex; align-items: center; gap: var(--space-4); min-width: 0; }
+.info-card { gap: var(--card-text-gap); justify-content: flex-start; border-radius: var(--radius-lg); background: var(--surface-raised); }
+.info-card__head { display: flex; align-items: center; gap: var(--space-4); min-width: 0; /* VISIBLE title -> text gap = --card-text-gap (rule L11, M1): the 40 ring is taller than the title ink (1cap of the h3 font), so the head's bottom margin takes back the half-difference; icon + title stay centred on one axis */ font-size: var(--type-h3-size); line-height: var(--type-h3-lh); font-weight: 500; margin-bottom: min(0px, calc((1cap - var(--chip-lg)) / 2)); }
 .info-card__label { min-width: 0; color: var(--text-accent); font-size: var(--type-h3-size); line-height: var(--type-h3-lh); letter-spacing: var(--type-h3-ls); font-weight: 500; } /* item-title role (h3 24/32/500, as link-card__title), NOT body */
 .info-card__value { font-size: var(--type-lead-size); line-height: var(--type-lead-lh); letter-spacing: var(--type-lead-ls); color: var(--text-accent); }
 .info-card__value--body { color: var(--text-ink-deep); font-size: var(--type-body-size); line-height: var(--type-body-lh); letter-spacing: var(--type-body-ls); }
@@ -99,45 +104,47 @@
 :is(.text-card) a:not(.btn, .round-btn) { position: relative; z-index: 1; }
 html :is(.text-card) a.btn:is(:active, .is-pressed) { transform: none; position: relative; top: 1px; }
 
-/* quality cards (Home Quality, LIGHT band): row of 3 cards, 4 cols each, square (1:1, = height of the Products row). No outline, fill --surface-raised (rule: a card is slightly lighter than the surface it stands on), radius-lg, padding --space-5, no shadow / gradient.
+/* quality cards (Home Quality, LIGHT band): row of 3 cards, 4 cols each, height follows the content (L11). No outline, fill --surface-raised (rule: a card is slightly lighter than the surface it stands on), radius-lg, padding --space-5, no shadow / gradient.
    The text card is the shared .text-card (below). .quality-card = EudraGMDP / GDP: icon ring top-left, looping point-line scene in the art zone (.quality-card__art > canvas, src/pages/home-quality-scenes.js),
    title t-h2 + one-line t-body at the bottom. Scene colours come from the local --il-* tokens (same names as .link-card__art): --il-fill white main object, --il-soft lines / dots, --il-bg what the lines fade into. */
 /* Band (light, --surface): the section that holds .quality-cards (Home #quality, About #quality). One definition; .home-quality is the legacy Home class name, same rule. */
 .quality-band, .home-section.home-quality { padding-block: var(--space-8); background: var(--surface); color: var(--text); }
+.section--lg:has(+ .quality-band) { padding-bottom: 0; } /* two neighbouring sections on the same surface: ONE band (the quality band's own 64), not 128 + 64 */
 .quality-cards { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); column-gap: var(--grid-gap); grid-column: 1 / -1; grid-row: 1; align-items: stretch; margin: 0; padding: 0; list-style: none; } /* grid-column/row: when the container is itself a grid (Home .home-grid) */
-/* text card = 1:1 (the row of three squares) */
-:where(.quality-cards) .text-card { aspect-ratio: 1 / 1; }
+/* Heights follow the CONTENT (rule L11, customer 2026-11-19): no square cards. Row height = the tallest card's content; the other cards keep their content on top, spare height stays at the BOTTOM; the art zone is the flexible part (its own ratio is the minimum). */
 .quality-cards > li { grid-column: span 4; display: flex; min-width: 0; }
-/* Desktop (>= 1200): the 4 rows of the card (icon, art, title, text) are rows of the .quality-cards grid; every li and card is a SUBGRID of them, so icon / art / title / text line up across the row for ANY text length (EN, DE): no fixed line reservations. */
+/* Desktop (>= 1200): the 3 rows of the card (icon, art, copy = title + text) are rows of the .quality-cards grid; every li and card is a SUBGRID of them, so icon / art / title tops line up across the row for ANY text length (EN, DE). Title and its text are ONE block (.quality-card__copy): text always follows ITS title with the card text gap, titles are never stretched. The text card (flex column) keeps text -> button = --text-cta-gap (45), spare height under the button. */
 @media (min-width: 1200px) {
-  .quality-cards { grid-template-rows: auto minmax(0, 1fr) auto auto; }
-  .quality-cards > li { grid-row: span 4; display: grid; grid-template-rows: subgrid; }
+  .quality-cards { grid-template-rows: auto minmax(auto, 1fr) auto; }
+  .quality-cards > li { grid-row: span 3; display: grid; grid-template-rows: subgrid; }
   .quality-cards > li > :is(.text-card, .quality-card) { grid-row: 1 / -1; }
+  .quality-cards .text-card { justify-content: flex-start; gap: var(--text-cta-gap); }
 }
-.quality-card { flex: 1; min-width: 0; box-sizing: border-box; aspect-ratio: 1 / 1; padding: var(--card-padding); border: 0; border-radius: var(--radius-lg); background: var(--surface-raised); color: var(--text); }
+.quality-card { flex: 1; min-width: 0; box-sizing: border-box; padding: var(--card-padding); border: 0; border-radius: var(--radius-lg); background: var(--surface-raised); color: var(--text); }
 .quality-card > * { margin: 0; }
 .quality-card__title { color: var(--text-accent); }
-.quality-card { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto auto; row-gap: var(--card-inner-gap); align-items: start; }
-@media (min-width: 1200px) { .quality-card { grid-template-rows: subgrid; align-items: stretch; } } /* title / text boxes fill their shared row: equal heights across the row, text starts at one line */
+.quality-card { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; row-gap: var(--card-inner-gap); align-items: start; }
+@media (min-width: 1200px) { .quality-card { grid-template-rows: subgrid; } }
 .quality-card > .icon-ring { grid-row: 1; justify-self: start; color: var(--accent); }
-.quality-card__art { --il-fill: var(--surface-white); --il-soft: var(--accent); --il-bg: var(--surface-raised); grid-row: 2; align-self: stretch; position: relative; min-height: 0; min-width: 0; width: 100%; color: var(--accent); }
+.quality-card__art { --il-fill: var(--surface-white); --il-soft: var(--accent); --il-bg: var(--surface-raised); grid-row: 2; align-self: stretch; aspect-ratio: 3 / 1; position: relative; min-height: 0; min-width: 0; width: 100%; color: var(--accent); }
 .quality-card__canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
 .quality-card__canvas.is-ready { opacity: 1; }
-.quality-card__title { grid-row: 3; overflow-wrap: break-word; hyphens: auto; }
-.quality-card__text { grid-row: 4; margin-top: calc(var(--card-text-gap) - var(--card-inner-gap)); /* row-gap 12 above + this = title -> text = --card-text-gap (30) */ overflow-wrap: break-word; hyphens: auto; }
-@media (max-width: 1199px) { .quality-card__text { min-height: 4lh; } .quality-card__title { min-height: 2lh; } } /* tablet (cards not in the shared row grid): reserve the longer title/text lines so the art zones match */
+.quality-card__copy { grid-row: 3; align-self: stretch; display: flex; flex-direction: column; gap: var(--card-text-gap); min-width: 0; } /* the BLOCK fills its row (equal heights across the row), its content stays on top: title top-aligned, text directly under ITS title (title -> text = --card-text-gap 30 / 22 mobile, M1-trimmed boxes = visible gap), spare height at the bottom */
+.quality-card__title { overflow-wrap: break-word; hyphens: auto; }
+.quality-card__text { overflow-wrap: break-word; hyphens: auto; }
+:root:not(:lang(de)) .quality-card__text { hyphens: manual; } /* EN body text is never auto-hyphenated (customer: no 'distribu-/tor'); DE keeps it */
+/* <= 1199 (cards are not in the shared row grid): NO reserved heights (rule L11). The art zone has its own ratio, rows follow the content, equal-height cards in a row keep the content on top and the spare space at the bottom. */
+@media (max-width: 1199px) { .quality-card { grid-template-rows: auto auto 1fr; align-content: start; } .quality-card__art { aspect-ratio: 4 / 3; align-self: start; } }
 /* Tablet: text card full width (row layout), the two fact cards under it, 4 cols each. Mobile: stacked, art zones keep one shared height. */
 @media (max-width: 1199px) {
   .quality-cards { row-gap: var(--grid-gap); }
   .quality-cards > li { grid-column: span 4; }
   .quality-cards > li:first-child { grid-column: 1 / -1; }
-  :where(.quality-cards) .text-card { aspect-ratio: auto; flex-direction: row; align-items: flex-end; flex-wrap: wrap; justify-content: space-between; }
+  :where(.quality-cards) .text-card { flex-direction: row; align-items: flex-end; flex-wrap: wrap; justify-content: space-between; }
   :where(.quality-cards) .text-card__body { flex: 1 1 60%; max-width: 70ch; }
 }
 @media (max-width: 767px) {
   .quality-cards > li, .quality-cards > li:first-child { grid-column: 1 / -1; }
-  .quality-cards .quality-card { aspect-ratio: auto; min-height: 440px; }
-  .quality-cards .quality-card__text { min-height: 2lh; } /* both cards reserve 2 text lines, so the art zones (and the shared floor) have the same height */
 }
 
 
@@ -147,6 +154,7 @@ html :is(.text-card) a.btn:is(:active, .is-pressed) { transform: none; position:
    ========================================================================== */
 @media (max-width: 1199px) {
   .people-card { row-gap: var(--space-4); }
+  .people-card__body > .t-lead, :lang(de) .people-card__body > .t-lead { text-indent: 0; } /* tablet: the quote column starts 12px after the photo, a hanging mark would touch it */
   .people-card__media { grid-column: 1 / span 3; grid-row: 1 / span 2; align-self: start; }
   .people-card__body { grid-column: 4 / -1; grid-row: 1; }
   .people-card__contacts { grid-column: 4 / -1; grid-row: 2; margin-top: 0; }
@@ -154,6 +162,6 @@ html :is(.text-card) a.btn:is(:active, .is-pressed) { transform: none; position:
 @media (max-width: 767px) {
   .people-card__body > .t-lead, :lang(de) .people-card__body > .t-lead { text-indent: 0; } /* no gutter left of the text on mobile: a hanging mark would touch the outline */
   .people-card__media { grid-column: 1 / -1; grid-row: 1; aspect-ratio: 4 / 3; }
-  .people-card__body { grid-column: 1 / -1; grid-row: 2; gap: var(--space-4); }
+  .people-card__body { grid-column: 1 / -1; grid-row: 2; }
   .people-card__contacts { grid-column: 1 / -1; grid-row: 3; }
 }

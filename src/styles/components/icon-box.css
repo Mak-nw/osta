@@ -24,6 +24,7 @@
 .icon-box--ink > .icon:has(use[href$="#leaf"]) { --ink-f: .65; }
 .icon-box--ink > .icon:has(use[href$="#puzzle"]) { --ink-f: .75; --ink-dy: -.03; }
 .icon-box--ink > .icon:has(use[href$="#grid"]) { --ink-f: .69; }
+.icon-box--ink > .icon:has(use[href$="#globe"]) { --ink-f: .835; } /* circle r 9 (ink 19.5 of 24): enlarged to the cap band like the other sprite glyphs (contact row: Impressum website) */
 .icon-box--ink:not(.icon-ring > *) { translate: 0 var(--_sh); } /* bare in a text row (chip, filter): centred on the ink, not on the line box */
 /* set T: ONE size per font size for every glyph (ICON-A) = CAP HEIGHT of the face (cap top ... baseline), whatever the string (descenders hang below); inside a ring the inner box is shifted onto that ink, the ring itself is not moved */
 .icon-ring > .icon-box--ink { translate: 0 var(--_sh); } /* the circle stays concentric with its row (card padding, hit area); only the INNER box is moved onto the text ink (ICON-D) */

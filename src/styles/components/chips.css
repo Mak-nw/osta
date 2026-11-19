@@ -13,11 +13,11 @@
 .meta-tag__key { color: var(--text); }
 
 /* breadcrumbs: Home — Products — Anastrozole */
-.breadcrumbs { display: flex; align-items: center; gap: var(--space-3); font-size: var(--type-label-size); line-height: var(--type-label-lh); color: var(--text-accent); }
+.breadcrumbs { display: flex; align-items: flex-start; gap: var(--space-3); font-size: var(--type-label-size); line-height: var(--type-label-lh); color: var(--text-accent); }
 .breadcrumbs a { display: inline-flex; align-items: center; min-height: var(--hit-min); } /* click target >= 24 px, text stays 14/20 */
 /* breadcrumb link hover: text-link component (components/text-link.css) */
-.breadcrumbs__sep { width: var(--space-5); height: 1px; background: var(--border-strong); opacity: .5; }
-.breadcrumbs__current { color: var(--text); }
+.breadcrumbs__sep { flex: none; margin-top: calc(var(--hit-min) / 2); width: var(--space-5); height: 1px; background: var(--border-strong); opacity: .5; }
+.breadcrumbs__current { color: var(--text); padding-block: calc((var(--hit-min) - var(--type-label-lh)) / 2); } /* a long current page wraps inside its own box; first line centred on the 24px link row like the links */
 
 /* filter list (sidebar) */
 .filter-list { display: flex; flex-direction: column; gap: var(--space-1); }

@@ -17,6 +17,7 @@
 .header__logo img { height: var(--logo-header-h); width: auto; max-width: none; display: block; }
 .header__actions { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-1); }
 .header__cta-phone { display: none; }
+.header__cta.btn { height: var(--_h); min-height: 0; padding-block: 0; white-space: nowrap; } /* header controls stay one line at the fixed control height (the generic .btn may wrap) */
 .header__cta { margin-left: var(--space-2); min-width: 0; --_fs: var(--type-label-size); --_lh: var(--type-label-lh); }
 
 /* .nav-pill: text link, NO fill at rest (border 1px transparent keeps the size); hover / focus-visible / pressed = fill (see below). Sizes --sm|--md|--lg; states: .is-active */

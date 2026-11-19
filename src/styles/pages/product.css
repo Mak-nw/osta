@@ -26,21 +26,26 @@
 
 /* Action button under the info tiles (.product-hero__inner child after .product-info, 24 px = row gap of the hero): centred on the page axis (cols 3-10 are symmetric) */
 .product-hero__inner > .btn { justify-self: center; }
+.product-hero__inner > .section-head--center { align-self: stretch; } /* full width of the hero column: the chip / button row under the centred text wraps only when it physically cannot fit */
 
 /* ==========================================================================
    Responsive product. Tablet: hero full 8 columns, info cards 2 per row; mobile: info cards stacked.
    ========================================================================== */
 @media (max-width: 1199px) {
-  .product-related .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .product-related .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } /* 3 cards = one full row (no orphan); 1 column below 900 */
   .product-hero__inner > *, .product-related .container > * { grid-column: 1 / -1; }
   .product-info { margin-top: var(--space-5); }
   .product-answer { max-width: none; } /* tablet: full width of the hero, as the rest of the hero (design-system.md) */
 }
-@media (max-width: 767px) {
+@media (max-width: 899px) {
   .product-related .grid-3 { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 767px) {
   .product-info { grid-template-columns: minmax(0, 1fr); }
   .product-info > .info-card { grid-column: 1 / -1; }
-  .breadcrumbs { flex-wrap: wrap; row-gap: var(--space-1); }
+  .breadcrumbs { flex-wrap: wrap; align-items: center; row-gap: var(--space-1); } /* every item (link, separator, current page) centred on the 44 px row: one line axis */
+  .breadcrumbs__sep { margin-top: 0; }
+  .breadcrumbs__current { display: inline-flex; align-items: center; min-height: var(--control-md); padding-block: 0; }
   .breadcrumbs a { display: inline-flex; align-items: center; justify-content: center; min-height: var(--control-md); min-width: var(--control-md); }
 }
 
@@ -48,8 +53,8 @@
 .product-info > .info-card--wide { grid-column: 1 / -1; }
 .spec-table { width: 100%; border-collapse: collapse; }
 .spec-table th, .spec-table td { padding-block: var(--space-2); text-align: left; vertical-align: top; border-top: 1px solid var(--border); }
-.spec-table tr:first-child th, .spec-table tr:first-child td { border-top: 0; }
-.spec-table th { width: 40%; padding-right: var(--space-4); color: var(--text); font-weight: 400; }
+.spec-table tr:first-child th, .spec-table tr:first-child td { border-top: 0; padding-top: 0; text-box: trim-start cap alphabetic; } /* first row: no cell padding and the leading above the cap trimmed, so the visible title -> first row gap = the card text gap (M1 / L11) */
+.spec-table th { width: 40%; padding-right: var(--space-4); color: var(--text); font-weight: 400; overflow-wrap: break-word; hyphens: auto; } /* labels break only at hyphens / spaces; long VALUES (td) may still wrap anywhere */
 @media (max-width: 767px) {
   .spec-table th { width: 45%; }
 }

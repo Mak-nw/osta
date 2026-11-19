@@ -76,6 +76,19 @@
       "approvedAt": "2026-11-18",
       "quote": "гап між групами на сторінці Contact 45 (замість 12)",
       "source": "chat 2026-11-18 (orchestrator relay; 50 snapped to 45 by P25)"
+    },
+    {
+      "selector": ".contact-split__content .section-head, .contact-split__content .section-head *",
+      "rule": "A3.1",
+      "reason": "Contact card heading group: heading -> description = --section-head-gap (45 desktop / 32 mobile) instead of the 0.72 x P cap of a large card; same pattern as .contact-people.",
+      "approvedBy": "customer",
+      "approvedAt": "2026-11-18",
+      "quote": "heading→description 45",
+      "pages": [
+        "contact",
+        "de/contact"
+      ],
+      "source": "chat 2026-11-18 (orchestrator relay: customer rule heading->description 45 desktop / 32 mobile everywhere; plus the 45 contact-people entry)"
     }
   ]
 }

@@ -1,13 +1,13 @@
 /* service card (Services, About): ONE definition. .svc-cards (grid) > article.svc-card > .svc-card__art[data-scene] (3D scene, services-card-scenes.js) + .svc-card__text > h3.svc-card__title.t-h2 + p.svc-card__desc.t-body.
-   Two levels: art on top, text below pressed to the BOTTOM edge. The card is a SUBGRID of 2 rows (art / text) of .svc-cards, so the text row is as tall as the tallest text in the row (auto), the same for all cards,
+   Two levels: art on top, text directly under it, top-aligned (form 4e0687: title -> description gap 22, free space at the bottom). The card is a SUBGRID of 2 rows (art / text) of .svc-cards, so the text row is as tall as the tallest text in the row (auto), the same for all cards,
    with no JS measuring; the art row = the art div aspect ratio (scene scale follows the slot width). Surface: light card (--surface-raised) on a light section; .svc-card--on-accent on the BLUE section
    (--surface-card-on-accent, white text and scene lines, customer 2026-11-13). No outline, no shadow, not clickable. */
-.svc-cards { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); grid-template-rows: auto auto; column-gap: var(--grid-gap); row-gap: var(--grid-gap); align-items: stretch; }
+.svc-cards { display: grid; grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr)); grid-auto-rows: auto; column-gap: var(--grid-gap); row-gap: var(--grid-gap); align-items: stretch; }
 .svc-card { grid-column: span 3; grid-row: span 2; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: subgrid; row-gap: 0; box-sizing: border-box; min-width: 0; padding: var(--card-padding); background: var(--surface-raised); color: var(--text); border: 0; border-radius: var(--radius-lg); }
 .svc-card > * { margin: 0; }
 .svc-card__art { position: relative; display: grid; place-items: center; min-width: 0; min-height: 0; aspect-ratio: 8 / 7; overflow: hidden; } /* decorative, aria-hidden */
-.svc-card__text { display: flex; flex-direction: column; gap: var(--card-text-gap); justify-content: flex-end; min-width: 0; min-height: 0; padding-top: var(--card-inner-gap); }
-.svc-card__title { color: var(--text-accent); text-wrap: balance; min-width: 0; overflow-wrap: break-word; hyphens: manual; }
+.svc-card__text { grid-row: 2; display: flex; flex-direction: column; row-gap: var(--svc-card-text-gap); min-width: 0; min-height: 0; padding-top: var(--card-inner-gap); } /* description DIRECTLY under the title: gap = --svc-card-text-gap 22 (customer 2026-11-19, form 4e0687: not pinned to the bottom, empty space stays below the shorter text); title tops are aligned (same row), the text row is as tall as the tallest text of the card row */
+.svc-card__title { color: var(--text-accent); text-wrap: balance; min-width: 0; overflow-wrap: break-word; hyphens: auto; hyphenate-limit-chars: 9 4 4; } /* long words break only at syllables WITH a hyphen (EN and DE), never mid-word without one; min word 9, >=4 letters each side: no 'Re-gu-la-to-ri-schen' chains */
 .svc-card__desc { text-wrap: pretty; }
 /* illustrations: the same four 3D scenes everywhere (src/pages/service-scenes.js), one shared WebGL renderer per row (services-card-scenes.js), canvas fills the art zone, NO floor dot field.
    Light card: lines and main object = --accent, scene background = card colour. */
@@ -17,6 +17,10 @@
 .svc-card--on-accent { --on-accent-bg: var(--surface-card-on-accent); background: var(--surface-card-on-accent); color: var(--text-on-accent); }
 .svc-card--on-accent .svc-card__title { color: var(--text-on-accent); }
 .svc-card--on-accent .svc-card__art { --il-fill: var(--text-on-accent); --il-soft: var(--text-on-accent); --il-bg: var(--surface-card-on-accent); }
+@media (min-width: 1200px) and (max-width: 1439px) {
+  .svc-card { grid-column: span 6; } /* 2 per row: a 4-up track is ~170-190 px of text at 36 px titles (DE words 8-9 lines); same 2-up as the tablet */
+  .svc-card__art { aspect-ratio: 3 / 2; }
+}
 @media (max-width: 1199px) {
   .svc-card { grid-column: span 4; }
   .svc-card__art { aspect-ratio: 3 / 2; }

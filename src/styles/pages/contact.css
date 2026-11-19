@@ -18,13 +18,16 @@
   gap: var(--card-block-gap); /* surface, radius and padding come from the card component: .card.card--pad-lg (--card-padding 45) */
 }
 .contact-split__title, .contact-split__form-head { margin: 0; }
+.contact-split__content.card--pad-lg .section-head { gap: var(--section-head-gap); } /* heading -> description = 45 desktop / 32 mobile (customer 2026-11-18 'heading→description 45'); overrides the 0.72 x P cap of .card--pad-lg .section-head; signed A3.1 exception in style-gate.exceptions.json */
 .contact-split__rule { width: 100%; margin: calc(var(--divider-gap) - var(--card-block-gap)) 0; border: 0; border-top: 1px solid var(--border); }
 .contact-form { display: flex; flex-direction: column; gap: var(--card-block-gap); font-size: var(--type-label-size); } /* heading -> first field = 32 (gap of the card) = field -> field 32; the floated label rises into that gap like between fields */ /* field -> field 32 = 8 + floated label 20 + 4 (an error message also lives in that gap, absolutely) */
 
 /* Label -> value rows */
 .contact-row { display: flex; flex-direction: column; gap: var(--card-inner-gap); min-width: 0; } /* label -> contact-line = ONE token 12; the label is trimmed to its text box, so the visible gap = the token */
 .contact-row dd { margin: 0; }
-.contact-info { gap: var(--card-block-gap); width: 100%; } /* L10: full inner width of the card (a flex item inside .section-head shrank to its content, so the 2nd people column sat between page columns). The card spans 6 (desktop) / all 8 / 4 page columns symmetrically, so 2 equal tracks + --grid-gap put the 2nd column exactly on a page column line (L7 desktop, L5 tablet), same as the form row below. */
+.contact-info { width: 100%; }
+.contact-info > .contact-people + .contact-people { margin-top: calc(var(--card-padding) - var(--card-block-gap)); } /* BETWEEN contact groups (general/phone/fax block -> managers) = 45 / 32 mobile = the .contact-people row-gap role (signed A3.1 exception for .contact-people); the card flex gap supplies --card-block-gap */
+.contact-info { gap: var(--card-block-gap); } /* L10: full inner width of the card (a flex item inside .section-head shrank to its content, so the 2nd people column sat between page columns). The card spans 6 (desktop) / all 8 / 4 page columns symmetrically, so 2 equal tracks + --grid-gap put the 2nd column exactly on a page column line (L7 desktop, L5 tablet), same as the form row below. */
 .contact-rows > .contact-row:first-child { grid-column: 1 / -1; } /* General: full width above the Phone | Fax columns (same 2-col grid as the managers) */
 
 /* Managers: plain text blocks, no cards */
@@ -58,7 +61,7 @@
   .contact-people { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (min-width: 1440px), (min-width: 768px) and (max-width: 1199px) {
-  .contact-people { row-gap: var(--text-group-gap); } /* rows of the subgrid persons (inside a group) */
+  .contact-people:not(.contact-rows) { row-gap: var(--text-group-gap); } /* rows of the subgrid persons (inside a group); the dl.contact-rows keeps the BETWEEN-groups gap (45 / 32) */
   .contact-person { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: var(--text-group-gap); }
   .contact-lines { display: contents; }
   .contact-lines > .contact-line { align-self: start; justify-self: start; }
@@ -66,7 +69,6 @@
   .contact-lines > .contact-line:last-child { margin-top: calc(var(--click-group-gap) - var(--text-group-gap) - var(--space-1)); }
 }
 @media (max-width: 767px) {
-  .contact-split__content .section-head { gap: var(--card-block-gap); } /* heading group inside the card: 16 (24 > 0.72 x 32) */
   .contact-people { grid-template-columns: minmax(0, 1fr); }
   .contact-form__row { grid-template-columns: minmax(0, 1fr); gap: var(--card-block-gap); }
   .contact-form__actions .btn { width: 100%; }
